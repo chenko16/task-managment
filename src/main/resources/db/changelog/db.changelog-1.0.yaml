@@ -1,0 +1,421 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: sdurachenko
+      comment: Created user table
+      changes:
+        - createTable:
+            tableName: user
+            columns:
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: login
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: system_role
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 2
+      author: sdurachenko
+      comment: Created project table
+      changes:
+        - createTable:
+            tableName: project
+            columns:
+              - column:
+                  name: project_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: reporter_id
+                  type: BIGINT
+                  constraints:
+                    foreignKey:
+                      referencedColumnNames: user_id
+                      referencedTableName: user
+                      nullable: false
+              - column:
+                  name: assignee_id
+                  type: BIGINT
+                  constraints:
+                    foreignKey:
+                      referencedColumnNames: user_id
+                      referencedTableName: user
+                      nullable: false
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 3
+      author: sdurachenko
+      comment: Created release table
+      changes:
+        - createTable:
+            tableName: release
+            columns:
+              - column:
+                  name: release_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: project_id
+                  type: BIGINT
+                  constraints:
+                    foreignKey:
+                      referencedColumnNames: project_id
+                      referencedTableName: project
+                      nullable: false
+              - column:
+                  name: reporter_id
+                  type: BIGINT
+                  constraints:
+                    foreignKey:
+                      referencedColumnNames: user_id
+                      referencedTableName: user
+                      nullable: false
+              - column:
+                  name: created
+                  type: DATETIME
+              - column:
+                  name: closed
+                  type: DATETIME
+              - column:
+                  name: description
+                  type: varchar(2000)
+        - addPrimaryKey:
+            columnNames: release_id, project_id
+            constraintName: pk_release
+            tableName: release
+  - changeSet:
+      id: 4
+      author: sdurachenko
+      comment: Created task table
+      changes:
+        - createTable:
+            tableName: task
+            columns:
+              - column:
+                  name: task_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: reporter_id
+                  type: BIGINT
+                  constraints:
+                    foreignKey:
+                      referencedColumnNames: user_id
+                      referencedTableName: user
+                      nullable: false
+              - column:
+                  name: assignee_id
+                  type: BIGINT
+                  constraints:
+                    foreignKey:
+                      referencedColumnNames: user_id
+                      referencedTableName: user
+                      nullable: false
+              - column:
+                  name: project_id
+                  type: BIGINT
+                  constraints:
+                    foreignKey:
+                      referencedColumnNames: project_id
+                      referencedTableName: project
+                      nullable: false
+              - column:
+                  name: release_id
+                  type: BIGINT
+                  constraints:
+                    foreignKey:
+                      referencedColumnNames: release_id
+                      referencedTableName: release
+                      nullable: false
+              - column:
+                  name: created
+                  type: DATETIME
+              - column:
+                  name: closed
+                  type: DATETIME
+              - column:
+                  name: description
+                  type: varchar(2000)
+              - column:
+                  name: type
+                  type: varchar(50)
+              - column:
+                  name: title
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 5
+      author: sdurachenko
+      comment: Created task_link table
+      changes:
+        - createTable:
+            tableName: task_link
+            columns:
+              - column:
+                  name: link_from
+                  type: BIGINT
+                  constraints:
+                    foreignKey:
+                      referencedColumnNames: task_id
+                      referencedTableName: task
+                      nullable: false
+              - column:
+                  name: link_to
+                  type: BIGINT
+                  constraints:
+                    foreignKey:
+                      referencedColumnNames: task_id
+                      referencedTableName: task
+                      nullable: false
+        - addPrimaryKey:
+            columnNames: link_from, link_to
+            constraintName: pk_task_link
+            tableName: task_link
+  - changeSet:
+      id: 6
+      author: sdurachenko
+      comment: Created business_role table
+      changes:
+        - createTable:
+            tableName: business_role
+            columns:
+              - column:
+                  name: role_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(100)
+  - changeSet:
+      id: 7
+      author: sdurachenko
+      comment: Created user_project_role table
+      changes:
+        - createTable:
+            tableName: user_project_role
+            columns:
+              - column:
+                  name: project_role_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    foreignKey:
+                      referencedColumnNames: user_id
+                      referencedTableName: user
+                      nullable: false
+              - column:
+                  name: project_id
+                  type: BIGINT
+                  constraints:
+                    foreignKey:
+                      referencedColumnNames: project_id
+                      referencedTableName: project
+                      nullable: false
+              - column:
+                  name: role_id
+                  type: BIGINT
+                  constraints:
+                    foreignKey:
+                      referencedColumnNames: role_id
+                      referencedTableName: business_role
+                      nullable: false
+  - changeSet:
+      id: 8
+      author: sdurachenko
+      comment: Created requirement table
+      changes:
+        - createTable:
+            tableName: requirement
+            columns:
+              - column:
+                  name: requirement_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: link
+                  type: varchar(100)
+  - changeSet:
+      id: 9
+      author: sdurachenko
+      comment: Created task_requirement_link table
+      changes:
+        - createTable:
+            tableName: task_requirement_link
+            columns:
+              - column:
+                  name: task_id
+                  type: BIGINT
+                  constraints:
+                    foreignKey:
+                      referencedColumnNames: task_id
+                      referencedTableName: task
+                      nullable: false
+              - column:
+                  name: requirement_id
+                  type: BIGINT
+                  constraints:
+                    foreignKey:
+                      referencedColumnNames: requirement_id
+                      referencedTableName: requirement
+                      nullable: false
+        - addPrimaryKey:
+            columnNames: task_id, requirement_id
+            constraintName: pk_task_requirement_link
+            tableName: task_requirement_link
+  - changeSet:
+      id: 10
+      author: sdurachenko
+      comment: Created project_comment table
+      changes:
+        - createTable:
+            tableName: project_comment
+            columns:
+              - column:
+                  name: comment_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: project_id
+                  type: BIGINT
+                  constraints:
+                    foreignKey:
+                      referencedColumnNames: project_id
+                      referencedTableName: project
+                      nullable: false
+              - column:
+                  name: writer_id
+                  type: BIGINT
+                  constraints:
+                    foreignKey:
+                      referencedColumnNames: user_id
+                      referencedTableName: user
+                      nullable: false
+              - column:
+                  name: text
+                  type: varchar(2000)
+        - addPrimaryKey:
+            columnNames: comment_id, project_id
+            constraintName: pk_project_comment
+            tableName: project_comment
+  - changeSet:
+      id: 11
+      author: sdurachenko
+      comment: Created release_comment table
+      changes:
+        - createTable:
+            tableName: release_comment
+            columns:
+              - column:
+                  name: comment_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: release_id
+                  type: BIGINT
+                  constraints:
+                    foreignKey:
+                      referencedColumnNames: release_id
+                      referencedTableName: release
+                      nullable: false
+              - column:
+                  name: writer_id
+                  type: BIGINT
+                  constraints:
+                    foreignKey:
+                      referencedColumnNames: user_id
+                      referencedTableName: user
+                      nullable: false
+              - column:
+                  name: text
+                  type: varchar(2000)
+        - addPrimaryKey:
+            columnNames: comment_id, release_id
+            constraintName: pk_release_comment
+            tableName: release_comment
+  - changeSet:
+      id: 12
+      author: sdurachenko
+      comment: Created task_comment table
+      changes:
+        - createTable:
+            tableName: task_comment
+            columns:
+              - column:
+                  name: comment_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: task_id
+                  type: BIGINT
+                  constraints:
+                    foreignKey:
+                      referencedColumnNames: task_id
+                      referencedTableName: task
+                      nullable: false
+              - column:
+                  name: writer_id
+                  type: BIGINT
+                  constraints:
+                    foreignKey:
+                      referencedColumnNames: user_id
+                      referencedTableName: user
+                      nullable: false
+              - column:
+                  name: text
+                  type: varchar(2000)
+        - addPrimaryKey:
+            columnNames: comment_id, task_id
+            constraintName: pk_task_comment
+            tableName: task_comment
