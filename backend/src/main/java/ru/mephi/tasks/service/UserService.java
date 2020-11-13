@@ -5,11 +5,12 @@ import ru.mephi.tasks.dto.user.UserDto;
 import ru.mephi.tasks.dto.user.UserRequest;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
     void createUser(UserRequest id);
-    UserDto getUser(Long id);
+    Optional<UserDto> getUser(Long id);
     List<UserDto> getUserList();
     void deleteUser(Long id);
     void updateUserStatus(Long id, Boolean status);

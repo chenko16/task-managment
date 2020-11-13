@@ -28,8 +28,7 @@ public class UserController {
     @GetMapping(value = "/{id}")
     @ApiOperation("Get user info")
     public ResponseEntity<UserDto> getUser(@PathVariable Long id) {
-        return ResponseEntity.ok()
-                .body(userService.getUser(id));
+        return ResponseEntity.of(userService.getUser(id));
     }
 
     @GetMapping(value = "/list")

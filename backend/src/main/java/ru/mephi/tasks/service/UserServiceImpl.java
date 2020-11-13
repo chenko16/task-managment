@@ -11,6 +11,7 @@ import ru.mephi.tasks.dto.user.UserRequest;
 import ru.mephi.tasks.mapping.UserMapper;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,10 +31,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUser(Long id) {
+    public Optional<UserDto> getUser(Long id) {
         return repository.findById(id)
-                .map(mapper::toDto)
-                .orElse(null);
+                .map(mapper::toDto);
     }
 
     @Override
