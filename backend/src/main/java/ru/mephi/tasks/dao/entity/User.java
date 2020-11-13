@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table
+@Table(name = "security_user")
 public class User {
 
     @Id
@@ -16,5 +16,9 @@ public class User {
     private String login;
 
     private String password;
+
+    private Boolean active;
+
+    private String systemRole;
 
 }
