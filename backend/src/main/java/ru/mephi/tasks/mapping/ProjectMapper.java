@@ -8,9 +8,12 @@ import ru.mephi.tasks.dto.project.ProjectRequest;
 
 @Mapper
 public interface ProjectMapper {
+
     @Mapping(source = "id", target = "projectId")
     Project toEntity(ProjectRequest project);
 
     @Mapping(source = "projectId", target = "id")
+    @Mapping(source = "assignee.userId", target = "assignee.id")
+    @Mapping(source = "reporter.userId", target = "reporter.id")
     ProjectDto toDto(Project project);
 }
