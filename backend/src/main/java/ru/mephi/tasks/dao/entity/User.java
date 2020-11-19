@@ -3,6 +3,8 @@ package ru.mephi.tasks.dao.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -22,4 +24,6 @@ public class User {
 
     private String systemRole;
 
+    @OneToMany(mappedBy = "user")
+    List<ProjectUser> roles = new ArrayList<>();
 }
