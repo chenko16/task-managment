@@ -52,6 +52,20 @@ public class ProjectController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping(value = "/{id}/description/")
+    @ApiOperation("Update project description")
+    public ResponseEntity<Void> updateProjectDescription(@PathVariable Long id, @RequestParam String description) {
+        projectService.updateProjectDescription(id, description);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping(value = "/{id}/active/")
+    @ApiOperation("Update project active status")
+    public ResponseEntity<Void> updateProjectDescription(@PathVariable Long id, @RequestParam Boolean active) {
+        projectService.updateProjectActive(id, active);
+        return ResponseEntity.ok().build();
+    }
+
     @PutMapping(value = "/{id}/assignee/")
     @ApiOperation("Update project assignee")
     public ResponseEntity<Void> updateProjectAssignee(@PathVariable Long id, @RequestParam Long userId) {

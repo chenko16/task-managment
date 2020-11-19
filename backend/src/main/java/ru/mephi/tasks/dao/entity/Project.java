@@ -26,6 +26,10 @@ public class Project {
 
     private String name;
 
+    String description;
+
+    Boolean active = true;
+
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     List<ProjectUser> participants = new ArrayList<>();
 

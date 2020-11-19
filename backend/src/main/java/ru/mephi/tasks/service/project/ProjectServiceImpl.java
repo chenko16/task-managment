@@ -62,6 +62,24 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public void updateProjectDescription(Long id, String description) {
+        projectRepository.findById(id)
+                .ifPresent(project -> {
+                    project.setDescription(description);
+                    projectRepository.save(project);
+                });
+    }
+
+    @Override
+    public void updateProjectActive(Long id, Boolean active) {
+        projectRepository.findById(id)
+                .ifPresent(project -> {
+                    project.setActive(active);
+                    projectRepository.save(project);
+                });
+    }
+
+    @Override
     public void updateProjectAssignee(Long id, Long userId) {
         User assignee = userRepository.findById(userId).orElseThrow(() -> new EntryNotFoundException("security_user", "user_id", userId));
         projectRepository.findById(id)

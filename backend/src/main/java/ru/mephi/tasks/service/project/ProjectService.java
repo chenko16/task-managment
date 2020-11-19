@@ -15,6 +15,8 @@ public interface ProjectService {
     List<ProjectDto> getProjectList();
     void deleteProject(Long id);
     void updateProjectName(Long id, String name);
+    void updateProjectDescription(Long id, String description);
+    void updateProjectActive(Long id, Boolean active);
     void updateProjectAssignee(Long id, Long userId);
     void updateProjectReporter(Long id, Long userId);
     void addParticipant(Long id, Long userId);
