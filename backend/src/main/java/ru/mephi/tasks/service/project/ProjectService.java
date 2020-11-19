@@ -1,8 +1,9 @@
 package ru.mephi.tasks.service.project;
 
+import ru.mephi.tasks.dao.entity.BusinessRole;
 import ru.mephi.tasks.dto.project.ProjectDto;
 import ru.mephi.tasks.dto.project.ProjectRequest;
-import ru.mephi.tasks.dto.user.UserRequest;
+import ru.mephi.tasks.dto.projectUser.ProjectUserDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,4 +17,8 @@ public interface ProjectService {
     void updateProjectName(Long id, String name);
     void updateProjectAssignee(Long id, Long userId);
     void updateProjectReporter(Long id, Long userId);
+    void addParticipant(Long id, Long userId);
+    void deleteParticipant(Long id, Long userId);
+    void setParticipantRole(Long id, Long userId, BusinessRole role);
+    List<ProjectUserDto> getParticipants(Long id);
 }
