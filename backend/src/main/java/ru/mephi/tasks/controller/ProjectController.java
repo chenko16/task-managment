@@ -62,7 +62,7 @@ public class ProjectController {
 
     @PutMapping(value = "/{id}/active/")
     @ApiOperation("Update project active status")
-    public ResponseEntity<Void> updateProjectDescription(@PathVariable Long id, @RequestParam Boolean active) {
+    public ResponseEntity<Void> updateProjectActiveStatus(@PathVariable Long id, @RequestParam Boolean active) {
         projectService.updateProjectActive(id, active);
         return ResponseEntity.ok().build();
     }
