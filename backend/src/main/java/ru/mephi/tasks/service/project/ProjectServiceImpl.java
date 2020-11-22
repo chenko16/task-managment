@@ -146,7 +146,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         projectsUserDto.setAssignees(projectByAssignee.stream().map(Project::getProjectId).collect(Collectors.toList()));
         projectsUserDto.setReporters(projectByReporter.stream().map(Project::getProjectId).collect(Collectors.toList()));
-        projectsUserDto.setParticipants(projectByParticipant.stream().map(projectUser -> new RoleInProjectDto(projectUser.getProject().getProjectId(), projectUser.getBusinessRole().name())).collect(Collectors.toList()));
+        projectsUserDto.setParticipants(projectByParticipant.stream().map(projectUser -> new RoleInProjectDto(projectUser.getProject().getProjectId(), projectUser.getBusinessRole())).collect(Collectors.toList()));
 
         return projectsUserDto;
     }
