@@ -5,9 +5,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.mephi.tasks.dao.entity.*;
 import ru.mephi.tasks.dao.repository.ProjectRepository;
+import ru.mephi.tasks.dao.repository.ProjectUserRepository;
 import ru.mephi.tasks.dao.repository.UserRepository;
+import ru.mephi.tasks.dto.project.ProjectsByUserDto;
 import ru.mephi.tasks.dto.project.ProjectDto;
 import ru.mephi.tasks.dto.project.ProjectRequest;
+import ru.mephi.tasks.dto.project.RoleInProjectDto;
 import ru.mephi.tasks.dto.projectUser.ProjectUserDto;
 import ru.mephi.tasks.exceptions.EntryNotFoundException;
 import ru.mephi.tasks.mapping.ProjectMapper;
@@ -24,6 +27,8 @@ public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository;
 
     private final UserRepository userRepository;
+
+    private final ProjectUserRepository projectUserRepository;
 
     private final ProjectMapper projectMapper;
 
@@ -128,4 +133,22 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = projectRepository.findById(id).orElseThrow(() -> new EntryNotFoundException("project", "project_id", id));
         return project.getParticipants().stream().map(projectUserMapper::toDto).collect(Collectors.toList());
     }
+
+    @Override
+    public ProjectsByUserDto getProjectsByUsers(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntryNotFoundException("security_user", "user_id", userId));
+
+        List<Project> projectByReporter = projectRepository.getProjectByReporter(user);
+        List<Project> projectByAssignee = projectRepository.getProjectByAssignee(user);
+        List<ProjectUser> projectByParticipant = projectUserRepository.getProjectUsersByUser(user);
+
+        ProjectsByUserDto projectsUserDto = new ProjectsByUserDto();
+
+        projectsUserDto.setAssignees(projectByAssignee.stream().map(Project::getProjectId).collect(Collectors.toList()));
+        projectsUserDto.setReporters(projectByReporter.stream().map(Project::getProjectId).collect(Collectors.toList()));
+        projectsUserDto.setParticipants(projectByParticipant.stream().map(projectUser -> new RoleInProjectDto(projectUser.getProject().getProjectId(), projectUser.getBusinessRole().name())).collect(Collectors.toList()));
+
+        return projectsUserDto;
+    }
+
 }

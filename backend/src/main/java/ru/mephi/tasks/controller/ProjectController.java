@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.mephi.tasks.dao.entity.BusinessRole;
 import ru.mephi.tasks.dto.project.ProjectDto;
 import ru.mephi.tasks.dto.project.ProjectRequest;
+import ru.mephi.tasks.dto.project.ProjectsByUserDto;
 import ru.mephi.tasks.dto.projectUser.ProjectUserDto;
 import ru.mephi.tasks.service.project.ProjectService;
 
@@ -105,5 +106,11 @@ public class ProjectController {
     @ApiOperation("Get participants")
     public ResponseEntity<List<ProjectUserDto>> getParticipants(@PathVariable Long id) {
         return ResponseEntity.ok(projectService.getParticipants(id));
+    }
+
+    @GetMapping(value = "/list/user/{id}")
+    @ApiOperation("Get projects ids by user (assignee, reporter or participant)")
+    public ResponseEntity<ProjectsByUserDto> getProjectsByUsers(@PathVariable Long id) {
+        return ResponseEntity.ok(projectService.getProjectsByUsers(id));
     }
 }

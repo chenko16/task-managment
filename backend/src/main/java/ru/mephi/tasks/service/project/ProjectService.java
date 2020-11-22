@@ -1,6 +1,7 @@
 package ru.mephi.tasks.service.project;
 
 import ru.mephi.tasks.dao.entity.BusinessRole;
+import ru.mephi.tasks.dto.project.ProjectsByUserDto;
 import ru.mephi.tasks.dto.project.ProjectDto;
 import ru.mephi.tasks.dto.project.ProjectRequest;
 import ru.mephi.tasks.dto.projectUser.ProjectUserDto;
@@ -23,4 +24,5 @@ public interface ProjectService {
     void deleteParticipant(Long id, Long userId);
     void setParticipantRole(Long id, Long userId, BusinessRole role);
     List<ProjectUserDto> getParticipants(Long id);
+    ProjectsByUserDto getProjectsByUsers(Long id);
 }
