@@ -10,6 +10,7 @@ public class ProjectDto {
     private UserDto assignee;
     private UserDto reporter;
     private String name;
-
+    private String description;
+    private Boolean active;
 }
 
