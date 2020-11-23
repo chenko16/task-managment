@@ -2,3 +2,9 @@
 .gitconfig
 target/
 *.iml
+
+
+*/node_modules/*
+node_modules/
+ui/package-lock.json
+ui/dist
