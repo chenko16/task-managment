@@ -3,13 +3,16 @@ import {Grid} from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import * as userSelectors from "../../store/users/Reducer";
 import * as userActions from "../../store/users/Actions";
+import * as notificationActions from "../../store/notification/Actions";
 import {connect} from "react-redux";
-import {User} from "../../store/users/Types";
+import {User, UserRequest} from "../../store/users/Types";
 import {SettingsForm} from "../../components/settings/SettingsForm";
 
 
 export interface SettingsViewDispatchProps {
-    fetchUsers() : any
+    fetchUsers() : any,
+    displayError(msg: string): any,
+    createUser(user: UserRequest, okCallback?, errorCallback?): any
 }
 
 export interface SettingsViewStateProps {
@@ -44,6 +47,12 @@ class SettingsView extends React.Component<SettingsViewStateProps & SettingsView
                     currentTab={this.props.currentTab}
                     users={this.props.users}
                     isLoading={this.props.isLoading}
+                    displayError={this.props.displayError}
+                    createUser={(user) => {
+                        this.props.createUser(user, () => {
+                            this.props.fetchUsers();
+                        })
+                    }}
                 />
             </React.Fragment>
         )
@@ -77,6 +86,12 @@ function mapDispatchToProps(dispatch: any): SettingsViewDispatchProps {
     return {
         fetchUsers: () => {
             dispatch(userActions.fetchUsers())
+        },
+        createUser: (user: UserRequest, okCallback?, errorCallback?) => {
+            dispatch(userActions.createUser(user, okCallback, errorCallback))
+        },
+        displayError: (msg: string) => {
+            dispatch(notificationActions.error(msg))
         }
     }
 }

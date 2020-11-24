@@ -7,7 +7,7 @@ export interface User {
 }
 
 export interface UserRequest {
-    id: number,
+    id?: number,
     login: string,
     password: string,
     systemRole: SystemRole
@@ -22,5 +22,11 @@ export enum SystemRole {
 export const mapRole = {
     USER: "Пользователь",
     MANAGER: "Менеджер",
-    ADMIN: "Администратор"
+    ADMIN: "Администратор",
+    DEVELOPER: 'Разработчик',
+    TESTER: 'Тестировщик',
+    DEVOPS: 'Девопс',
+    LEADER: 'Лидер',
+    ASSIGNEE: 'Ответственный',
+    REPORTER: 'Создатель'
 }

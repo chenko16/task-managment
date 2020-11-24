@@ -1,7 +1,6 @@
 import * as React from 'react'
 import 'typeface-roboto'
 import {Route, RouteProps} from 'react-router-dom';
-import {UserInfoView} from "./UserInfoView";
 import SettingsView from "../settings/SettingsView";
 
 export default class UserRouter extends React.Component<any, any> {
@@ -13,8 +12,7 @@ export default class UserRouter extends React.Component<any, any> {
     render() {
         return (
             <React.Fragment>
-                <Route path="/users" exact component={SettingsView}/>
-                <Route path="/users/:id" exact component={UserInfoView}/>
+                <Route path="/users" exact={true} render={() => <SettingsView currentTab={1}/>}/>
             </React.Fragment>
         )
     }

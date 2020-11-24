@@ -49,14 +49,18 @@ export const updateRoleAction = createAsyncAction(
 
 
 
-export function createUser(user: UserRequest) {
+export function createUser(user: UserRequest, okCallback?, errorCallback?) {
     return (dispatch, getState) => {
         dispatch(createUserAction.request());
         UserService.createUser(user, () => {
             dispatch(reqFinished());
+            if (okCallback)
+                okCallback();
             dispatch(createUserAction.success());
         }, (errorMessage) => {
             dispatch(createUserAction.failure());
+            if (errorCallback)
+                errorCallback(errorMessage);
             dispatch(notificationActions.error(errorMessage));
         })
     }

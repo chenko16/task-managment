@@ -1,5 +1,5 @@
 import * as React from "react";
-import {User} from "../../store/users/Types";
+import {User, UserRequest} from "../../store/users/Types";
 import UsersForm from "../users/UsersForm";
 import PersonIcon from "@material-ui/icons/Person";
 import FolderIcon from "@material-ui/icons/Folder";
@@ -9,7 +9,9 @@ import {AppBar, Grid, Tab, Tabs} from "@material-ui/core";
 export interface SettingsFormProps {
     users: User[],
     isLoading: boolean,
-    currentTab?: number
+    currentTab?: number,
+    displayError(errorMessage: string): any,
+    createUser(user: UserRequest, okCallback?, errorCallback?): any
 }
 
 export interface SettingsFormState {
@@ -32,22 +34,18 @@ export class SettingsForm extends React.Component<SettingsFormProps, SettingsFor
             {
                 name: "Проекты",
                 value: <React.Fragment></React.Fragment>,
-                //     <ProjectsForm
-                //     isLoading={this.props.isLoading}
-                //     isAdmin={this.props.isAdmin}
-                //     projects={this.props.projects}
-                //     kafkaQuotas={this.props.kafkaQuotas}
-                //     monitoringQuotas={this.props.monitoringQuotas}
-                //     processingQuotas={this.props.processingQuotas}
-                //     indexQuotas={this.props.indexQuotas}
-                //     createProject={this.props.createProject}
-                //     displayError={this.props.displayError}
-                // />,
                 icon: <FolderIcon/>
             },
             {
                 name: "Пользователи",
-                value: <UsersForm users={this.props.users} isLoading={this.props.isLoading}/>,
+                value: <UsersForm
+                    users={this.props.users}
+                    isLoading={this.props.isLoading}
+                    displayError={this.props.displayError}
+                    createUser={(user) => {
+                        this.props.createUser(user)
+                    }}
+                />,
                 icon: <PersonIcon/>
             }
         ]

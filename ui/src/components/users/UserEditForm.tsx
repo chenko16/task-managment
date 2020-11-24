@@ -6,15 +6,13 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle, Grid, MenuItem,
-    Paper, Select, TextField,
+    Paper, Select, Table, TableBody, TableCell, TableHead, TableRow, TextField,
     withStyles
 } from "@material-ui/core";
 import Draggable from "react-draggable";
 import {ResizableBox} from "react-resizable";
 import {mapRole, SystemRole, User} from "../../store/users/Types";
 import {Project, ProjectsByUsers} from "../../store/project/Types";
-import {Autocomplete} from "@material-ui/lab";
-
 
 const styles = theme => createStyles({
     resizable: {
@@ -45,12 +43,15 @@ function PaperComponent(props) {
     );
 }
 
+interface ProjectRole {
+    projectName: string,
+    role: string
+}
+
 export interface UserEditFormProps {
     currentUser?: User,
-    //  projects: Project[],
-    //userProjects: ProjectsByUsers[],
-
-    // displayError(msg: string): any,
+    projects: Project[],
+    userProjects: ProjectsByUsers,
 
     onClose(value: string, data?: any): any,
 
@@ -59,7 +60,7 @@ export interface UserEditFormProps {
 
 export interface UserEditFormState {
     user: User,
-    systemRoles: SystemRole[],
+    systemRoles: SystemRole[]
 }
 
 class UserEditForm extends React.Component<UserEditFormProps, UserEditFormState> {
@@ -87,13 +88,49 @@ class UserEditForm extends React.Component<UserEditFormProps, UserEditFormState>
         }
     }
 
+    createRolesTable(projects: Project[], userProjects: ProjectsByUsers) : ProjectRole[] {
+        let projectRoles: ProjectRole[] = [];
+
+        userProjects.assignee.forEach((projectId) => {
+            let projectRole: ProjectRole = {
+                projectName: projects.filter((project) => {
+                    return project.id === projectId
+                })[0].name,
+                role: "ASSIGNEE"
+            }
+            projectRoles.push(projectRole);
+        });
+
+        userProjects.reporters.forEach((projectId) => {
+            let projectRole: ProjectRole = {
+                projectName: projects.filter((project) => {
+                    return project.id === projectId
+                })[0].name,
+                role: "REPORTER"
+            }
+            projectRoles.push(projectRole);
+        });
+
+        userProjects.participants.forEach((roleInProject) => {
+            let projectRole: ProjectRole = {
+                projectName: projects.filter((project) => {
+                    return project.id === roleInProject.projectId
+                })[0].name,
+                role: roleInProject.role
+            }
+            projectRoles.push(projectRole);
+        });
+
+        return projectRoles;
+    }
+
     render() {
         const {classes} = this.props;
         return (
             <React.Fragment>
                 <Dialog
                     open={true}
-                    onClose={this.props.onClose("Cancel")}
+                    onClose={(e) => this.props.close(false)}
                     maxWidth={false}
                     PaperComponent={PaperComponent}
                     aria-labelledby="draggable-dialog-title"
@@ -108,7 +145,15 @@ class UserEditForm extends React.Component<UserEditFormProps, UserEditFormState>
                                     Настройки пользователя.
                                 </Grid>
                                 <Grid item>
-                                    <Button color={"primary"} variant={"contained"}>
+                                    <Button
+                                        color={"primary"}
+                                        variant={"contained"}
+                                        onClick={event => {
+                                            let user: User = this.state.user;
+                                            user.active = !user.active;
+                                            this.setState({user: user});
+                                        }}
+                                    >
                                         {this.state.user.active ? "Деактивировать" : "Активировать"}
                                     </Button>
                                 </Grid>
@@ -117,7 +162,8 @@ class UserEditForm extends React.Component<UserEditFormProps, UserEditFormState>
                         <DialogContent>
                             <DialogContentText>
                                 <Grid container direction="column" justify="center" alignItems="center">
-                                    <Grid container direction="row" justify="flex-start" alignItems="center" style={{margin: 4}}>
+                                    <Grid container direction="row" justify="flex-start" alignItems="center"
+                                          style={{margin: 4}}>
                                         <Grid item xs={2}>
                                             <b>Логин:</b>
                                         </Grid>
@@ -132,19 +178,25 @@ class UserEditForm extends React.Component<UserEditFormProps, UserEditFormState>
                                             />
                                         </Grid>
                                     </Grid>
-                                    <Grid container direction="row" justify="flex-start" alignItems="center" style={{margin: 4}}>
+                                    <Grid container direction="row" justify="flex-start" alignItems="center"
+                                          style={{margin: 4}}>
                                         <Grid item xs={2}>
                                             <b>Роль в системе:</b>
                                         </Grid>
                                         <Grid item xs={8} style={{marginLeft: "30px"}}>
                                             <Select
                                                 value={this.state.user.systemRole}
+                                                onChange={event => {
+                                                    let user: User = this.state.user;
+                                                    user.systemRole = (event.target.value as SystemRole);
+                                                    this.setState({user: user});
+                                                }}
                                                 variant={"outlined"}
                                                 fullWidth
                                                 displayEmpty
                                             >
                                                 {this.state.systemRoles.map((role) => {
-                                                    return  <MenuItem value={role}> {mapRole[role]} </MenuItem>
+                                                    return <MenuItem value={role}> {mapRole[role]} </MenuItem>
                                                 })}
                                             </Select>
                                         </Grid>
@@ -153,75 +205,29 @@ class UserEditForm extends React.Component<UserEditFormProps, UserEditFormState>
                                 <div style={{margin: 4}}>
                                     <b> Список проектов, в которых пользователь участвует: </b>
                                 </div>
-                                {/*Укажите название поля, в которое будет записываться время записи, а также выберите*/}
-                                {/*формат времени и*/}
-                                {/*временную зону, в которой Вы хотите хранить время.*/}
                             </DialogContentText>
-
-                            {/*<Autocomplete*/}
-                            {/*    options={this.props.timeFormats}*/}
-                            {/*    renderOption={(option) => {*/}
-                            {/*        return option;*/}
-                            {/*    }}*/}
-                            {/*    getOptionLabel={option => {*/}
-                            {/*        return option;*/}
-                            {/*    }}*/}
-                            {/*    defaultValue={this.state.timeFormat}*/}
-                            {/*    onChange={(event, newValue) => {*/}
-                            {/*        this.setState({timeFormat: newValue})*/}
-                            {/*    }}*/}
-                            {/*    renderInput={params => (*/}
-                            {/*        <TextField*/}
-                            {/*            {...params}*/}
-                            {/*            variant="standard"*/}
-                            {/*            error={this.state.timeFormat === ""}*/}
-                            {/*            label="Формат времени"*/}
-                            {/*            placeholder="Выберите формат времени"*/}
-                            {/*            margin="normal"*/}
-                            {/*            fullWidth*/}
-                            {/*        />*/}
-                            {/*    )}*/}
-                            {/*/>*/}
-                            {/*<Autocomplete*/}
-                            {/*    options={this.props.timezones}*/}
-                            {/*    renderOption={(option) => {*/}
-                            {/*        return option;*/}
-                            {/*    }}*/}
-                            {/*    getOptionLabel={option => {*/}
-                            {/*        return option;*/}
-                            {/*    }}*/}
-                            {/*    defaultValue={this.state.timezone}*/}
-                            {/*    onChange={(event, newValue) => {*/}
-                            {/*        this.setState({timezone: newValue})*/}
-                            {/*    }}*/}
-                            {/*    renderInput={params => (*/}
-                            {/*        <TextField*/}
-                            {/*            {...params}*/}
-                            {/*            variant="standard"*/}
-                            {/*            error={this.state.timezone === ""}*/}
-                            {/*            label="Временная зона"*/}
-                            {/*            placeholder="Выберите временную зону"*/}
-                            {/*            margin="normal"*/}
-                            {/*            fullWidth*/}
-                            {/*        />*/}
-                            {/*    )}*/}
-                            {/*/>*/}
+                            <Paper style={{overflow: "auto"}}>
+                                <Table style={{textDecoration: "none"}}>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>Проект</TableCell>
+                                            <TableCell>Роль</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody style={{textDecoration: "none"}}>
+                                        {this.createRolesTable(this.props.projects, this.props.userProjects).map((projectRole) => {
+                                            return <TableRow>
+                                                <TableCell>{projectRole.projectName}</TableCell>
+                                                <TableCell>{mapRole[projectRole.role]}</TableCell>
+                                            </TableRow>
+                                        })}
+                                    </TableBody>
+                                </Table>
+                            </Paper>
                         </DialogContent>
                         <DialogActions style={{marginTop: 6, marginRight: 6}}>
                             <Button
                                 onClick={(e) => {
-                                    // if (this.state.toField == "" || this.state.toField == null) {
-                                    //     this.props.displayError("Нужно ввести название поля!")
-                                    //     return;
-                                    // }
-                                    // if (this.state.timeFormat == "" || this.state.timeFormat == null) {
-                                    //     this.props.displayError("Нужно указать формат времени!")
-                                    //     return;
-                                    // }
-                                    // if (this.state.timezone == "" || this.state.timezone == null) {
-                                    //     this.props.displayError("Нужно указать временную зону!")
-                                    //     return;
-                                    // }
                                     this.props.onClose('Ok', this.state)
                                     this.props.close(false);
                                 }}

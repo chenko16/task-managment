@@ -8,7 +8,7 @@ export class UserService {
         okCallback: () => void,
         errorCallback: (errorMessage: string) => void) {
 
-        let result = await BackendProvider.request('POST', '/user');
+        let result = await BackendProvider.request('POST', '/user',null,null,JSON.stringify(user));
 
         if (result.ok) {
             let body = await result.json();
@@ -63,7 +63,14 @@ export class UserService {
             systemRole: SystemRole.MANAGER,
             active: false
         };
-        users.push(user1,user2,user3);
+        let user4: User = {
+            id:4,
+            login:"Itachi",
+            systemRole: SystemRole.ADMIN,
+            active: true
+        };
+
+        users.push(user1,user2,user3,user4);
         okCallback(users);
         // if (result.ok) {
         //     let body = await result.json();
