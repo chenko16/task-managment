@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.mephi.tasks.dto.user.SystemRole;
 import ru.mephi.tasks.dto.user.UserDto;
 import ru.mephi.tasks.dto.user.UserRequest;
-import ru.mephi.tasks.service.UserService;
+import ru.mephi.tasks.service.user.UserService;
 
 import java.util.List;
 

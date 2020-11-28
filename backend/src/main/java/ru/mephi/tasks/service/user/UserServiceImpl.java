@@ -1,4 +1,4 @@
-package ru.mephi.tasks.service;
+package ru.mephi.tasks.service.user;
 
 import com.google.common.collect.Streams;
 import lombok.RequiredArgsConstructor;
