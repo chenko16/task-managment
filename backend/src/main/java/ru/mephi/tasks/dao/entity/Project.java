@@ -1,6 +1,7 @@
 package ru.mephi.tasks.dao.entity;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.Optional;
 @Data
 @Entity
 @Table(name = "project")
+@ToString(exclude = "releases")
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,9 +35,12 @@ public class Project {
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     List<ProjectUser> participants = new ArrayList<>();
 
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    List<Release> releases = new ArrayList<>();
+
     public void addParticipant(User user) {
         ProjectUser projectUser = new ProjectUser(user, this);
-        getParticipants().add(projectUser);
+        participants.add(projectUser);
     }
 
     public void deleteParticipant(User user) {
