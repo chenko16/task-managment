@@ -20,9 +20,8 @@ public class UserController {
 
     @PostMapping
     @ApiOperation("Create/edit user")
-    public ResponseEntity<Void> createUser(@RequestBody UserRequest user) {
-        userService.createUser(user);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<UserDto> createUser(@RequestBody UserRequest user) {
+        return ResponseEntity.ok().body(userService.createUser(user));
     }
 
     @GetMapping(value = "/{id}")
