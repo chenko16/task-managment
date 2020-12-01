@@ -2,11 +2,21 @@ import * as React from "react";
 import {
     Button,
     createStyles,
-    Dialog, DialogActions,
+    Dialog,
+    DialogActions,
     DialogContent,
     DialogContentText,
-    DialogTitle, Grid, MenuItem,
-    Paper, Select, Table, TableBody, TableCell, TableHead, TableRow, TextField,
+    DialogTitle,
+    Grid,
+    MenuItem,
+    Paper,
+    Select,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    TextField,
     withStyles
 } from "@material-ui/core";
 import Draggable from "react-draggable";
@@ -63,7 +73,11 @@ export interface UserEditFormProps {
 }
 
 export interface UserEditFormState {
-    user: User,
+    id: number,
+    login: string,
+    systemRole: SystemRole,
+    active: boolean,
+    user?: User,
     systemRoles: SystemRole[]
 }
 
@@ -74,12 +88,10 @@ class UserEditForm extends React.Component<UserEditFormProps, UserEditFormState>
         for (let role in SystemRole)
             systemRoles.push(role as SystemRole);
         this.state = {
-            user: this.props.currentUser ? this.props.currentUser : {
-                id: -1,
-                login: "",
-                systemRole: SystemRole.USER,
-                active: false
-            },
+            id: this.props.currentUser ? this.props.currentUser.id : -1,
+            login: this.props.currentUser ? this.props.currentUser.login : "",
+            systemRole: this.props.currentUser ? this.props.currentUser.systemRole : SystemRole.USER,
+            active: this.props.currentUser ? this.props.currentUser.active : false,
             systemRoles: systemRoles
         }
         this.props.fetchProjectsByUser(this.props.currentUser?.id);
@@ -89,6 +101,10 @@ class UserEditForm extends React.Component<UserEditFormProps, UserEditFormState>
         if (props.currentUser !== state.user) {
             props.fetchProjectsByUser(props.currentUser?.id)
             return {
+                id: props.currentUser ? props.currentUser.id : -1,
+                login: props.currentUser ? props.currentUser.login : "",
+                systemRole: props.currentUser ? props.currentUser.systemRole : SystemRole.USER,
+                active: props.currentUser ? props.currentUser.active : false,
                 user: props.currentNode
             };
         }
@@ -155,10 +171,10 @@ class UserEditForm extends React.Component<UserEditFormProps, UserEditFormState>
                                         color={"primary"}
                                         variant={"contained"}
                                         onClick={event => {
-                                            this.props.updateUserStatus(this.state.user.id,!this.state.user.active);
+                                            this.props.updateUserStatus(this.state.id,!this.state.active);
                                         }}
                                     >
-                                        {this.state.user.active ? "Деактивировать" : "Активировать"}
+                                        {this.state.active ? "Деактивировать" : "Активировать"}
                                     </Button>
                                 </Grid>
                             </Grid>
@@ -175,7 +191,7 @@ class UserEditForm extends React.Component<UserEditFormProps, UserEditFormState>
                                             <TextField
                                                 id="name"
                                                 disabled
-                                                defaultValue={this.state.user.login}
+                                                defaultValue={this.state.login}
                                                 type="login"
                                                 variant={"outlined"}
                                                 fullWidth
@@ -189,11 +205,9 @@ class UserEditForm extends React.Component<UserEditFormProps, UserEditFormState>
                                         </Grid>
                                         <Grid item xs={8} style={{marginLeft: "30px"}}>
                                             <Select
-                                                value={this.state.user.systemRole}
+                                                value={this.state.systemRole}
                                                 onChange={event => {
-                                                    let user: User = this.state.user;
-                                                    user.systemRole = (event.target.value as SystemRole);
-                                                    this.setState({user: user});
+                                                    this.setState({systemRole: (event.target.value as SystemRole)});
                                                 }}
                                                 variant={"outlined"}
                                                 fullWidth
