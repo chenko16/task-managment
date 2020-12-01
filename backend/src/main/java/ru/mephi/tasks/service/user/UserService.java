@@ -1,4 +1,4 @@
-package ru.mephi.tasks.service;
+package ru.mephi.tasks.service.user;
 
 import ru.mephi.tasks.dto.user.SystemRole;
 import ru.mephi.tasks.dto.user.UserDto;
