@@ -3,12 +3,12 @@ import {forwardRef} from "react";
 import MaterialTable from "material-table";
 import {Add, ArrowDownward, Check, Clear, Delete, Edit, Remove, Search} from "@material-ui/icons";
 import AddBtn from "@material-ui/icons/Add";
-import {Avatar, Fab, Link} from "@material-ui/core";
+import {Avatar, Fab} from "@material-ui/core";
 import Utils from "../../store/users/Utils";
-import {User, UserRequest} from "../../store/users/Types";
+import {SystemRole, User, UserRequest} from "../../store/users/Types";
 import {withRouter} from "react-router";
-import UserEditForm from "./UserEditForm";
-import {BusinessRole, Project, ProjectsByUsers, RoleInProject} from "../../store/project/Types";
+import UserEditForm, {UserEditFormState} from "./UserEditForm";
+import {Project, ProjectsByUsers} from "../../store/project/Types";
 import AddUserDialog from "./AddUserDialog";
 
 const tableIcons = {
@@ -26,73 +26,26 @@ const tableIcons = {
 export interface UsersFormProps {
     users: User[],
     isLoading: boolean,
+    projects: Project[],
+    userProjects: ProjectsByUsers | undefined,
 
     displayError(errorMessage: string): any,
-    createUser(user: UserRequest, okCallback?, errorCallback?): any
-    // projects: Projects[]
+    createUser(user: UserRequest): any,
+    updateUserStatus(id: number, status: boolean): any,
+    updateUserRole(id: number, role: SystemRole): any,
+    fetchProjectsByUser(userId: number): any
 }
 
 export interface UsersFormState {
     columns: any[],
     currentUser?: User,
     openEdit: boolean,
-    openAdd: boolean,
-
-    projects: Project[],
-    projectsByUser: ProjectsByUsers
+    openAdd: boolean
 }
 
 class UsersForm extends React.Component<UsersFormProps, UsersFormState> {
     constructor(props) {
         super(props);
-
-        let project1: Project = {
-            id: 1,
-            reporter: this.props.users[0],
-            assignee: this.props.users[1],
-            name: "teamMinato"
-        };
-
-        let project2: Project = {
-            id: 2,
-            reporter: this.props.users[2],
-            assignee: this.props.users[0],
-            name: "teamHatake"
-        };
-
-        let project3: Project = {
-            id: 3,
-            reporter: this.props.users[1],
-            assignee: this.props.users[2],
-            name: "teamUchiha"
-        };
-
-        let projects: Project[] = [];
-        projects.push(project1, project2, project3);
-
-        let roleInProject1: RoleInProject = {
-            projectId: 1,
-            role: BusinessRole.DEVELOPER
-        }
-
-        let roleInProject2: RoleInProject = {
-            projectId: 2,
-            role: BusinessRole.LEADER
-        }
-
-        let roleInProject3: RoleInProject = {
-            projectId: 3,
-            role: BusinessRole.DEVOPS
-        }
-
-        let roleInProjects: RoleInProject[] = [];
-        roleInProjects.push(roleInProject1, roleInProject2, roleInProject3);
-
-        let projectsByUsers: ProjectsByUsers = {
-            assignee: [1, 2],
-            reporters: [3],
-            participants: roleInProjects
-        }
 
         this.state = {
             columns: [
@@ -117,10 +70,7 @@ class UsersForm extends React.Component<UsersFormProps, UsersFormState> {
                 }
             ],
             openEdit: false,
-            openAdd: false,
-
-            projects: projects,
-            projectsByUser: projectsByUsers
+            openAdd: false
         }
     }
 
@@ -128,13 +78,12 @@ class UsersForm extends React.Component<UsersFormProps, UsersFormState> {
         return (
             <React.Fragment>
                 <MaterialTable
-                    tableRef={this.tableRef}
                     icons={tableIcons}
-                    title="Метрики"
+                    title="Пользователи"
                     options={{
                         search: true,
                         paging: false,
-                        showTitle: false,
+                        showTitle: true,
                         actionsColumnIndex: -1,
                         header: true
                     }}
@@ -166,9 +115,16 @@ class UsersForm extends React.Component<UsersFormProps, UsersFormState> {
                 />
 
                 {this.state.openEdit && <UserEditForm
-                    projects={this.state.projects}
-                    userProjects={this.state.projectsByUser}
-                    onClose={(value, data) => {
+                    projects={this.props.projects}
+                    userProjects={this.props.userProjects}
+                    fetchProjectsByUser={(userId) => {
+                        this.props.fetchProjectsByUser(userId)
+                    }}
+                    updateUserStatus={(id, status) => {
+                        this.props.updateUserStatus(id, status)
+                    }}
+                    onClose={(value, data: UserEditFormState) => {
+                        this.props.updateUserRole(data.user.id,data.user.systemRole);
                         console.log(data);
                     }}
                     close={value => this.setState({openEdit: value})}
@@ -179,7 +135,6 @@ class UsersForm extends React.Component<UsersFormProps, UsersFormState> {
                     displayError={this.props.displayError}
                     close={value => this.setState({openAdd: value})}
                     onClose={(value, data) => {
-                        console.log(data);
                         if (value === 'Ok') {
                             this.props.createUser(data);
                         }
@@ -192,7 +147,6 @@ class UsersForm extends React.Component<UsersFormProps, UsersFormState> {
                     style={{
                         position: "fixed", bottom: 24, right: 24
                     }}
-                    // component={Link} {...{to: "/flow/new"} as any}
                     onClick={(e) => {this.setState({openAdd: true})}}
                 >
                     <AddBtn/>

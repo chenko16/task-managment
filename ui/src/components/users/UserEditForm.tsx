@@ -51,9 +51,13 @@ interface ProjectRole {
 export interface UserEditFormProps {
     currentUser?: User,
     projects: Project[],
-    userProjects: ProjectsByUsers,
+    userProjects: ProjectsByUsers | undefined,
 
     onClose(value: string, data?: any): any,
+
+    updateUserStatus(id: number, status: boolean): any,
+
+    fetchProjectsByUser(userId: number): any
 
     close(value: boolean): any
 }
@@ -78,20 +82,22 @@ class UserEditForm extends React.Component<UserEditFormProps, UserEditFormState>
             },
             systemRoles: systemRoles
         }
+        this.props.fetchProjectsByUser(this.props.currentUser?.id);
     }
 
     static getDerivedStateFromProps(props, state) {
         if (props.currentUser !== state.user) {
+            props.fetchProjectsByUser(props.currentUser?.id)
             return {
                 user: props.currentNode
             };
         }
     }
 
-    createRolesTable(projects: Project[], userProjects: ProjectsByUsers) : ProjectRole[] {
+    createRolesTable(projects: Project[], userProjects: ProjectsByUsers | undefined) : ProjectRole[] {
         let projectRoles: ProjectRole[] = [];
 
-        userProjects.assignee.forEach((projectId) => {
+        userProjects?.assignee.forEach((projectId) => {
             let projectRole: ProjectRole = {
                 projectName: projects.filter((project) => {
                     return project.id === projectId
@@ -101,7 +107,7 @@ class UserEditForm extends React.Component<UserEditFormProps, UserEditFormState>
             projectRoles.push(projectRole);
         });
 
-        userProjects.reporters.forEach((projectId) => {
+        userProjects?.reporters.forEach((projectId) => {
             let projectRole: ProjectRole = {
                 projectName: projects.filter((project) => {
                     return project.id === projectId
@@ -111,7 +117,7 @@ class UserEditForm extends React.Component<UserEditFormProps, UserEditFormState>
             projectRoles.push(projectRole);
         });
 
-        userProjects.participants.forEach((roleInProject) => {
+        userProjects?.participants.forEach((roleInProject) => {
             let projectRole: ProjectRole = {
                 projectName: projects.filter((project) => {
                     return project.id === roleInProject.projectId
@@ -149,9 +155,7 @@ class UserEditForm extends React.Component<UserEditFormProps, UserEditFormState>
                                         color={"primary"}
                                         variant={"contained"}
                                         onClick={event => {
-                                            let user: User = this.state.user;
-                                            user.active = !user.active;
-                                            this.setState({user: user});
+                                            this.props.updateUserStatus(this.state.user.id,!this.state.user.active);
                                         }}
                                     >
                                         {this.state.user.active ? "Деактивировать" : "Активировать"}

@@ -47,8 +47,6 @@ export const updateRoleAction = createAsyncAction(
     '@user/UPDATE_ROLE_FAIL'
 )<void, number, void>();
 
-
-
 export function createUser(user: UserRequest, okCallback?, errorCallback?) {
     return (dispatch, getState) => {
         dispatch(createUserAction.request());
@@ -118,27 +116,35 @@ export function deleteUser(id: number) {
     }
 }
 
-export function updateStatus(id: number, status: boolean) {
+export function updateStatus(id: number, status: boolean, okCallback?, errorCallback?) {
     return (dispatch, getState) => {
         dispatch(updateStatusAction.request());
         UserService.updateStatus(id, status, (id) => {
             dispatch(reqFinished());
             dispatch(updateStatusAction.success(id));
+            if (okCallback)
+                okCallback();
         }, (errorMessage) => {
             dispatch(updateStatusAction.failure());
             dispatch(notificationActions.error(errorMessage));
+            if (errorCallback)
+                errorCallback(errorMessage);
         })
     }
 }
 
-export function updateRole(id: number, role: SystemRole) {
+export function updateRole(id: number, role: SystemRole, okCallback?, errorCallback?) {
     return (dispatch, getState) => {
         dispatch(updateRoleAction.request());
         UserService.updateRole(id, role, (id) => {
             dispatch(reqFinished());
             dispatch(updateRoleAction.success(id));
+            if (okCallback)
+                okCallback();
         }, (errorMessage) => {
             dispatch(updateRoleAction.failure());
+            if (errorCallback)
+                errorCallback(errorMessage);
             dispatch(notificationActions.error(errorMessage));
         })
     }

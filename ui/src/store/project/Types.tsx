@@ -16,6 +16,8 @@ export interface Project {
     assignee: User,
     reporter: User,
     name: string,
+    description: string,
+    active: boolean
 }
 
 export interface RoleInProject {

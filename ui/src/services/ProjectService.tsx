@@ -208,14 +208,14 @@ export class ProjectService {
 
     static async getProjectsByUsers (
         userId: number,
-        okCallback: (projectByUsers: ProjectsByUsers[]) => void,
+        okCallback: (projectByUsers: ProjectsByUsers) => void,
         errorCallback: (errorMessage: string) => void) {
 
         let result = await BackendProvider.request('GET', '/project/list/user/' + userId.toString());
 
         if (result.ok) {
             let body = await result.json();
-            okCallback(body as ProjectsByUsers[]);
+            okCallback(body as ProjectsByUsers);
         } else {
             errorCallback("Ошиюка при получении списка проектов пользователя.")
         }
