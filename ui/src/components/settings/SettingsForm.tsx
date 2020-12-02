@@ -41,6 +41,7 @@ export class SettingsForm extends React.Component<SettingsFormProps, SettingsFor
             {
                 name: "Проекты",
                 value: <ProjectsForm
+                    users={this.props.users}
                     projects={this.props.projects}
                     displayError={this.props.displayError}
                 />,
@@ -74,6 +75,7 @@ export class SettingsForm extends React.Component<SettingsFormProps, SettingsFor
     }
 
     render() {
+        console.log(JSON.stringify(this.props, null,2))
         this.buildParts()
         return (
             <React.Fragment>

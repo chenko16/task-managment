@@ -7,6 +7,7 @@ import AddBtn from "@material-ui/icons/Add";
 import {Project} from "../../store/project/Types";
 import AddProjectDialog from "./AddProjectDialog";
 import Utils from "../../store/users/Utils";
+import {User} from "../../store/users/Types";
 
 
 const tableIcons = {
@@ -23,6 +24,7 @@ const tableIcons = {
 
 export interface ProjectsFormProps {
     projects: Project[],
+    users: User[],
 
     displayError(msg: string): any
 }
@@ -95,9 +97,11 @@ export default class ProjectsForm extends React.Component<ProjectsFormProps, Pro
 
                 {this.state.openAdd && <AddProjectDialog
                     displayError={this.props.displayError}
+                    users={this.props.users}
                     close={value => this.setState({openAdd: value})}
                     onClose={(value, data) => {
                         if (value === 'Ok') {
+                            console.log(JSON.stringify(data,null,2))
                             //this.props.createUser(data);
                         }
                     }}

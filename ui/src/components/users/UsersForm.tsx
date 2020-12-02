@@ -75,6 +75,7 @@ class UsersForm extends React.Component<UsersFormProps, UsersFormState> {
     }
 
     render(): React.ReactNode {
+        console.log(JSON.stringify(this.props, null, 2))
         return (
             <React.Fragment>
                 <MaterialTable

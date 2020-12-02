@@ -45,32 +45,36 @@ export class UserService {
         let result = await BackendProvider.request('GET', '/user/list');
 
         let users: User[] = [];
+
         let user1: User = {
-            id:1,
+            id: 10,
             login:"Saske",
             systemRole: SystemRole.USER,
             active: true
         };
         let user2: User = {
-            id:2,
+            id: 2,
             login:"Kakashi",
             systemRole: SystemRole.ADMIN,
             active: true
         };
         let user3: User = {
-            id:3,
+            id: 3,
             login:"Sakura",
             systemRole: SystemRole.MANAGER,
             active: false
         };
         let user4: User = {
-            id:4,
+            id: 4,
             login:"Itachi",
             systemRole: SystemRole.ADMIN,
             active: true
         };
 
-        users.push(user1,user2,user3,user4);
+        users.push(user1);
+        users.push(user2);
+        users.push(user3);
+        users.push(user4);
         okCallback(users);
         // if (result.ok) {
         //     let body = await result.json();
@@ -121,6 +125,15 @@ export class UserService {
             okCallback(id)
         } else {
             errorCallback("Ошибка при обновлении роли.")
+        }
+    }
+
+    static getEmptyUser(): User {
+        return {
+            id: -1,
+            systemRole: SystemRole.USER,
+            login: "",
+            active: false
         }
     }
 

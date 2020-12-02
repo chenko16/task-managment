@@ -10,8 +10,6 @@ import {connect} from "react-redux";
 import {SystemRole, User, UserRequest} from "../../store/users/Types";
 import {SettingsForm} from "../../components/settings/SettingsForm";
 import {BusinessRole, Project, ProjectsByUsers, RoleInProject} from "../../store/project/Types";
-import {user} from "../../store/auth/Reducer";
-
 
 export interface SettingsViewDispatchProps {
     fetchUsers() : any,
@@ -35,12 +33,73 @@ export interface SettingsViewProps {
 }
 
 export interface SettingsViewState {
-
+    projects: Project[],
+    projectsByUser: ProjectsByUsers
 }
 
 class SettingsView extends React.Component<SettingsViewStateProps & SettingsViewDispatchProps & SettingsViewProps, SettingsViewState>{
     constructor(props) {
         super(props);
+
+
+        let project1: Project = {
+            id: 1,
+            reporter: this.props.users[0],
+            assignee: this.props.users[1],
+            name: "teamMinato",
+            description:"i will always watch after you",
+            active: true
+        };
+
+        let project2: Project = {
+            id: 2,
+            reporter: this.props.users[2],
+            assignee: this.props.users[0],
+            name: "teamHatake",
+            description: "team7 <3",
+            active: true
+        };
+
+        let project3: Project = {
+            id: 3,
+            reporter: this.props.users[1],
+            assignee: this.props.users[2],
+            name: "teamUchiha",
+            description: "any tehnique is worthless before my eyes",
+            active: false
+        };
+
+        let projects: Project[] = [];
+        projects.push(project1, project2, project3);
+
+        let roleInProject1: RoleInProject = {
+            projectId: 1,
+            role: BusinessRole.DEVELOPER
+        }
+
+        let roleInProject2: RoleInProject = {
+            projectId: 2,
+            role: BusinessRole.LEADER
+        }
+
+        let roleInProject3: RoleInProject = {
+            projectId: 3,
+            role: BusinessRole.DEVOPS
+        }
+
+        let roleInProjects: RoleInProject[] = [];
+        roleInProjects.push(roleInProject1, roleInProject2, roleInProject3);
+
+        let projectsByUsers: ProjectsByUsers = {
+            assignee: [1, 2],
+            reporters: [3],
+            participants: roleInProjects
+        }
+
+        this.state = {
+            projects: projects,
+            projectsByUser: projectsByUsers
+        }
 
         this.props.fetchUsers();
         this.props.fetchProjects();
@@ -50,12 +109,14 @@ class SettingsView extends React.Component<SettingsViewStateProps & SettingsView
         if (this.props.isLoading)
             return this.renderLoader();
 
+        console.log(JSON.stringify(this.props, null, 2));
         return (
             <React.Fragment>
                 <SettingsForm
                     currentTab={this.props.currentTab}
                     users={this.props.users}
-                    projects={this.props.projects}
+                    // projects={this.props.projects}
+                    projects={this.state.projects}
                     isLoading={this.props.isLoading}
                     displayError={this.props.displayError}
                     createUser={(user) => {
@@ -73,7 +134,8 @@ class SettingsView extends React.Component<SettingsViewStateProps & SettingsView
                             this.props.fetchUsers();
                         })
                     }}
-                    projectsByUser={this.props.projectsByUser}
+                    // projectsByUser={this.props.projectsByUser}
+                    projectsByUser={this.state.projectsByUser}
                     fetchProjectsByUser={(userId)=> {
                         this.props.fetchProjectsByUser(userId)
                     }}
