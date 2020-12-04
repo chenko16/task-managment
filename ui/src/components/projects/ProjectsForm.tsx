@@ -4,10 +4,11 @@ import {Add, ArrowDownward, Check, Clear, Delete, Edit, Remove, Search} from "@m
 import MaterialTable from "material-table";
 import {Avatar, Fab} from "@material-ui/core";
 import AddBtn from "@material-ui/icons/Add";
-import {Project} from "../../store/project/Types";
+import {BusinessRole, Project, ProjectRequest, UserProject} from "../../store/project/Types";
 import AddProjectDialog from "./AddProjectDialog";
 import Utils from "../../store/users/Utils";
 import {User} from "../../store/users/Types";
+import EditProjectDialog from "./EditProjectDialog";
 
 
 const tableIcons = {
@@ -25,8 +26,35 @@ const tableIcons = {
 export interface ProjectsFormProps {
     projects: Project[],
     users: User[],
+    participants?: UserProject[],
+    openEditProject: boolean,
+    currentProject? : Project,
 
-    displayError(msg: string): any
+    currentProjectChanged(currentProject): any,
+
+    openEditProjectChanged (openEditProject) : any,
+
+    displayError(msg: string): any,
+
+    createProject(project: ProjectRequest, okCallback?, errorCallback?): any,
+
+    updateDescription(id: number, description: string, okCallback?, errorCallback?): any,
+
+    updateAssignee(id: number, userId: number, okCallback?: (project: Project) => void, errorCallback?): any,
+
+    updateReporter(id: number, userId: number, okCallback?, errorCallback?): any,
+
+    updateProjectStatus(id: number, status: boolean, okCallback?, errorCallback?): any,
+
+    addParticipant(id: number, userId: number, okCallback?, errorCallback?): any,
+
+    deleteParticipant(id: number, userId: number, okCallback?, errorCallback?): any,
+
+    setParticipantRole(id: number, userId: number, role: BusinessRole, okCallback?, errorCallback?): any,
+
+    getParticipants(id: number, okCallback?, errorCallback?): any,
+
+    fetchProjects(): any
 }
 
 export interface ProjectsFormState {
@@ -41,7 +69,8 @@ export default class ProjectsForm extends React.Component<ProjectsFormProps, Pro
         super(props);
         this.state = {
             openAdd: false,
-            openEdit: false,
+            openEdit: this.props.openEditProject,
+            currentProject: this.props.currentProject,
             columns: [
                 {title: 'id', field: 'id', hidden: true},
                 {title: 'reporter', field: 'reporter', hidden: true},
@@ -56,6 +85,8 @@ export default class ProjectsForm extends React.Component<ProjectsFormProps, Pro
     }
 
     render(): React.ReactNode {
+        console.log(JSON.stringify(this.state, null, 2))
+        console.log(JSON.stringify(this.props, null, 2))
         return (
             <React.Fragment>
                 <MaterialTable
@@ -91,6 +122,8 @@ export default class ProjectsForm extends React.Component<ProjectsFormProps, Pro
                         }
                     }}
                     onRowClick={(event, rowData: Project) => {
+                        this.props.openEditProjectChanged(true);
+                        this.props.currentProjectChanged(rowData);
                         this.setState({currentProject: rowData, openEdit: true})
                     }}
                 />
@@ -99,10 +132,44 @@ export default class ProjectsForm extends React.Component<ProjectsFormProps, Pro
                     displayError={this.props.displayError}
                     users={this.props.users}
                     close={value => this.setState({openAdd: value})}
-                    onClose={(value, data) => {
-                        if (value === 'Ok') {
-                            console.log(JSON.stringify(data,null,2))
+                    onClose={(value, projectRequest, assignee, reporter, description) => {
+                        if (value === 'Ok' && projectRequest && assignee && reporter && description) {
+                            this.props.createProject(projectRequest, (project) => {
+                                this.props.updateReporter(project.id, reporter.id);
+                                this.props.updateAssignee(project.id, assignee.id);
+                                this.props.updateDescription(project.id, description);
+                                this.props.fetchProjects();
+                            })
                             //this.props.createUser(data);
+                        }
+                    }}
+                />}
+
+                {this.state.openEdit && <EditProjectDialog
+                    participants={this.props.participants}
+                    addParticipant={(id, participant) => {
+                        this.props.addParticipant(id, participant, () => {
+                            this.props.getParticipants(id);
+                        });
+                    }}
+                    deleteParticipant={this.props.deleteParticipant}
+                    getParticipants={this.props.getParticipants}
+                    setParticipantRole={this.props.setParticipantRole}
+                    currentProject={this.state.currentProject}
+                    displayError={this.props.displayError}
+                    users={this.props.users}
+                    updateProjectStatus={this.props.updateProjectStatus}
+                    close={(e) => {
+                        this.setState({openEdit: e})
+                        this.props.openEditProjectChanged(e);
+                        this.props.currentProjectChanged(undefined);
+                    }}
+                    onClose={(value, description, assignee) => {
+                        if (value === 'Ok' && description && assignee && this.state.currentProject) {
+                            if (this.state.currentProject?.description !== description)
+                                this.props.updateDescription(this.state.currentProject?.id, description);
+                            if (this.state.currentProject?.assignee !== assignee)
+                                this.props.updateAssignee(this.state.currentProject?.id, assignee.id);
                         }
                     }}
                 />}

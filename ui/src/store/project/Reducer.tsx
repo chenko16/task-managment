@@ -2,12 +2,13 @@ import * as actions from "./Actions"
 import {ActionType, getType} from "typesafe-actions";
 import {Reducer} from "redux";
 import {ApplicationState} from "../Store";
-import {Project, ProjectsByUsers} from "./Types";
+import {Project, ProjectsByUsers, UserProject} from "./Types";
 
 export interface ProjectStoreState {
     projects : Array<Project>,
     selectedProject : Project | undefined,
     currentProjectsByUser : ProjectsByUsers | undefined,
+    currentParticipants: UserProject[] | undefined,
     actionInProgress : boolean,
     projectLoadInProgress : boolean,
     projectsByUsersProgress: boolean
@@ -17,14 +18,13 @@ const initialState: ProjectStoreState = {
     projects : [],
     selectedProject : undefined,
     currentProjectsByUser : undefined,
+    currentParticipants: undefined,
     actionInProgress : false,
     projectLoadInProgress : false,
     projectsByUsersProgress: false
 }
 
 export type Actions = ActionType<typeof actions>
-
-
 
 export const reducer: Reducer<ProjectStoreState> = (state: ProjectStoreState = initialState, action: Actions) => {
     switch (action.type) {
@@ -55,9 +55,17 @@ export const reducer: Reducer<ProjectStoreState> = (state: ProjectStoreState = i
         case getType(actions.fetchProjectsByUserAction.failure):
             return {...state, projectsByUsersProgress: false}
 
+        case getType(actions.getParticipantsAction.request):
+            return {...state, actionInProgress: true}
+
+        case getType(actions.getParticipantsAction.success):
+            return {...state, actionInProgress: false, currentParticipants: action.payload}
+
+        case getType(actions.getParticipantsAction.failure):
+            return {...state, actionInProgress: false}
+
         default:
             return state;
-
     }
 }
 
@@ -83,4 +91,8 @@ export function getProjectsByUser(state: ApplicationState): ProjectsByUsers | un
 
 export function isProjectsByUserLoading(state: ApplicationState): boolean {
     return state.project.projectsByUsersProgress;
+}
+
+export function getParticipants(state: ApplicationState): UserProject[] | undefined {
+    return state.project.currentParticipants;
 }

@@ -380,8 +380,8 @@ class App extends React.Component<AppProps & ReactRouterProps, AppState> {
 
   render() {
 
-    console.log(this.props)
-    console.log(this.state)
+    // console.log(this.props)
+    // console.log(this.state)
 
     if (!this.props.isAuthPerformed) {
       this.props.checkAuth()

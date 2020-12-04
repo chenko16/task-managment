@@ -12,7 +12,7 @@ import {
     withStyles
 } from "@material-ui/core";
 import {mapRole, SystemRole, User, UserRequest} from "../../store/users/Types";
-import {BusinessRole} from "../../store/project/Types";
+import {BusinessRole, ProjectRequest} from "../../store/project/Types";
 import {UserService} from "../../services/UserService";
 
 const styles = theme => createStyles({
@@ -49,7 +49,7 @@ export interface AddProjectDialogProps {
 
     displayError(errorMessage: string): any,
 
-    onClose(value: string, data?: any): any,
+    onClose(value: string, projectRequest?: ProjectRequest, assignee?: User, reporter?: User, description?: string): any,
 
     close(value: boolean): any
 }
@@ -57,6 +57,7 @@ export interface AddProjectDialogProps {
 export interface AddProjectDialogState {
     businessRoles: BusinessRole[],
     name: string,
+    description: string,
     assigneeLogin: string,
     assignee: User,
     reporterLogin: string,
@@ -72,6 +73,7 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
         this.state = {
             businessRoles: businessRoles,
             name: "",
+            description: "",
             assigneeLogin: "",
             assignee: UserService.getEmptyUser(),
             reporterLogin: "",
@@ -80,7 +82,7 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
     }
 
     render(): React.ReactNode {
-        console.log(this.state)
+       // console.log(this.state)
         // @ts-ignore
         const {classes} = this.props;
         return (
@@ -110,6 +112,7 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
                                         <Grid item xs={8} style={{marginLeft: "30px"}}>
                                             <TextField
                                                 id="name"
+                                                error={this.state.name===""}
                                                 defaultValue={this.state.name}
                                                 onChange={(e) => {
                                                     this.setState({name: e.target.value})
@@ -120,6 +123,26 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
                                             />
                                         </Grid>
                                     </Grid>
+                                    <Grid container direction="column" justify="flex-start" alignItems="flex-start"
+                                          style={{margin: 4}}>
+                                        <Grid item>
+                                            <b>Описание проекта:</b>
+                                        </Grid>
+                                        <Grid item style={{width: "95%", marginTop: 6}}>
+                                            <TextField
+                                                id="outlined-multiline-description"
+                                                multiline
+                                                rows={4}
+                                                fullWidth
+                                                error={this.state.description===""}
+                                                defaultValue={this.state.description}
+                                                onChange={(e) => {
+                                                    this.setState({description: e.target.value})
+                                                }}
+                                                variant="outlined"
+                                            />
+                                        </Grid>
+                                    </Grid>
                                     <Grid container direction="row" justify="flex-start" alignItems="center"
                                           style={{margin: 4}}>
                                         <Grid item xs={2}>
@@ -127,10 +150,9 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
                                         </Grid>
                                         <Grid item xs={8} style={{marginLeft: "30px"}}>
                                             <Select
-                                                value={this.state.reportLogin}
+                                                value={this.state.reporterLogin}
                                                 onChange={(event, child)=> {
                                                     let id = child.props.id as number;
-                                                    console.log(id)
                                                     let reporter: User = this.props.users.filter(user => {
                                                         return user.id === id
                                                     }).map(user => {
@@ -158,7 +180,6 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
                                                 value={this.state.assigneeLogin}
                                                 onChange={(event, child)=> {
                                                     let id = child.props.id as number;
-                                                    console.log(id)
                                                     let assignee: User = this.props.users.filter(user => {
                                                         return user.id === id
                                                     }).map(user => {
@@ -177,9 +198,28 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
                                         </Grid>
                                     </Grid>
                                 </Grid>
-                                <div style={{margin: 4}}>
-                                    <b> Список проектов, в которых пользователь участвует: </b>
-                                </div>
+                                {/*<Grid container direction="column" justify="flex-start" alignItems="flex-start"*/}
+                                {/*      style={{margin: 4}}>*/}
+                                {/*    <Grid item>*/}
+                                {/*        <b>Участники проекта:</b>*/}
+                                {/*    </Grid>*/}
+                                {/*    <Grid item style={{width: "95%", marginTop: 6}}>*/}
+                                {/*        <TextField*/}
+                                {/*            id="outlined-multiline-description"*/}
+                                {/*            multiline*/}
+                                {/*            rows={4}*/}
+                                {/*            fullWidth*/}
+                                {/*            defaultValue={this.state.description}*/}
+                                {/*            onChange={(e) => {*/}
+                                {/*                this.setState({description: e.target.value})*/}
+                                {/*            }}*/}
+                                {/*            variant="outlined"*/}
+                                {/*        />*/}
+                                {/*    </Grid>*/}
+                                {/*</Grid>*/}
+                                {/*<div style={{margin: 4}}>*/}
+                                {/*    <b> Список проектов, в которых пользователь участвует: </b>*/}
+                                {/*</div>*/}
                             </DialogContentText>
                             {/*<Paper style={{overflow: "auto"}}>*/}
                             {/*    <Table style={{textDecoration: "none"}}>*/}
@@ -203,13 +243,32 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
                         <DialogActions style={{marginTop: 6, marginRight: 6}}>
                             <Button
                                 onClick={(e) => {
-                                    this.props.onClose('Ok', this.state)
+                                    if (this.state.name === "" || this.state.name === undefined) {
+                                        this.props.displayError("Поле 'Название проекта' не может быть пустым.");
+                                        return;
+                                    }
+                                    if (this.state.description === "" || this.state.description === undefined) {
+                                        this.props.displayError("Поле 'Описание' не может быть пустым.");
+                                        return;
+                                    }
+                                    if (this.state.assigneeLogin === "" || this.state.assignee === undefined) {
+                                        this.props.displayError("Выбор управляющего обязателен.");
+                                        return;
+                                    }
+                                    if (this.state.reporterLogin === "" || this.state.reporter === undefined) {
+                                        this.props.displayError("Выбор руководителя обязателен.");
+                                        return;
+                                    }
+                                    let projectRequest: ProjectRequest = {
+                                        name: this.state.name
+                                    };
+                                    this.props.onClose('Ok', projectRequest, this.state.assignee, this.state.reporter, this.state.description);
                                     this.props.close(false);
                                 }}
                                 color="primary"
                                 variant={"contained"}
                             >
-                                Обновить
+                                Создать
                             </Button>
                             <Button onClick={(e) => {
                                 this.props.onClose('Cancel');

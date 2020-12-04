@@ -75,7 +75,7 @@ class UsersForm extends React.Component<UsersFormProps, UsersFormState> {
     }
 
     render(): React.ReactNode {
-        console.log(JSON.stringify(this.props, null, 2))
+       // console.log(JSON.stringify(this.props, null, 2))
         return (
             <React.Fragment>
                 <MaterialTable
@@ -126,7 +126,6 @@ class UsersForm extends React.Component<UsersFormProps, UsersFormState> {
                     }}
                     onClose={(value, data: UserEditFormState) => {
                         this.props.updateUserRole(data.id,data.systemRole);
-                        console.log(data);
                     }}
                     close={value => this.setState({openEdit: value})}
                     currentUser={this.state.currentUser}

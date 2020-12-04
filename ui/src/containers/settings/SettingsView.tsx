@@ -9,23 +9,44 @@ import * as notificationActions from "../../store/notification/Actions";
 import {connect} from "react-redux";
 import {SystemRole, User, UserRequest} from "../../store/users/Types";
 import {SettingsForm} from "../../components/settings/SettingsForm";
-import {BusinessRole, Project, ProjectsByUsers, RoleInProject} from "../../store/project/Types";
+import {
+    BusinessRole,
+    Project,
+    ProjectRequest,
+    ProjectsByUsers,
+    RoleInProject,
+    UserProject
+} from "../../store/project/Types";
+import ProjectsForm from "../../components/projects/ProjectsForm";
+import EditProjectDialog from "../../components/projects/EditProjectDialog";
 
 export interface SettingsViewDispatchProps {
-    fetchUsers() : any,
     displayError(msg: string): any,
+
+    fetchUsers() : any,
     createUser(user: UserRequest, okCallback?, errorCallback?): any,
     updateUserStatus(id: number, status: boolean, okCallback?, errorCallback?): any,
     updateUserRole(id: number, role: SystemRole, okCallback?, errorCallback?): any,
+
     fetchProjects(): any,
-    fetchProjectsByUser(userId: number, okCallback?, errorCallback?): any
+    fetchProjectsByUser(userId: number, okCallback?, errorCallback?): any,
+    createProject(project: ProjectRequest, okCallback?, errorCallback?): any,
+    updateDescription (id: number, description: string, okCallback?, errorCallback?): any,
+    updateAssignee (id: number, userId: number, okCallback?, errorCallback?): any,
+    updateReporter (id: number, userId: number, okCallback?, errorCallback?): any,
+    addParticipant (id: number, userId: number, okCallback?, errorCallback?): any,
+    deleteParticipant (id: number, userId: number, okCallback?, errorCallback?): any,
+    setParticipantRole (id: number, userId: number, role: BusinessRole, okCallback?, errorCallback?): any,
+    getParticipants (id: number, okCallback?, errorCallback?): any,
+    updateProjectStatus (id: number, status: boolean, okCallback?, errorCallback?): any
 }
 
 export interface SettingsViewStateProps {
     users: User[],
     projects: Project[],
     projectsByUser: ProjectsByUsers | undefined,
-    isLoading: boolean
+    isLoading: boolean,
+    participants: UserProject[] | undefined
 }
 
 export interface SettingsViewProps {
@@ -34,7 +55,9 @@ export interface SettingsViewProps {
 
 export interface SettingsViewState {
     projects: Project[],
-    projectsByUser: ProjectsByUsers
+    projectsByUser: ProjectsByUsers,
+    openEditProject: boolean,
+    currentProject?: Project
 }
 
 class SettingsView extends React.Component<SettingsViewStateProps & SettingsViewDispatchProps & SettingsViewProps, SettingsViewState>{
@@ -65,7 +88,7 @@ class SettingsView extends React.Component<SettingsViewStateProps & SettingsView
             reporter: this.props.users[1],
             assignee: this.props.users[2],
             name: "teamUchiha",
-            description: "any tehnique is worthless before my eyes",
+            description: "any teсhnique is worthless before my eyes",
             active: false
         };
 
@@ -98,7 +121,8 @@ class SettingsView extends React.Component<SettingsViewStateProps & SettingsView
 
         this.state = {
             projects: projects,
-            projectsByUser: projectsByUsers
+            projectsByUser: projectsByUsers,
+            openEditProject: false
         }
 
         this.props.fetchUsers();
@@ -109,7 +133,7 @@ class SettingsView extends React.Component<SettingsViewStateProps & SettingsView
         if (this.props.isLoading)
             return this.renderLoader();
 
-        console.log(JSON.stringify(this.props, null, 2));
+        //console.log(JSON.stringify(this.props, null, 2));
         return (
             <React.Fragment>
                 <SettingsForm
@@ -139,6 +163,37 @@ class SettingsView extends React.Component<SettingsViewStateProps & SettingsView
                     fetchProjectsByUser={(userId)=> {
                         this.props.fetchProjectsByUser(userId)
                     }}
+                    updateAssignee={(projectId, userId) => {
+                        this.props.updateAssignee(projectId, userId, () => {
+                            this.props.fetchProjects();
+                        })
+                    }}
+                    updateDescription={(projectId, description) => {
+                        this.props.updateDescription(projectId, description, () => {
+                            this.props.fetchProjects();
+                        })
+                    }}
+                    updateReporter={(projectId, userId) => {
+                        this.props.updateReporter(projectId, userId, () => {
+                            this.props.fetchProjects();
+                        })
+                    }}
+                    updateProjectStatus={(projectId, status) => {
+                        this.props.updateProjectStatus(projectId, status, () => {
+                            this.props.fetchProjects();
+                        })
+                    }}
+                    openEditProject={this.state.openEditProject}
+                    openEditProjectChanged={(openEditProject) => {this.setState({openEditProject: openEditProject})}}
+                    currentProject={this.state.currentProject}
+                    currentProjectChanged={(currentProject) => {this.setState({currentProject: currentProject})}}
+                    participants={this.props.participants}
+                    addParticipant={this.props.addParticipant}
+                    deleteParticipant={this.props.deleteParticipant}
+                    getParticipants={this.props.getParticipants}
+                    setParticipantRole={this.props.setParticipantRole}
+                    createProject={this.props.createProject}
+                    fetchProjects={this.props.fetchProjects}
                 />
             </React.Fragment>
         )
@@ -163,7 +218,8 @@ function mapStateToProps(state) : SettingsViewStateProps {
         users : userSelectors.getAllUsers(state),
         projects: projectSelectors.getAllProjects(state),
         projectsByUser: projectSelectors.getProjectsByUser(state),
-        isLoading: userSelectors.usersIsFetching(state) || projectSelectors.projectsIsFetching(state)
+        isLoading: userSelectors.usersIsFetching(state) || projectSelectors.projectsIsFetching(state),
+        participants: projectSelectors.getParticipants(state)
     }
 }
 
@@ -188,6 +244,33 @@ function mapDispatchToProps(dispatch: any): SettingsViewDispatchProps {
         },
         updateUserRole(id: number, role: SystemRole, okCallback?, errorCallback?): any {
             dispatch(userActions.updateRole(id, role, okCallback, errorCallback))
+        },
+        getParticipants(id: number, okCallback?, errorCallback?): any {
+            dispatch(projectActions.getParticipants(id, okCallback, errorCallback))
+        },
+        setParticipantRole(id: number, userId: number, role: BusinessRole, okCallback?, errorCallback?): any {
+            dispatch(projectActions.setParticipantRole(id, userId, role, okCallback, errorCallback))
+        },
+        addParticipant(id: number, userId: number, okCallback?, errorCallback?): any {
+            dispatch(projectActions.addParticipant(id, userId, okCallback, errorCallback))
+        },
+        deleteParticipant(id: number, userId: number, okCallback?, errorCallback?): any {
+            dispatch(projectActions.deleteParticipant(id, userId, okCallback, errorCallback))
+        },
+        updateDescription(id: number, description: string, okCallback?, errorCallback?): any {
+            dispatch(projectActions.updateDescription(id, description, okCallback, errorCallback))
+        },
+        updateAssignee(id: number, userId: number, okCallback?, errorCallback?): any {
+            dispatch(projectActions.updateAssignee(id, userId, okCallback, errorCallback))
+        },
+        updateReporter(id: number, userId: number, okCallback?, errorCallback?): any {
+            dispatch(projectActions.updateReporter(id, userId, okCallback, errorCallback))
+        },
+        updateProjectStatus(id: number, status: boolean, okCallback?, errorCallback?): any {
+            dispatch(projectActions.updateProjectStatus(id, status, okCallback, errorCallback))
+        },
+        createProject(project: ProjectRequest, okCallback?, errorCallback?): any {
+            dispatch(projectActions.createProject(project, okCallback, errorCallback))
         },
         displayError: (msg: string) => {
             dispatch(notificationActions.error(msg))

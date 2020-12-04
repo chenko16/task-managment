@@ -7,7 +7,7 @@ export interface UserProject {
 }
 
 export interface ProjectRequest {
-    id: number,
+    id?: number,
     name: string
 }
 
