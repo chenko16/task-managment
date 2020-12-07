@@ -1,36 +1,95 @@
-import {SystemRole, User} from "../store/users/Types";
 import BackendProvider from "./BackendProvider";
+import {Release, ReleaseRequest} from "../store/releases/Types";
 
 
 export default class ReleaseService {
 
-    static async auth(
-        username: string,
-        password: string,
-        okCallback: (user: User, redirect: string | null) => void,
+    static async createRelease(
+        release: ReleaseRequest,
+        okCallback: (release: Release) => void,
         errorCallback: (errorMessage: string) => void) {
 
-        let result = await BackendProvider.request('POST', '/auth/login', null, null, JSON.stringify({
-            username: username,
-            password: password
-        }))
+        let result = await BackendProvider.request('POST', '/release', null, null, JSON.stringify(release))
 
-        let user : User = {
-            id:2,
-            login: "Poly",
-            systemRole: SystemRole.ADMIN,
-            active: true
+        if (result.ok) {
+            let body = await result.json();
+            okCallback(body as Release);
+        } else {
+            errorCallback("Ошибка при создании релиза")
         }
-        okCallback(user, null)
-
-        // if (result.ok) {
-        //     let body = await result.json();
-        //     let user = body as User
-        //     okCallback(user, result.headers.get("redirect"))
-        // } else {
-        //     errorCallback("Неверный логин или пароль")
-        // }
     }
 
+    static async  getRelease(
+        idRelease: number,
+        okCallback: (release: Release) => void,
+        errorCallback: (errorMessage: string) => void) {
 
+        let result = await BackendProvider.request('GET', '/release/' + idRelease.toString())
+
+        if (result.ok) {
+            let body = await result.json();
+            okCallback(body as Release);
+        } else {
+            errorCallback("Ошибка при получении релиза")
+        }
+    }
+
+    static async  getReleases(
+        okCallback: (releases: Release[]) => void,
+        errorCallback: (errorMessage: string) => void) {
+
+        let result = await BackendProvider.request('GET', '/release/list')
+
+        if (result.ok) {
+            let body = await result.json();
+            okCallback(body as Release[]);
+        } else {
+            errorCallback("Ошибка при получении списка релизов")
+        }
+    }
+
+    static async  deleteRelease(
+        idRelease: number,
+        okCallback: (idRelease: number) => void,
+        errorCallback: (errorMessage: string) => void) {
+
+        let result = await BackendProvider.request('DELETE', '/release/' + idRelease.toString())
+
+        if (result.ok) {
+            okCallback(idRelease);
+        } else {
+            errorCallback("Ошибка при удалении релиза")
+        }
+    }
+
+    static async  updateReleaseDescription(
+        idRelease: number,
+        description: string,
+        okCallback: (idRelease: number) => void,
+        errorCallback: (errorMessage: string) => void) {
+
+        let result = await BackendProvider.request('PUT', '/release/' + idRelease.toString() + '/description/', null, {
+            description: description
+        })
+
+        if (result.ok) {
+            okCallback(idRelease);
+        } else {
+            errorCallback("Ошибка при обновлении описания релиза")
+        }
+    }
+
+    static async  finishRelease(
+        idRelease: number,
+        okCallback: (idRelease: number) => void,
+        errorCallback: (errorMessage: string) => void) {
+
+        let result = await BackendProvider.request('PUT', '/release/' + idRelease.toString() + '/finish/')
+
+        if (result.ok) {
+            okCallback(idRelease);
+        } else {
+            errorCallback("Ошибка при закрытии релиза")
+        }
+    }
 }

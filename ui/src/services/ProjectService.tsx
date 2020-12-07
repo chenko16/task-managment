@@ -260,7 +260,7 @@ export class ProjectService {
             let body = await result.json();
             okCallback(body as ProjectsByUsers);
         } else {
-            errorCallback("Ошиюка при получении списка проектов пользователя.")
+            errorCallback("Ошибка при получении списка проектов пользователя.")
         }
     }
 
