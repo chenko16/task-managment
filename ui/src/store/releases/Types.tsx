@@ -6,6 +6,7 @@ export interface Release {
     reporter: User,
     project: Project,
     created: number,
+    description: string,
     finished: number
 }
 
@@ -15,9 +16,4 @@ export interface ReleaseRequest {
     name: string,
     description: string,
     reporterId: number
-    // private Long id;
-    // private Long projectId;
-    // private String name;
-    // private String description;
-    // private Long reporterId;
 }

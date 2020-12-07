@@ -11,6 +11,7 @@ public class ReleaseDto {
     private Long id;
     private UserDto reporter;
     private ProjectDto project;
+    private String description;
     private Instant created;
     private Instant finished;
 }
