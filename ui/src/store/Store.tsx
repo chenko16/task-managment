@@ -1,6 +1,7 @@
 import * as auth from './auth/Reducer';
 import * as notification from './notification/Reducer';
 import * as user from './users/Reducer';
+import * as releases from './releases/Reducer';
 // import * as role from './role/Reducer';
 import * as project from './project/Reducer'
 import {applyMiddleware, combineReducers, createStore, Reducer} from 'redux';
@@ -13,6 +14,7 @@ export interface ApplicationState {
     project: project.ProjectStoreState
     notification: notification.NotificationState,
     user: user.UsersStoreState,
+    releases: releases.ReleasesStoreState
     // role: role.RoleStoreState
 }
 
@@ -22,6 +24,7 @@ export const reducers: Reducer<ApplicationState> =
         project: project.reducer,
         notification: notification.reducer,
         user: user.reducer,
+        releases: releases.reducer
         // role: role.reducer
     })
 

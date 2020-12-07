@@ -280,7 +280,7 @@ class EditProjectDialog extends React.Component<EditProjectDialogProps, EditProj
                                     </Grid>
                                 </Grid>
                                 <div style={{margin: 4}}>
-                                    <b> Список проектов, в которых пользователь участвует: </b>
+                                    <b> Список пользователей, которые учавствуют в проекте: </b>
                                 </div>
                             </DialogContentText>
                             <Paper style={{overflow: "auto"}}>
