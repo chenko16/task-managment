@@ -35,8 +35,8 @@ public class ProjectServiceImpl implements ProjectService {
     private final ProjectUserMapper projectUserMapper;
 
     @Override
-    public void createProject(ProjectRequest project) {
-        projectRepository.save(projectMapper.toEntity(project));
+    public ProjectDto createProject(ProjectRequest project) {
+        return projectMapper.toDto(projectRepository.save(projectMapper.toEntity(project)));
     }
 
     @Override
