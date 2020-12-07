@@ -21,9 +21,8 @@ public class ProjectController {
 
     @PostMapping
     @ApiOperation("Create/edit project")
-    public ResponseEntity<Void> createProject(@RequestBody ProjectRequest projectRequest) {
-        projectService.createProject(projectRequest);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<ProjectDto> createProject(@RequestBody ProjectRequest projectRequest) {
+        return ResponseEntity.ok().body(projectService.createProject(projectRequest));
     }
 
     @GetMapping(value = "/{id}")

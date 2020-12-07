@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface ProjectService {
 
-    void createProject(ProjectRequest id);
+    ProjectDto createProject(ProjectRequest id);
     Optional<ProjectDto> getProject(Long id);
     List<ProjectDto> getProjectList();
     void deleteProject(Long id);
