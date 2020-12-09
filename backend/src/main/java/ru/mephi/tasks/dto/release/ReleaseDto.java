@@ -12,6 +12,7 @@ public class ReleaseDto {
     private UserDto reporter;
     private ProjectDto project;
     private String description;
+    private String name;
     private Instant created;
     private Instant finished;
 }

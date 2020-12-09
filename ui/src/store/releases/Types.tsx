@@ -3,6 +3,7 @@ import {Project} from "../project/Types";
 
 export interface Release {
     id: number,
+    name: string,
     reporter: User,
     project: Project,
     created: number,
@@ -11,7 +12,7 @@ export interface Release {
 }
 
 export interface ReleaseRequest {
-    id: number,
+    id?: number,
     projectId: number,
     name: string,
     description: string,

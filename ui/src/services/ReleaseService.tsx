@@ -39,13 +39,46 @@ export default class ReleaseService {
         errorCallback: (errorMessage: string) => void) {
 
         let result = await BackendProvider.request('GET', '/release/list')
-
-        if (result.ok) {
-            let body = await result.json();
-            okCallback(body as Release[]);
-        } else {
-            errorCallback("Ошибка при получении списка релизов")
-        }
+        let  data = "[\n" +
+            "    {\n" +
+            "        \"id\": 1,\n" +
+            "        \"reporter\": {\n" +
+            "            \"id\": 1,\n" +
+            "            \"login\": \"Kakashi\",\n" +
+            "            \"active\": true,\n" +
+            "            \"systemRole\": \"ADMIN\"\n" +
+            "        },\n" +
+            "        \"project\": {\n" +
+            "            \"id\": 1,\n" +
+            "            \"assignee\": {\n" +
+            "                \"id\": null,\n" +
+            "                \"login\": \"Kakashi\",\n" +
+            "                \"active\": true,\n" +
+            "                \"systemRole\": \"ADMIN\"\n" +
+            "            },\n" +
+            "            \"reporter\": {\n" +
+            "                \"id\": null,\n" +
+            "                \"login\": \"Kakashi\",\n" +
+            "                \"active\": true,\n" +
+            "                \"systemRole\": \"ADMIN\"\n" +
+            "            },\n" +
+            "            \"name\": \"teamMinato\",\n" +
+            "            \"description\": \"i will always watch after you\",\n" +
+            "            \"active\": true\n" +
+            "        },\n" +
+            "        \"description\": \"описание\",\n" +
+            "        \"name\" : \"firstRelease\",\n" +
+            "        \"created\": \"2020-12-09T19:40:40.686524Z\",\n" +
+            "        \"finished\": null\n" +
+            "    }\n" +
+            "]"
+        okCallback(JSON.parse(data));
+        // if (result.ok) {
+        //     let body = await result.json();
+        //     okCallback(body as Release[]);
+        // } else {
+        //     errorCallback("Ошибка при получении списка релизов")
+        // }
     }
 
     static async  deleteRelease(

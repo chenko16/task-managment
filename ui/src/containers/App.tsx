@@ -33,6 +33,7 @@ import AuthView from "./auth/AuthView";
 import {User} from "../store/users/Types";
 import SettingsView from "./settings/SettingsView";
 import {SettingsForm} from "../components/settings/SettingsForm";
+import ReleasesRouter from "./releases/ReleasesRouter";
 
 // import MonitoringView from './monitoring/MonitoringView';
 // import GroupRouter from "./group/GroupRouter";
@@ -499,7 +500,7 @@ class App extends React.Component<AppProps & ReactRouterProps, AppState> {
           <div className={classes.appBarSpacer}/>
           <div className={classes.mainWindow}>
             {/*<Route path="/tasks" component={TaskRouter}/>*/}
-            {/*<Route path="/releases" component={ReleasesRouter}/>*/}
+            <Route path="/releases" component={ReleasesRouter}/>
             <Route path="/settings" component={SettingsView}/>
             <Route path="/users" exact={true} render={() => <SettingsView currentTab={1}/>}/>
           </div>
