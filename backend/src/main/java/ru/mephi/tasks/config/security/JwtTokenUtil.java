@@ -48,7 +48,8 @@ public class JwtTokenUtil implements Serializable {
     public String generateToken(UserDetails userDetails) throws RoleNotFoundException {
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", userDetails.getAuthorities().stream().findFirst().orElseThrow(() ->
-                new RoleNotFoundException(String.format("No any authorities for user: %s", userDetails.getUsername()))).getAuthority());
+                new RoleNotFoundException(String.format("No any authorities for user: %s", userDetails.getUsername())))
+                .getAuthority().replace("ROLE_", ""));
         return doGenerateToken(claims, userDetails.getUsername());
     }
 
