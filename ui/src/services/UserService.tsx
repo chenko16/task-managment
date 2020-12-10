@@ -5,16 +5,15 @@ export class UserService {
 
     static async createUser(
         user: UserRequest,
-        okCallback: () => void,
+        okCallback: (user: User) => void,
         errorCallback: (errorMessage: string) => void) {
 
-        let result = await BackendProvider.request('POST', '/user',null,null,JSON.stringify(user));
+        let result = await BackendProvider.request('POST', '/user',null,null, JSON.stringify(user));
 
         if (result.ok) {
             let body = await result.json();
-            okCallback()
+            okCallback(body as User)
         } else {
-            //let body = await result.json();
             if (user.id) {
                 errorCallback("Ошибка при редактировании пользователя.")
             } else {
@@ -44,44 +43,12 @@ export class UserService {
 
         let result = await BackendProvider.request('GET', '/user/list');
 
-        let users: User[] = [];
-
-        let user1: User = {
-            id: 10,
-            login:"Saske",
-            systemRole: SystemRole.USER,
-            active: true
-        };
-        let user2: User = {
-            id: 2,
-            login:"Kakashi",
-            systemRole: SystemRole.ADMIN,
-            active: true
-        };
-        let user3: User = {
-            id: 3,
-            login:"Sakura",
-            systemRole: SystemRole.MANAGER,
-            active: false
-        };
-        let user4: User = {
-            id: 4,
-            login:"Itachi",
-            systemRole: SystemRole.ADMIN,
-            active: true
-        };
-
-        users.push(user1);
-        users.push(user2);
-        users.push(user3);
-        users.push(user4);
-        okCallback(users);
-        // if (result.ok) {
-        //     let body = await result.json();
-        //     okCallback(body as User[]);
-        // } else {
-        //     errorCallback("Ошибка при получении списка пользователей.")
-        // }
+        if (result.ok) {
+            let body = await result.json();
+            okCallback(body as User[]);
+        } else {
+            errorCallback("Ошибка при получении списка пользователей.")
+        }
     }
 
     static async deleteUser(
@@ -104,7 +71,7 @@ export class UserService {
         okCallback: (id: number) => void,
         errorCallback: (errorMessage: string) => void) {
 
-        let result = await BackendProvider.request('PUT', '/user/' + id.toString(), null, {status: status});
+        let result = await BackendProvider.request('PUT', '/user/status/' + id.toString(), null, {status: status});
 
         if (result.ok) {
             okCallback(id);
@@ -119,7 +86,7 @@ export class UserService {
         okCallback: (id: number) => void,
         errorCallback: (errorMessage: string) => void) {
 
-        let result = await BackendProvider.request('PUT', '/user/' + id.toString() , null, {role: role});
+        let result = await BackendProvider.request('PUT', '/user/role/' + id.toString() , null, {role: role});
 
         if (result.ok) {
             okCallback(id)

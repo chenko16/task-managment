@@ -85,8 +85,8 @@ export default class ProjectsForm extends React.Component<ProjectsFormProps, Pro
     }
 
     render(): React.ReactNode {
-        console.log(JSON.stringify(this.state, null, 2))
-        console.log(JSON.stringify(this.props, null, 2))
+        // console.log(JSON.stringify(this.state, null, 2))
+        // console.log(JSON.stringify(this.props, null, 2))
         return (
             <React.Fragment>
                 <MaterialTable

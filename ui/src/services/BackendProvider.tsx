@@ -4,9 +4,22 @@ export default class BackendProvider {
   static path = __API__;
 
   static request(method: string, path: string, headers?: any, params?: any, body?: any) {
-    let _headers = {
-      Accept: 'application/json',
-      'Content-Type': 'application/json;charset=UTF-8'
+
+    let token = sessionStorage.getItem("jwtToken");
+    console.log("method "+ method+", path: "+path + ", token "+token)
+
+    let _headers = {};
+    if (token) {
+      _headers = {
+        Accept: 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
+        Authorization: `Bearer ${token}`
+      }
+    } else {
+      _headers = {
+        Accept: 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
+      }
     }
 
     if (headers) {
@@ -25,9 +38,10 @@ export default class BackendProvider {
       })
       url += '?' + paramArr.join('&')
     }
+
     return fetch(url, {
       method: method,
-      credentials: 'include',
+      // credentials: 'include',
       headers: _headers,
       redirect: 'manual',
       body: body

@@ -341,11 +341,10 @@ interface AppState {
 }
 
 interface AppProps {
-  user: User,
+  login: string,
   isAuthenticated: boolean,
   isAuthPerformed: boolean,
-  checkAuth() : any,
-  logout() : any
+  logout(): any
 }
 
 class App extends React.Component<AppProps & ReactRouterProps, AppState> {
@@ -381,13 +380,13 @@ class App extends React.Component<AppProps & ReactRouterProps, AppState> {
 
   render() {
 
-    // console.log(this.props)
+    // console.log(JSON.stringify(this.props, null,2))
     // console.log(this.state)
 
-    if (!this.props.isAuthPerformed) {
-      this.props.checkAuth()
-      return this.renderLoader()
-    }
+    // if (!this.props.isAuthPerformed) {
+    // //  this.props.checkAuth()
+    //   return this.renderLoader()
+    // }
 
     if (!this.props.isAuthenticated) {
       return this.renderAuthView()
@@ -515,7 +514,7 @@ class App extends React.Component<AppProps & ReactRouterProps, AppState> {
   }
 
   getName() {
-    let val = this.props.user.login;
+    let val = this.props.login;
     if (val.length > 10) {
       val = val.substr(0, 10) + "..."
     }
@@ -528,17 +527,14 @@ function mapStateToProps(state) {
   return {
     isAuthenticated: authSelectors.isAuthenticated(state),
     isAuthPerformed: authSelectors.isAuthPerformed(state),
-    user: authSelectors.user(state)
+    login: authSelectors.username(state)
   }
 }
 
 function mapDispatchProps(dispatch: any) {
   return {
-    logout: () => {
-      dispatch(authActions.logout());
-    },
-    checkAuth: () => {
-      dispatch(authActions.checkAuth());
+    logout(): any {
+      dispatch(authActions.logout())
     }
   }
 }

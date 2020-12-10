@@ -99,21 +99,6 @@ class EditProjectDialog extends React.Component<EditProjectDialogProps, EditProj
         }
     }
 
-    static getDerivedStateFromProps(props, state) {
-        if (props.currentProject !== state.currentProject) {
-            return {
-                id: props.currentProject ? props.currentProject.id : -1,
-                name: props.currentProject ? props.currentProject.name : "",
-                description: props.currentProject ? props.currentProject.description : "",
-                assigneeLogin: props.currentProject ? props.currentProject.assignee.login : "",
-                active: props.currentProject ? props.currentProject.active : false,
-                assignee: props.currentProject ? props.currentProject.assignee : UserService.getEmptyUser(),
-                reporter: props.currentProject ? props.currentProject.reporter : UserService.getEmptyUser(),
-                currentProject: props.currentProject
-            };
-        }
-    }
-
     render(): React.ReactNode {
         console.log(this.state)
         // @ts-ignore

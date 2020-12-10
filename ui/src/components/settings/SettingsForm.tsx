@@ -123,7 +123,7 @@ export class SettingsForm extends React.Component<SettingsFormProps, SettingsFor
     }
 
     render() {
-        console.log(JSON.stringify(this.props, null, 2))
+        // console.log(JSON.stringify(this.props, null, 2))
         this.buildParts()
         return (
             <React.Fragment>

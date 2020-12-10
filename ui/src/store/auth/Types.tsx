@@ -1,9 +1,8 @@
-import {User} from "../users/Types";
+import {SystemRole} from "../users/Types";
 
 export interface AuthResult {
-    user: User,
-    login: string,
-    redirect? : string
+    role: SystemRole,
+    login: string
 }
 
 

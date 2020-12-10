@@ -24,7 +24,7 @@ var setupApi = function (env, options) {
         break;
       default :
         console.log("using development mode")
-        apiHost = 'http://localhost:8081'
+        apiHost = 'http://localhost:8080'
     }
   }
   console.log("api url is : " + apiHost)
@@ -33,7 +33,7 @@ var setupApi = function (env, options) {
 module.exports = (env, options) => {
 
   setupApi(env, options)
-  var API_VAR = "'" + apiHost + basePath + '/api' + "'"
+  var API_VAR = "'" + apiHost + "'"
   var BASE_VAR = "'" + basePath + "'"
   console.log('Api path :' + API_VAR)
   return {

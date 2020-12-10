@@ -13,22 +13,17 @@ export class ProjectService {
 
         let result = await BackendProvider.request('POST', '/project', null, null, JSON.stringify(project));
 
-        let projectNew: Project = {
-            id: 1,
-            name: "name"
+        if (result.ok) {
+            let body = await result.json();
+            okCallback(body as Project);
+        } else {
+            //let body = await result.json();
+            if (project.id) {
+                errorCallback("Ошибка при редактировании проекта.")
+            } else {
+                errorCallback("Ошибка при добавлении проекта.");
+            }
         }
-        okCallback(projectNew);
-        // if (result.ok) {
-        //     let body = await result.json();
-        //     okCallback(body as Project);
-        // } else {
-        //     //let body = await result.json();
-        //     if (project.id) {
-        //         errorCallback("Ошибка при редактировании проекта.")
-        //     } else {
-        //         errorCallback("Ошибка при добавлении проекта.");
-        //     }
-        // }
     }
 
     static async getProjectInfo(
@@ -80,7 +75,7 @@ export class ProjectService {
         okCallback: (id: number) => void,
         errorCallback: (errorMessage: string) => void) {
 
-        let result = await BackendProvider.request('PUT', '/project/' + id.toString() + '/name', null, {name: name});
+        let result = await BackendProvider.request('PUT', '/project/' + id.toString() + '/name/', null, {name: name});
 
         if (result.ok) {
             okCallback(id);
@@ -95,7 +90,7 @@ export class ProjectService {
         okCallback: (id: number) => void,
         errorCallback: (errorMessage: string) => void) {
 
-        let result = await BackendProvider.request('PUT', '/project/' + id.toString() + '/description', null, {description: description});
+        let result = await BackendProvider.request('PUT', '/project/' + id.toString() + '/description/', null, {description: description});
 
         if (result.ok) {
             okCallback(id);
@@ -110,7 +105,7 @@ export class ProjectService {
         okCallback: (id: number) => void,
         errorCallback: (errorMessage: string) => void) {
 
-        let result = await BackendProvider.request('PUT', '/project/' + id.toString() + '/status', null, {status: status});
+        let result = await BackendProvider.request('PUT', '/project/' + id.toString() + '/active/', null, {active: status});
 
         if (result.ok) {
             okCallback(id);
@@ -125,7 +120,7 @@ export class ProjectService {
         okCallback: (id: number) => void,
         errorCallback: (errorMessage: string) => void) {
 
-        let result = await BackendProvider.request('PUT', '/project/' + id.toString() + '/assignee', null, {userId: userId});
+        let result = await BackendProvider.request('PUT', '/project/' + id.toString() + '/assignee/', null, {userId: userId});
 
         if (result.ok) {
             okCallback(id);
@@ -140,7 +135,7 @@ export class ProjectService {
         okCallback: (id: number) => void,
         errorCallback: (errorMessage: string) => void) {
 
-        let result = await BackendProvider.request('PUT', '/project/' + id.toString() + '/reporter', null, {userId: userId});
+        let result = await BackendProvider.request('PUT', '/project/' + id.toString() + '/reporter/', null, {userId: userId});
 
         if (result.ok) {
             okCallback(id);
@@ -157,13 +152,11 @@ export class ProjectService {
 
         let result = await BackendProvider.request('PUT', '/project/' + id.toString() + '/participant/' + userId.toString());
 
-        okCallback(id);
-        //
-        // if (result.ok) {
-        //     okCallback(id);
-        // } else {
-        //     errorCallback("Ошибка при добавлении участника.");
-        // }
+        if (result.ok) {
+            okCallback(id);
+        } else {
+            errorCallback("Ошибка при добавлении участника.");
+        }
     }
 
     static async deleteParticipant (
@@ -174,12 +167,11 @@ export class ProjectService {
 
         let result = await BackendProvider.request('DELETE', '/project/' + id.toString() + '/participant/' + userId.toString());
 
-        okCallback(id);
-        // if (result.ok) {
-        //     okCallback(id);
-        // } else {
-        //     errorCallback("Ошибка при удалении участника.");
-        // }
+        if (result.ok) {
+            okCallback(id);
+        } else {
+            errorCallback("Ошибка при удалении участника.");
+        }
     }
 
     static async setParticipantRole (
@@ -192,12 +184,11 @@ export class ProjectService {
         let result = await BackendProvider.request('PUT', '/project/' + id.toString() + '/participant/' + userId.toString() + '/role', null,
             {role: role});
 
-        okCallback(id);
-        // if (result.ok) {
-        //     okCallback(id);
-        // } else {
-        //     errorCallback("Ошибка при изменении роли участника.");
-        // }
+        if (result.ok) {
+            okCallback(id);
+        } else {
+            errorCallback("Ошибка при изменении роли участника.");
+        }
     }
 
     static async getParticipants (
@@ -207,46 +198,12 @@ export class ProjectService {
 
         let result = await BackendProvider.request('GET', '/project/' + id.toString() + '/participants');
 
-        let user1: User = {
-            id: 10,
-            login:"Saske",
-            systemRole: SystemRole.USER,
-            active: true
-        };
-        let user2: User = {
-            id: 2,
-            login:"Kakashi",
-            systemRole: SystemRole.ADMIN,
-            active: true
-        };
-        let user3: User = {
-            id: 3,
-            login:"Sakura",
-            systemRole: SystemRole.MANAGER,
-            active: false
-        };
-
-        let userProject1 : UserProject = {
-            businessRole: BusinessRole.LEADER,
-            user: user1
+        if (result.ok) {
+            let body = await result.json();
+            okCallback(body as UserProject[]);
+        } else {
+            errorCallback("Ошибка при получении списка участников проекта.");
         }
-        let userProject2 : UserProject = {
-            businessRole: BusinessRole.DEVOPS,
-            user: user2
-        }
-        let userProject3 : UserProject = {
-            businessRole: BusinessRole.DEVELOPER,
-            user: user3
-        }
-        let userProjects: UserProject[] = [];
-        userProjects.push(userProject1,userProject2, userProject3);
-        okCallback(userProjects);
-        // if (result.ok) {
-        //     let body = await result.json();
-        //     okCallback(body as UserProject[]);
-        // } else {
-        //     errorCallback("Ошибка при получении списка участников проекта.");
-        // }
     }
 
     static async getProjectsByUsers (

@@ -94,26 +94,28 @@ class UserEditForm extends React.Component<UserEditFormProps, UserEditFormState>
             active: this.props.currentUser ? this.props.currentUser.active : false,
             systemRoles: systemRoles
         }
-        this.props.fetchProjectsByUser(this.props.currentUser?.id);
     }
 
-    static getDerivedStateFromProps(props, state) {
-        if (props.currentUser !== state.user) {
-            props.fetchProjectsByUser(props.currentUser?.id)
-            return {
-                id: props.currentUser ? props.currentUser.id : -1,
-                login: props.currentUser ? props.currentUser.login : "",
-                systemRole: props.currentUser ? props.currentUser.systemRole : SystemRole.USER,
-                active: props.currentUser ? props.currentUser.active : false,
-                user: props.currentNode
-            };
-        }
+    // static getDerivedStateFromProps(props, state) {
+    //     if (props.currentUser !== state.user) {
+    //         return {
+    //             id: props.currentUser ? props.currentUser.id : -1,
+    //             login: props.currentUser ? props.currentUser.login : "",
+    //             systemRole: props.currentUser ? props.currentUser.systemRole : SystemRole.USER,
+    //             active: props.currentUser ? props.currentUser.active : false,
+    //             user: props.currentNode
+    //         };
+    //     }
+    // }
+
+    componentDidMount(): void {
+        this.props.fetchProjectsByUser(this.props.currentUser?.id);
     }
 
     createRolesTable(projects: Project[], userProjects: ProjectsByUsers | undefined) : ProjectRole[] {
         let projectRoles: ProjectRole[] = [];
 
-        userProjects?.assignee.forEach((projectId) => {
+        userProjects?.assignee?.forEach((projectId) => {
             let projectRole: ProjectRole = {
                 projectName: projects.filter((project) => {
                     return project.id === projectId
@@ -123,7 +125,7 @@ class UserEditForm extends React.Component<UserEditFormProps, UserEditFormState>
             projectRoles.push(projectRole);
         });
 
-        userProjects?.reporters.forEach((projectId) => {
+        userProjects?.reporters?.forEach((projectId) => {
             let projectRole: ProjectRole = {
                 projectName: projects.filter((project) => {
                     return project.id === projectId
@@ -133,7 +135,7 @@ class UserEditForm extends React.Component<UserEditFormProps, UserEditFormState>
             projectRoles.push(projectRole);
         });
 
-        userProjects?.participants.forEach((roleInProject) => {
+        userProjects?.participants?.forEach((roleInProject) => {
             let projectRole: ProjectRole = {
                 projectName: projects.filter((project) => {
                     return project.id === roleInProject.projectId
@@ -147,6 +149,7 @@ class UserEditForm extends React.Component<UserEditFormProps, UserEditFormState>
     }
 
     render() {
+        console.log(JSON.stringify(this.state,null,2))
         const {classes} = this.props;
         return (
             <React.Fragment>
