@@ -1,0 +1,21 @@
+info:
+  app:
+    version: '@project.version@'
+jwt:
+  secret: task-project
+spring:
+  datasource:
+    password: qwerty
+    url: jdbc:postgresql://localhost:5432/tasks
+    username: postgres
+    data: classpath:data.sql
+    initialization-mode: always
+  jpa:
+    hibernate:
+      ddl-auto: update
+springdoc:
+  swagger-ui:
+    doc-expansion: none
+    operations-sorter: alpha
+    path: /swagger-ui.html
+    tags-sorter: alpha
