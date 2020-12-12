@@ -18,10 +18,12 @@ export default class AuthService {
         if (result.ok) {
             let body = await result.json();
             var decoded = jwt_decode(body.jwtToken);
-            console.log(decoded);
+            sessionStorage.setItem("jwtToken", body.jwtToken);
             let authResult: AuthResult = {
                 login: decoded.sub,
-                role: decoded.role
+                role: decoded.role,
+                token: body.jwtToken,
+                exp: decoded.exp
             }
             okCallback(authResult)
         } else {

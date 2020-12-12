@@ -30,9 +30,8 @@ import * as authSelectors from '../store/auth/Reducer';
 import * as authActions from "../store/auth/Actions";
 import {blue} from "@material-ui/core/colors";
 import AuthView from "./auth/AuthView";
-import {User} from "../store/users/Types";
+import {mapRole, SystemRole} from "../store/users/Types";
 import SettingsView from "./settings/SettingsView";
-import {SettingsForm} from "../components/settings/SettingsForm";
 import ReleasesRouter from "./releases/ReleasesRouter";
 
 // import MonitoringView from './monitoring/MonitoringView';
@@ -342,8 +341,11 @@ interface AppState {
 
 interface AppProps {
   login: string,
+  role: SystemRole,
+  expTime: number,
   isAuthenticated: boolean,
   isAuthPerformed: boolean,
+  checkAuth: boolean,
   logout(): any
 }
 
@@ -355,12 +357,23 @@ class App extends React.Component<AppProps & ReactRouterProps, AppState> {
     {icon: <SettingsApplicationsIcon/>, text: "Настройки", link: "/settings"}
   ];
 
+  intervalID;
+
   constructor(props) {
     super(props);
     autoBind(this);
     this.state = {
       isOpened: false
     }
+  }
+
+  componentDidMount(): void {
+    this.intervalID = setInterval(() => {
+      const currentTime = Math.floor(Date.now() / 1000);
+      if (currentTime >= this.props.expTime) {
+        this.props.logout();
+      }
+    }, 1000);
   }
 
   renderMenuList (menuList: any[]) {
@@ -380,13 +393,7 @@ class App extends React.Component<AppProps & ReactRouterProps, AppState> {
 
   render() {
 
-    // console.log(JSON.stringify(this.props, null,2))
-    // console.log(this.state)
-
-    // if (!this.props.isAuthPerformed) {
-    // //  this.props.checkAuth()
-    //   return this.renderLoader()
-    // }
+    console.log(JSON.stringify(this.props, null,2))
 
     if (!this.props.isAuthenticated) {
       return this.renderAuthView()
@@ -446,6 +453,9 @@ class App extends React.Component<AppProps & ReactRouterProps, AppState> {
               <Box boxShadow={1} bgcolor={"white"} className={classes.userInfoBlock}>
                 <Typography variant="subtitle1" color={"primary"}>
                   {this.getName()}
+                </Typography>
+                <Typography variant="body" color={"primary"}>
+                  {mapRole[this.props.role]}
                 </Typography>
                 <Divider/>
                 <Button
@@ -527,7 +537,10 @@ function mapStateToProps(state) {
   return {
     isAuthenticated: authSelectors.isAuthenticated(state),
     isAuthPerformed: authSelectors.isAuthPerformed(state),
-    login: authSelectors.username(state)
+    login: authSelectors.username(state),
+    checkAuth: authSelectors.checkAuth(state),
+    role: authSelectors.getRole(state),
+    expTime: authSelectors.getExpTime(state)
   }
 }
 

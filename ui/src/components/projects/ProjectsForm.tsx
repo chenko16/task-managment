@@ -2,13 +2,13 @@ import * as React from "react";
 import {forwardRef} from "react";
 import {Add, ArrowDownward, Check, Clear, Delete, Edit, Remove, Search} from "@material-ui/icons";
 import MaterialTable from "material-table";
-import {Avatar, Fab} from "@material-ui/core";
+import {Fab} from "@material-ui/core";
 import AddBtn from "@material-ui/icons/Add";
 import {BusinessRole, Project, ProjectRequest, UserProject} from "../../store/project/Types";
 import AddProjectDialog from "./AddProjectDialog";
-import Utils from "../../store/users/Utils";
-import {User} from "../../store/users/Types";
+import {SystemRole, User} from "../../store/users/Types";
 import EditProjectDialog from "./EditProjectDialog";
+import CloseIcon from "@material-ui/icons/Close";
 
 
 const tableIcons = {
@@ -28,11 +28,14 @@ export interface ProjectsFormProps {
     users: User[],
     participants?: UserProject[],
     openEditProject: boolean,
-    currentProject? : Project,
+    userRoleProjects: Project[],
+    currentProject?: Project,
+    role: SystemRole,
+    currentUser: string,
 
     currentProjectChanged(currentProject): any,
 
-    openEditProjectChanged (openEditProject) : any,
+    openEditProjectChanged(openEditProject): any,
 
     displayError(msg: string): any,
 
@@ -53,6 +56,12 @@ export interface ProjectsFormProps {
     setParticipantRole(id: number, userId: number, role: BusinessRole, okCallback?, errorCallback?): any,
 
     getParticipants(id: number, okCallback?, errorCallback?): any,
+
+    fetchProject(id: number, okCallback?, errorCallback?): any,
+
+    deleteProject(id: number, okCallback?, errorCallback?): any,
+
+    fetchProjectsByUser(userId: number): any,
 
     fetchProjects(): any
 }
@@ -84,6 +93,14 @@ export default class ProjectsForm extends React.Component<ProjectsFormProps, Pro
         }
     }
 
+    componentDidMount(): void {
+        if (this.props.role === SystemRole.USER) {
+            this.props.fetchProjectsByUser(this.props.users.filter((user) => {
+                return user.login === this.props.currentUser
+            })[0].id)
+        }
+    }
+
     render(): React.ReactNode {
         // console.log(JSON.stringify(this.state, null, 2))
         // console.log(JSON.stringify(this.props, null, 2))
@@ -100,7 +117,8 @@ export default class ProjectsForm extends React.Component<ProjectsFormProps, Pro
                         header: true
                     }}
                     columns={this.state.columns}
-                    data={this.props.projects}
+                    data={this.props.role === SystemRole.USER ?
+                        this.props.userRoleProjects : this.props.projects}
                     localization={{
                         toolbar: {
                             searchTooltip: "Поиск",
@@ -121,24 +139,43 @@ export default class ProjectsForm extends React.Component<ProjectsFormProps, Pro
                             actions: ''
                         }
                     }}
+                    actions={[
+                        {
+                            icon: () => <CloseIcon style={{marginRight: 6}}/>,
+                            hidden: this.props.role !== SystemRole.MANAGER,
+                            tooltip: 'Удалить проект',
+                            onClick: (event, rowData) => {
+                                if (confirm("Вы уверены, что хотите удалить проект?")) {
+                                    this.props.deleteProject(rowData.id)
+                                }
+                            }
+                        }
+                    ]}
                     onRowClick={(event, rowData: Project) => {
-                        this.props.openEditProjectChanged(true);
-                        this.props.currentProjectChanged(rowData);
-                        this.setState({currentProject: rowData, openEdit: true})
+                        if (this.props.role === SystemRole.MANAGER) {
+                            this.props.openEditProjectChanged(true);
+                            this.props.currentProjectChanged(rowData);
+                            this.props.getParticipants(rowData.id);
+                            this.setState({currentProject: rowData, openEdit: true})
+                        }
                     }}
                 />
 
                 {this.state.openAdd && <AddProjectDialog
                     displayError={this.props.displayError}
                     users={this.props.users}
+                    reporterLogin={this.props.currentUser}
                     close={value => this.setState({openAdd: value})}
                     onClose={(value, projectRequest, assignee, reporter, description) => {
                         if (value === 'Ok' && projectRequest && assignee && reporter && description) {
                             this.props.createProject(projectRequest, (project) => {
-                                this.props.updateReporter(project.id, reporter.id);
-                                this.props.updateAssignee(project.id, assignee.id);
-                                this.props.updateDescription(project.id, description);
-                                this.props.fetchProjects();
+                                this.props.updateReporter(project.id, reporter.id, () => {
+                                    this.props.updateAssignee(project.id, assignee.id, () => {
+                                        this.props.updateDescription(project.id, description, () => {
+                                            this.props.fetchProjects();
+                                        })
+                                    })
+                                })
                             })
                             //this.props.createUser(data);
                         }
@@ -152,6 +189,7 @@ export default class ProjectsForm extends React.Component<ProjectsFormProps, Pro
                             this.props.getParticipants(id);
                         });
                     }}
+                    fetchProject={this.props.fetchProject}
                     deleteParticipant={this.props.deleteParticipant}
                     getParticipants={this.props.getParticipants}
                     setParticipantRole={this.props.setParticipantRole}
@@ -174,7 +212,7 @@ export default class ProjectsForm extends React.Component<ProjectsFormProps, Pro
                     }}
                 />}
 
-                <Fab
+                {this.props.role === SystemRole.MANAGER && <Fab
                     color="primary"
                     aria-label="Add"
                     style={{
@@ -185,7 +223,7 @@ export default class ProjectsForm extends React.Component<ProjectsFormProps, Pro
                     }}
                 >
                     <AddBtn/>
-                </Fab>
+                </Fab>}
             </React.Fragment>
         )
     }

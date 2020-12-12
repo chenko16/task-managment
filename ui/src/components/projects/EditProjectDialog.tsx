@@ -65,6 +65,8 @@ export interface EditProjectDialogProps {
 
     onClose(value: string, description?: string, assignee?: User): any,
 
+    fetchProject(id: number, okCallback?, errorCallback?): any,
+
     close(value: boolean): any
 }
 
@@ -97,6 +99,12 @@ class EditProjectDialog extends React.Component<EditProjectDialogProps, EditProj
             assignee: this.props.currentProject ? this.props.currentProject.assignee : UserService.getEmptyUser(),
             reporter: this.props.currentProject ? this.props.currentProject.reporter : UserService.getEmptyUser()
         }
+    }
+
+    componentDidMount(): void {
+        this.props.fetchProject(this.props.currentProject?.id, (project: Project) => {
+            this.setState({active: project.active})
+        })
     }
 
     render(): React.ReactNode {

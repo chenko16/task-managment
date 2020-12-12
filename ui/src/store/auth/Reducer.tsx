@@ -3,11 +3,14 @@ import * as actions from "./Actions"
 import {ActionType, getType} from "typesafe-actions";
 import {ApplicationState} from "../Store";
 import {SystemRole} from "../users/Types";
+import App from "../../containers/App";
 
 export interface AuthStoreState {
     authPerformed : boolean,
     authenticated: boolean,
     login: string | undefined,
+    jwtToken: string | undefined,
+    expTime: number | undefined,
     role: SystemRole | undefined,
     isLoading: boolean
 }
@@ -16,6 +19,8 @@ export const initialState: AuthStoreState = {
     authPerformed : false,
     login: undefined,
     role: undefined,
+    jwtToken: undefined,
+    expTime: undefined,
     authenticated: false,
     isLoading: false
 }
@@ -30,6 +35,8 @@ export const reducer: Reducer<AuthStoreState> = (state: AuthStoreState = initial
                 authenticated: true,
                 login: action.payload.login,
                 role: action.payload.role,
+                jwtToken: action.payload.token,
+                expTime: action.payload.exp,
                 authPerformed: true
             }
 
@@ -39,6 +46,8 @@ export const reducer: Reducer<AuthStoreState> = (state: AuthStoreState = initial
                 ...state,
                 authenticated: false,
                 login: undefined,
+                expTime: undefined,
+                jwtToken: undefined,
                 role: undefined
             }
 
@@ -65,5 +74,13 @@ export function username(state: ApplicationState) : string {
 
 export function getRole(state: ApplicationState) : SystemRole {
     return state.auth.role || SystemRole.USER;
+}
+
+export function checkAuth(state: ApplicationState) : boolean {
+    return state.auth.jwtToken != undefined
+}
+
+export function getExpTime(state: ApplicationState): number {
+    return state.auth.expTime || 0;
 }
 

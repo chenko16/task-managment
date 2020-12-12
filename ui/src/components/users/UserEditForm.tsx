@@ -96,18 +96,6 @@ class UserEditForm extends React.Component<UserEditFormProps, UserEditFormState>
         }
     }
 
-    // static getDerivedStateFromProps(props, state) {
-    //     if (props.currentUser !== state.user) {
-    //         return {
-    //             id: props.currentUser ? props.currentUser.id : -1,
-    //             login: props.currentUser ? props.currentUser.login : "",
-    //             systemRole: props.currentUser ? props.currentUser.systemRole : SystemRole.USER,
-    //             active: props.currentUser ? props.currentUser.active : false,
-    //             user: props.currentNode
-    //         };
-    //     }
-    // }
-
     componentDidMount(): void {
         this.props.fetchProjectsByUser(this.props.currentUser?.id);
     }
@@ -115,7 +103,7 @@ class UserEditForm extends React.Component<UserEditFormProps, UserEditFormState>
     createRolesTable(projects: Project[], userProjects: ProjectsByUsers | undefined) : ProjectRole[] {
         let projectRoles: ProjectRole[] = [];
 
-        userProjects?.assignee?.forEach((projectId) => {
+        userProjects?.assignees?.forEach((projectId) => {
             let projectRole: ProjectRole = {
                 projectName: projects.filter((project) => {
                     return project.id === projectId

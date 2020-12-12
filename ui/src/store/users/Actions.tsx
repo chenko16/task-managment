@@ -103,14 +103,18 @@ export function fetchUsers() {
     }
 }
 
-export function deleteUser(id: number) {
+export function deleteUser(id: number, okCallback?, errorCallback?) {
     return (dispatch, getState) => {
         dispatch(deleteUserAction.request());
         UserService.deleteUser(id, (id) => {
             dispatch(reqFinished());
+            if (okCallback)
+                okCallback(id);
             dispatch(deleteUserAction.success(id));
         }, (errorMessage) => {
             dispatch(deleteUserAction.failure());
+            if (errorCallback)
+                errorCallback(errorMessage);
             dispatch(notificationActions.error(errorMessage));
         })
     }

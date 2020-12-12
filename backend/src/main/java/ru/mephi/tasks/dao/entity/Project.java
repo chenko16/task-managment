@@ -18,11 +18,11 @@ public class Project {
     @Column(name = "project_id")
     private Long projectId;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "reporter_id", referencedColumnName = "user_id")
     private User reporter;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "assignee_id", referencedColumnName = "user_id")
     private User assignee;
 

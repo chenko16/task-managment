@@ -2,6 +2,7 @@ import * as React from "react";
 import {forwardRef} from "react";
 import MaterialTable from "material-table";
 import {Add, ArrowDownward, Check, Clear, Delete, Edit, Remove, Search} from "@material-ui/icons";
+import CloseIcon from "@material-ui/icons/Close";
 import AddBtn from "@material-ui/icons/Add";
 import {Avatar, Fab} from "@material-ui/core";
 import Utils from "../../store/users/Utils";
@@ -28,11 +29,18 @@ export interface UsersFormProps {
     isLoading: boolean,
     projects: Project[],
     userProjects: ProjectsByUsers | undefined,
+    role: SystemRole,
 
     displayError(errorMessage: string): any,
+
     createUser(user: UserRequest): any,
+
+    deleteUser(id: number, okCallback?, errorCallback?): any,
+
     updateUserStatus(id: number, status: boolean): any,
+
     updateUserRole(id: number, role: SystemRole): any,
+
     fetchProjectsByUser(userId: number): any
 }
 
@@ -75,7 +83,7 @@ class UsersForm extends React.Component<UsersFormProps, UsersFormState> {
     }
 
     render(): React.ReactNode {
-       // console.log(JSON.stringify(this.props, null, 2))
+        // console.log(JSON.stringify(this.props, null, 2))
         return (
             <React.Fragment>
                 <MaterialTable
@@ -110,8 +118,22 @@ class UsersForm extends React.Component<UsersFormProps, UsersFormState> {
                             actions: ''
                         }
                     }}
+                    actions={[
+                        {
+                            icon: () => <CloseIcon style={{marginRight: 6}}/>,
+                            tooltip: 'Удалить пользователя',
+                            hidden: this.props.role !== SystemRole.ADMIN,
+                            onClick: (event, rowData) => {
+                                if (confirm("Вы уверены, что хотите удалить пользователя?")) {
+                                    this.props.deleteUser(rowData.id)
+                                }
+                            }
+                        }
+                    ]}
                     onRowClick={(event, rowData) => {
-                        this.setState({currentUser: rowData, openEdit: true})
+                        if (this.props.role === SystemRole.ADMIN) {
+                            this.setState({currentUser: rowData, openEdit: true})
+                        }
                     }}
                 />
 
@@ -125,7 +147,7 @@ class UsersForm extends React.Component<UsersFormProps, UsersFormState> {
                         this.props.updateUserStatus(id, status)
                     }}
                     onClose={(value, data: UserEditFormState) => {
-                        this.props.updateUserRole(data.id,data.systemRole);
+                        this.props.updateUserRole(data.id, data.systemRole);
                     }}
                     close={value => this.setState({openEdit: value})}
                     currentUser={this.state.currentUser}
@@ -141,16 +163,18 @@ class UsersForm extends React.Component<UsersFormProps, UsersFormState> {
                     }}
                 />}
 
-                <Fab
+                {this.props.role === SystemRole.ADMIN && <Fab
                     color="primary"
                     aria-label="Add"
                     style={{
                         position: "fixed", bottom: 24, right: 24
                     }}
-                    onClick={(e) => {this.setState({openAdd: true})}}
+                    onClick={(e) => {
+                        this.setState({openAdd: true})
+                    }}
                 >
                     <AddBtn/>
-                </Fab>
+                </Fab>}
             </React.Fragment>
         )
     }

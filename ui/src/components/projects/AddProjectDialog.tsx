@@ -46,6 +46,7 @@ function PaperComponent(props) {
 
 export interface AddProjectDialogProps {
     users: User[],
+    reporterLogin: string,
 
     displayError(errorMessage: string): any,
 
@@ -76,13 +77,15 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
             description: "",
             assigneeLogin: "",
             assignee: UserService.getEmptyUser(),
-            reporterLogin: "",
-            reporter: UserService.getEmptyUser()
+            reporterLogin: this.props.reporterLogin,
+            reporter: this.props.users.filter((user) => {
+                return user.login === this.props.reporterLogin
+            })[0]
         }
     }
 
     render(): React.ReactNode {
-       // console.log(this.state)
+       console.log(this.state)
         // @ts-ignore
         const {classes} = this.props;
         return (
@@ -151,6 +154,7 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
                                         <Grid item xs={8} style={{marginLeft: "30px"}}>
                                             <Select
                                                 value={this.state.reporterLogin}
+                                                disabled
                                                 onChange={(event, child)=> {
                                                     let id = child.props.id as number;
                                                     let reporter: User = this.props.users.filter(user => {

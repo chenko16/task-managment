@@ -141,6 +141,7 @@ export function fetchProject(id: number, okCallback?, errorCallback?) {
     return (dispatch, getState) => {
         dispatch(fetchProjectAction.request());
         ProjectService.getProjectInfo(id, (project) => {
+            console.log(project)
             dispatch(reqFinished());
             if (okCallback)
                 okCallback(project);

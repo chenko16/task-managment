@@ -6,18 +6,20 @@ import FolderIcon from "@material-ui/icons/Folder";
 import {AppBar, Grid, Tab, Tabs} from "@material-ui/core";
 import {BusinessRole, Project, ProjectRequest, ProjectsByUsers, UserProject} from "../../store/project/Types";
 import ProjectsForm from "../projects/ProjectsForm";
-import EditProjectDialog from "../projects/EditProjectDialog";
 
 
 export interface SettingsFormProps {
     users: User[],
     projects: Project[],
     participants?: UserProject[],
+    userRoleProjects: Project[],
     projectsByUser: ProjectsByUsers | undefined,
     isLoading: boolean,
     currentTab?: number,
     openEditProject: boolean,
     currentProject?: Project,
+    role: SystemRole,
+    currentUser: string,
 
     openEditProjectChanged (openEditProject) : any,
 
@@ -26,6 +28,8 @@ export interface SettingsFormProps {
     displayError(errorMessage: string): any,
 
     createUser(user: UserRequest): any,
+
+    deleteUser(id: number, okCallback?, errorCallback?): any,
 
     updateUserStatus(id: number, status: boolean): any,
 
@@ -51,6 +55,10 @@ export interface SettingsFormProps {
 
     getParticipants(id: number, okCallback?, errorCallback?): any,
 
+    fetchProject(id: number, okCallback?, errorCallback?): any,
+
+    deleteProject (id: number, okCallback?, errorCallback?): any,
+
     fetchProjects(): any
 }
 
@@ -74,7 +82,10 @@ export class SettingsForm extends React.Component<SettingsFormProps, SettingsFor
             {
                 name: "Проекты",
                 value: <ProjectsForm
+                    role={this.props.role}
+                    currentUser={this.props.currentUser}
                     currentProject={this.props.currentProject}
+                    userRoleProjects={this.props.userRoleProjects}
                     currentProjectChanged={this.props.currentProjectChanged}
                     participants={this.props.participants}
                     addParticipant={this.props.addParticipant}
@@ -87,6 +98,9 @@ export class SettingsForm extends React.Component<SettingsFormProps, SettingsFor
                     updateReporter={this.props.updateReporter}
                     createProject={this.props.createProject}
                     fetchProjects={this.props.fetchProjects}
+                    fetchProject={this.props.fetchProject}
+                    deleteProject={this.props.deleteProject}
+                    fetchProjectsByUser={this.props.fetchProjectsByUser}
                     users={this.props.users}
                     projects={this.props.projects}
                     displayError={this.props.displayError}
@@ -98,6 +112,7 @@ export class SettingsForm extends React.Component<SettingsFormProps, SettingsFor
             {
                 name: "Пользователи",
                 value: <UsersForm
+                    role={this.props.role}
                     users={this.props.users}
                     projects={this.props.projects}
                     userProjects={this.props.projectsByUser}
@@ -109,6 +124,7 @@ export class SettingsForm extends React.Component<SettingsFormProps, SettingsFor
                     createUser={(user) => {
                         this.props.createUser(user)
                     }}
+                    deleteUser={this.props.deleteUser}
                     updateUserStatus={(id, status) => {
                         this.props.updateUserStatus(id, status)
                     }}
@@ -140,6 +156,8 @@ export class SettingsForm extends React.Component<SettingsFormProps, SettingsFor
                                     }}
                                 >
                                     {this.schemeParts.map((part, index) => {
+                                        if (index !== this.schemeParts.length &&
+                                            !(!(this.props.role === SystemRole.ADMIN) && index === 1))
                                         return <Tab label={part.name} icon={part.icon}/>
                                     })}
                                 </Tabs>
