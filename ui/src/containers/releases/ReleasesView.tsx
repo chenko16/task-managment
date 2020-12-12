@@ -1,5 +1,5 @@
 import * as React from "react";
-import {User} from "../../store/users/Types";
+import {SystemRole, User} from "../../store/users/Types";
 import {Project} from "../../store/project/Types";
 import * as userSelectors from "../../store/users/Reducer";
 import * as projectSelectors from "../../store/project/Reducer";
@@ -8,6 +8,7 @@ import * as projectActions from "../../store/project/Actions";
 import * as notificationActions from "../../store/notification/Actions";
 import * as releasesActions from "../../store/releases/Actions";
 import * as releasesSelectors from "../../store/releases/Reducer";
+import * as authSelectors from "../../store/auth/Reducer";
 import {connect} from "react-redux";
 import {Release, ReleaseRequest} from "../../store/releases/Types";
 import {ReleasesOverviewForm} from "../../components/releases/ReleasesOverviewForm";
@@ -29,6 +30,8 @@ export interface ReleasesViewStateProps {
     users: User[],
     projects: Project[],
     releases: Release[],
+    role: SystemRole,
+    currentUser: string,
 
     isLoading: boolean
 }
@@ -53,6 +56,8 @@ class ReleasesView extends React.Component<ReleasesViewProps & ReleasesViewDispa
         return (
             <React.Fragment>
                 <ReleasesOverviewForm
+                    currentUser={this.props.currentUser}
+                    role={this.props.role}
                     users={this.props.users}
                     projects={this.props.projects}
                     releases={this.props.releases}
@@ -71,7 +76,9 @@ function mapStateToProps(state): ReleasesViewStateProps {
         users: userSelectors.getAllUsers(state),
         projects: projectSelectors.getAllProjects(state),
         releases: releasesSelectors.getReleases(state),
-        isLoading: userSelectors.usersIsFetching(state) || projectSelectors.projectsIsFetching(state)
+        isLoading: userSelectors.usersIsFetching(state) || projectSelectors.projectsIsFetching(state),
+        role: authSelectors.getRole(state),
+        currentUser: authSelectors.username(state)
     }
 }
 

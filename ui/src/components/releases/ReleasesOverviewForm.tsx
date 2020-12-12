@@ -1,12 +1,13 @@
 import * as React from "react";
-import {User} from "../../store/users/Types";
-import {Project} from "../../store/project/Types";
+import {SystemRole, User} from "../../store/users/Types";
+import {Project, ProjectRequest} from "../../store/project/Types";
 import {Release, ReleaseRequest} from "../../store/releases/Types";
 import MaterialTable from "material-table";
-import {Fab} from "@material-ui/core";
+import {Chip, Fab} from "@material-ui/core";
 import AddBtn from "@material-ui/icons/Add";
 import {forwardRef} from "react";
 import {Add, ArrowDownward, Check, Clear, Delete, Edit, Remove, Search} from "@material-ui/icons";
+import AddReleaseDialog from "./AddReleaseDialog";
 
 
 const tableIcons = {
@@ -25,6 +26,8 @@ export interface ReleasesOverviewFormProps {
     users: User[],
     projects: Project[],
     releases: Release[],
+    currentUser: string,
+    role: SystemRole,
 
     displayError(msg: string): any,
 
@@ -46,14 +49,14 @@ export class ReleasesOverviewForm extends React.Component<ReleasesOverviewFormPr
             openAdd: false,
             columns: [
                 {title: 'id', field: 'id', hidden: true},
+                {title: 'Имя', field: 'name'},
+                {title: 'Проект', field: 'project', render: (rowData) => (rowData.project.name)},
+                {title: 'Описание', field: 'description'},
                 {
                     title: 'Ответственный',
                     field: 'reporter',
-                    render: (rowData) => (rowData.reporter.login)
+                    render: (rowData) => (<Chip label={rowData.reporter.login} color={"primary"}/>)
                 },
-                {title: 'Имя', field: 'name'},
-                {title: 'Проект', field: 'project', render: (rowData) => (rowData.project.name)},
-                {title: 'Описание', field: 'description', hidden: true},
                 {
                     title: 'Открыт', field: 'created', type: 'date'
                 },
@@ -106,6 +109,22 @@ export class ReleasesOverviewForm extends React.Component<ReleasesOverviewFormPr
                        console.log(rowData)
                     }}
                 />
+
+                {this.state.openAdd && <AddReleaseDialog
+                    projects={this.props.projects}
+                    users={this.props.users}
+                    reporterLogin={this.props.currentUser}
+                    displayError={this.props.displayError}
+                    close={(value)=> {this.setState({openAdd: value})}}
+                    onClose={(value, releaseRequest) => {
+                        if (value === 'Ok' && releaseRequest) {
+                            console.log(releaseRequest)
+                            this.props.createRelease(releaseRequest, () => {
+                                this.props.fetchReleases();
+                            });
+                        }
+                    }}
+                />}
 
                 <Fab
                     color="primary"
