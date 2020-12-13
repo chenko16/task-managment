@@ -29,7 +29,7 @@ public class ReleaseController {
         return ResponseEntity.of(releaseService.getRelease(id));
     }
 
-    @PostMapping("/list")
+    @GetMapping("/list")
     @Operation(description = "Get release list")
     public ResponseEntity<List<ReleaseDto>> getReleaseList() {
         return ResponseEntity.ok().body(releaseService.getReleaseList());
