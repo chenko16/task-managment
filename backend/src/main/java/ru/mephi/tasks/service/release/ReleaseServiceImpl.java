@@ -8,6 +8,7 @@ import ru.mephi.tasks.dao.entity.Release;
 import ru.mephi.tasks.dao.entity.User;
 import ru.mephi.tasks.dao.repository.ProjectRepository;
 import ru.mephi.tasks.dao.repository.ReleaseRepository;
+import ru.mephi.tasks.dao.repository.TaskRepository;
 import ru.mephi.tasks.dao.repository.UserRepository;
 import ru.mephi.tasks.dto.release.ReleaseDto;
 import ru.mephi.tasks.dto.release.ReleaseRequest;
@@ -28,6 +29,8 @@ public class ReleaseServiceImpl implements ReleaseService {
     private final UserRepository userRepository;
 
     private final ReleaseRepository releaseRepository;
+
+    private final TaskRepository taskRepository;
 
     private final ReleaseMapper releaseMapper;
 
@@ -79,4 +82,27 @@ public class ReleaseServiceImpl implements ReleaseService {
                 });
     }
 
+    @Override
+    public void addTask(Long releaseId, Long taskId) {
+        releaseRepository.findById(releaseId)
+                .ifPresent(release -> {
+                    taskRepository.findById(taskId)
+                            .ifPresent(task -> {
+                                release.getTasks().add(task);
+                                releaseRepository.save(release);
+                            });
+                });
+    }
+
+    @Override
+    public void removeTask(Long releaseId, Long taskId) {
+        releaseRepository.findById(releaseId)
+                .ifPresent(release -> {
+                    taskRepository.findById(taskId)
+                            .ifPresent(task -> {
+                                release.getTasks().remove(task);
+                                releaseRepository.save(release);
+                            });
+                });
+    }
 }

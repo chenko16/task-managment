@@ -2,7 +2,7 @@ package ru.mephi.tasks.dto.project;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import ru.mephi.tasks.dao.entity.BusinessRole;
+import ru.mephi.tasks.config.enums.BusinessRole;
 
 @Data
 @AllArgsConstructor

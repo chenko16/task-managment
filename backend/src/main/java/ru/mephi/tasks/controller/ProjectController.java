@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.mephi.tasks.dao.entity.BusinessRole;
+import ru.mephi.tasks.config.enums.BusinessRole;
 import ru.mephi.tasks.dto.project.ProjectDto;
 import ru.mephi.tasks.dto.project.ProjectRequest;
 import ru.mephi.tasks.dto.project.ProjectsByUserDto;
