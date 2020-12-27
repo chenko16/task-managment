@@ -3,12 +3,13 @@ package ru.mephi.tasks.service.task;
 import ru.mephi.tasks.config.enums.TaskStatus;
 import ru.mephi.tasks.config.enums.TaskType;
 import ru.mephi.tasks.dto.task.TaskDto;
+import ru.mephi.tasks.dto.task.TaskRequest;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface TaskService {
-    TaskDto createTask(TaskDto taskDto);
+    TaskDto createTask(TaskRequest taskRequest);
     Optional<TaskDto> getTask(Long id);
     List<TaskDto> getTaskList();
     void deleteTask(Long id);

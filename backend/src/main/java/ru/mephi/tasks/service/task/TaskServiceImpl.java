@@ -9,6 +9,7 @@ import ru.mephi.tasks.dao.entity.User;
 import ru.mephi.tasks.dao.repository.TaskRepository;
 import ru.mephi.tasks.dao.repository.UserRepository;
 import ru.mephi.tasks.dto.task.TaskDto;
+import ru.mephi.tasks.dto.task.TaskRequest;
 import ru.mephi.tasks.exceptions.EntryNotFoundException;
 import ru.mephi.tasks.mapping.TaskMapper;
 
@@ -27,8 +28,22 @@ public class TaskServiceImpl implements TaskService {
     private final UserRepository userRepository;
 
     @Override
-    public TaskDto createTask(TaskDto taskDto) {
-        Task task = taskMapper.toEntity(taskDto);
+    public TaskDto createTask(TaskRequest taskRequest) {
+        Task task = new Task();
+        User reporter = userRepository.findById(taskRequest.getReporterId()).orElseThrow(() -> new EntryNotFoundException("security_user", "user_id", taskRequest.getReporterId()));
+        task.setReporter(reporter);
+        if (taskRequest.getAssigneeId() != null) {
+            User assignee = userRepository.findById(taskRequest.getReporterId()).orElseThrow(() -> new EntryNotFoundException("security_user", "user_id", taskRequest.getReporterId()));
+            task.setAssignee(assignee);
+        }
+        if (taskRequest.getDescription() != null)
+            task.setDescription(taskRequest.getDescription());
+        if (taskRequest.getStatus() != null)
+            task.setStatus(taskRequest.getStatus().name());
+        if (taskRequest.getTitle() != null)
+            task.setTitle(taskRequest.getTitle());
+        if (taskRequest.getType() != null)
+            task.setType(taskRequest.getType().name());
         task.setCreated(new Timestamp(new Date().getTime()));
         return taskMapper.toDto(taskRepository.save(task));
     }
