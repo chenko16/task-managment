@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.mephi.tasks.config.enums.TaskStatus;
 import ru.mephi.tasks.config.enums.TaskType;
 import ru.mephi.tasks.dto.task.TaskDto;
+import ru.mephi.tasks.dto.task.TaskRequest;
 import ru.mephi.tasks.service.task.TaskService;
 
 import java.util.List;
@@ -20,8 +21,8 @@ public class TaskController {
 
     @PostMapping
     @Operation(description = "Save task controller")
-    public ResponseEntity<TaskDto> createTaskDto(@RequestBody TaskDto taskDto) {
-        return ResponseEntity.ok(taskService.createTask(taskDto));
+    public ResponseEntity<TaskDto> createTaskDto(@RequestBody TaskRequest taskRequest) {
+        return ResponseEntity.ok(taskService.createTask(taskRequest));
     }
 
     @GetMapping("/{id}")
