@@ -1,8 +1,7 @@
-package ru.mephi.tasks.dto.user;
+package ru.mephi.tasks.config.enums;
 
 public enum SystemRole {
     USER,
     MANAGER,
     ADMIN
-    ;
 }

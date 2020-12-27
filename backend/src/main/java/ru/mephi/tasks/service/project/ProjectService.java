@@ -1,6 +1,6 @@
 package ru.mephi.tasks.service.project;
 
-import ru.mephi.tasks.dao.entity.BusinessRole;
+import ru.mephi.tasks.config.enums.BusinessRole;
 import ru.mephi.tasks.dto.project.ProjectsByUserDto;
 import ru.mephi.tasks.dto.project.ProjectDto;
 import ru.mephi.tasks.dto.project.ProjectRequest;

@@ -3,6 +3,7 @@ package ru.mephi.tasks.service.project;
 import com.google.common.collect.Streams;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.mephi.tasks.config.enums.BusinessRole;
 import ru.mephi.tasks.dao.entity.*;
 import ru.mephi.tasks.dao.repository.ProjectRepository;
 import ru.mephi.tasks.dao.repository.ProjectUserRepository;

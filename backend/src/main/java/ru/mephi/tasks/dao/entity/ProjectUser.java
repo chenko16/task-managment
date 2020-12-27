@@ -2,6 +2,7 @@ package ru.mephi.tasks.dao.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.mephi.tasks.config.enums.BusinessRole;
 
 import javax.persistence.*;
 

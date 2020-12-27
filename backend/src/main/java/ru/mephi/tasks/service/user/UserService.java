@@ -1,6 +1,6 @@
 package ru.mephi.tasks.service.user;
 
-import ru.mephi.tasks.dto.user.SystemRole;
+import ru.mephi.tasks.config.enums.SystemRole;
 import ru.mephi.tasks.dto.user.UserDto;
 import ru.mephi.tasks.dto.user.UserRequest;
 
