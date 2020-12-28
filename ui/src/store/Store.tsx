@@ -2,7 +2,7 @@ import * as auth from './auth/Reducer';
 import * as notification from './notification/Reducer';
 import * as user from './users/Reducer';
 import * as releases from './releases/Reducer';
-// import * as role from './role/Reducer';
+import * as tasks from './tasks/Reducer';
 import * as project from './project/Reducer'
 import {applyMiddleware, combineReducers, createStore, Reducer} from 'redux';
 import {persistReducer, persistStore} from "redux-persist";
@@ -15,7 +15,7 @@ export interface ApplicationState {
     notification: notification.NotificationState,
     user: user.UsersStoreState,
     releases: releases.ReleasesStoreState
-    // role: role.RoleStoreState
+    tasks: tasks.TaskStoreState
 }
 
 export const reducers: Reducer<ApplicationState> =
@@ -24,8 +24,8 @@ export const reducers: Reducer<ApplicationState> =
         project: project.reducer,
         notification: notification.reducer,
         user: user.reducer,
-        releases: releases.reducer
-        // role: role.reducer
+        releases: releases.reducer,
+        tasks: tasks.reducer
     })
 
 const persistConfig = {

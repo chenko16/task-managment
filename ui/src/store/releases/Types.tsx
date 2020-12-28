@@ -1,14 +1,16 @@
 import {User} from "../users/Types";
 import {Project} from "../project/Types";
+import {Task} from "../tasks/Types";
 
 export interface Release {
     id: number,
     name: string,
     reporter: User,
     project: Project,
-    created: number,
+    created: string,
     description: string,
-    finished: number
+    finished: string,
+    tasks: Task[]
 }
 
 export interface ReleaseRequest {

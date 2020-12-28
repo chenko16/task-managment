@@ -9,9 +9,12 @@ import * as notificationActions from "../../store/notification/Actions";
 import * as releasesActions from "../../store/releases/Actions";
 import * as releasesSelectors from "../../store/releases/Reducer";
 import * as authSelectors from "../../store/auth/Reducer";
+import * as taskActions from "../../store/tasks/Actions";
+import * as taskSelectors from "../../store/tasks/Reducer";
 import {connect} from "react-redux";
 import {Release, ReleaseRequest} from "../../store/releases/Types";
-import {ReleasesOverviewForm} from "../../components/releases/ReleasesOverviewForm";
+import ReleasesOverviewForm from "../../components/releases/ReleasesOverviewForm";
+import {Task} from "../../store/tasks/Types";
 
 
 export interface ReleasesViewDispatchProps {
@@ -23,7 +26,13 @@ export interface ReleasesViewDispatchProps {
 
     fetchReleases(): any,
 
-    createRelease(release: ReleaseRequest, okCallback?, errorCallback?): any
+    createRelease(release: ReleaseRequest, okCallback?, errorCallback?): any,
+
+    addTaskToRelease(releaseId: number, taskId: number, okCallback?, errorCallback?): any,
+
+    deleteTaskFromRelease(releaseId: number, taskId: number, okCallback?, errorCallback?): any,
+
+    fetchTasks(): any
 }
 
 export interface ReleasesViewStateProps {
@@ -32,6 +41,7 @@ export interface ReleasesViewStateProps {
     releases: Release[],
     role: SystemRole,
     currentUser: string,
+    tasks: Task[],
 
     isLoading: boolean
 }
@@ -50,12 +60,17 @@ class ReleasesView extends React.Component<ReleasesViewProps & ReleasesViewDispa
         this.props.fetchReleases();
         this.props.fetchProjects();
         this.props.fetchUsers();
+        this.props.fetchTasks();
     }
 
     render(): React.ReactNode {
+        console.log(this.props)
         return (
             <React.Fragment>
                 <ReleasesOverviewForm
+                    addTaskToRelease={this.props.addTaskToRelease}
+                    deleteTaskFromRelease={this.props.deleteTaskFromRelease}
+                    tasks={this.props.tasks}
                     currentUser={this.props.currentUser}
                     role={this.props.role}
                     users={this.props.users}
@@ -63,7 +78,11 @@ class ReleasesView extends React.Component<ReleasesViewProps & ReleasesViewDispa
                     releases={this.props.releases}
                     displayError={this.props.displayError}
                     fetchReleases={this.props.fetchReleases}
-                    createRelease={this.props.createRelease}
+                    createRelease={(releaseRequest) => {
+                        this.props.createRelease(releaseRequest, () => {
+                            this.props.fetchReleases();
+                        })
+                    }}
                 />
             </React.Fragment>
         )
@@ -78,7 +97,8 @@ function mapStateToProps(state): ReleasesViewStateProps {
         releases: releasesSelectors.getReleases(state),
         isLoading: userSelectors.usersIsFetching(state) || projectSelectors.projectsIsFetching(state),
         role: authSelectors.getRole(state),
-        currentUser: authSelectors.username(state)
+        currentUser: authSelectors.username(state),
+        tasks: taskSelectors.getTasks(state)
     }
 }
 
@@ -94,8 +114,17 @@ function mapDispatchToProps(dispatch: any): ReleasesViewDispatchProps {
         fetchReleases(): any {
             dispatch(releasesActions.fetchReleases())
         },
+        fetchTasks(): any {
+            dispatch(taskActions.fetchTasks())
+        },
         createRelease(release: ReleaseRequest, okCallback?, errorCallback?): any {
             dispatch(releasesActions.createRelease(release, okCallback, errorCallback))
+        },
+        deleteTaskFromRelease(releaseId: number, taskId: number, okCallback?, errorCallback?): any {
+            dispatch(releasesActions.deleteTaskFromRelease(releaseId, taskId, okCallback, errorCallback))
+        },
+        addTaskToRelease(releaseId: number, taskId: number, okCallback?, errorCallback?): any {
+            dispatch(releasesActions.addTaskToRelease(releaseId, taskId, okCallback, errorCallback))
         },
         displayError: (msg: string) => {
             dispatch(notificationActions.error(msg))

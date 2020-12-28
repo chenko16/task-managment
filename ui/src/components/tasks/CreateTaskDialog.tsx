@@ -4,16 +4,22 @@ import {ResizableBox} from "react-resizable";
 import {
     Button,
     createStyles,
-    Dialog, DialogActions,
+    Dialog,
+    DialogActions,
     DialogContent,
     DialogContentText,
-    DialogTitle, Grid, MenuItem,
-    Paper, Select, TextField,
+    DialogTitle,
+    Grid,
+    MenuItem,
+    Paper,
+    Select,
+    TextField,
     withStyles
 } from "@material-ui/core";
 import {User} from "../../store/users/Types";
-import {BusinessRole, ProjectRequest} from "../../store/project/Types";
 import {UserService} from "../../services/UserService";
+import {TaskRequest, TaskStatus, TaskType} from "../../store/tasks/Types";
+import {Autocomplete} from "@material-ui/lab";
 
 const styles = theme => createStyles({
     resizable: {
@@ -44,20 +50,21 @@ function PaperComponent(props) {
     );
 }
 
-export interface AddProjectDialogProps {
+export interface CreateTaskDialogProps {
     users: User[],
     reporterLogin: string,
 
     displayError(errorMessage: string): any,
 
-    onClose(value: string, projectRequest?: ProjectRequest, assignee?: User, reporter?: User, description?: string): any,
+    onClose(value: string, taskRequest?: TaskRequest): any,
 
     close(value: boolean): any
 }
 
-export interface AddProjectDialogState {
-    businessRoles: BusinessRole[],
-    name: string,
+export interface CreateTaskDialogState {
+    taskTypes: TaskType[],
+    taskType?: TaskType,
+    title: string,
     description: string,
     assigneeLogin: string,
     assignee: User,
@@ -65,15 +72,16 @@ export interface AddProjectDialogState {
     reporter: User
 }
 
-class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProjectDialogState> {
+class CreateTaskDialog extends React.Component<CreateTaskDialogProps, CreateTaskDialogState> {
     constructor(props) {
         super(props);
-        let businessRoles: Array<BusinessRole> = new Array<BusinessRole>();
-        for (let role in BusinessRole)
-            businessRoles.push(role as BusinessRole);
+        let taskTypes: Array<TaskType> = new Array<TaskType>();
+        for (let type in TaskType)
+            taskTypes.push(type as TaskType);
         this.state = {
-            businessRoles: businessRoles,
-            name: "",
+            taskTypes: taskTypes,
+            taskType: taskTypes[0],
+            title: "",
             description: "",
             assigneeLogin: "",
             assignee: UserService.getEmptyUser(),
@@ -85,7 +93,7 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
     }
 
     render(): React.ReactNode {
-       console.log(this.state)
+        console.log(this.state)
         // @ts-ignore
         const {classes} = this.props;
         return (
@@ -102,7 +110,7 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
                         className={classes.resizable}
                     >
                         <DialogTitle style={{cursor: 'move'}} id="draggable-dialog-title">
-                            Создание проекта.
+                            Создание задачи.
                         </DialogTitle>
                         <DialogContent>
                             <DialogContentText>
@@ -110,15 +118,36 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
                                     <Grid container direction="row" justify="flex-start" alignItems="center"
                                           style={{margin: 4}}>
                                         <Grid item xs={2}>
-                                            <b>Название проекта:</b>
+                                            <b>Тип задачи:</b>
+                                        </Grid>
+                                        <Grid item xs={8} style={{marginLeft: "30px"}}>
+                                            <Select
+                                                value={this.state.taskType}
+                                                onChange={(event, child) => {
+                                                    this.setState({taskType: event.target.value});
+                                                }}
+                                                variant={"outlined"}
+                                                fullWidth
+                                                displayEmpty
+                                            >
+                                                {this.state.taskTypes?.map((type) => {
+                                                    return <MenuItem value={type}> {type} </MenuItem>
+                                                })}
+                                            </Select>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid container direction="row" justify="flex-start" alignItems="center"
+                                          style={{margin: 4}}>
+                                        <Grid item xs={2}>
+                                            <b>Название задачи:</b>
                                         </Grid>
                                         <Grid item xs={8} style={{marginLeft: "30px"}}>
                                             <TextField
                                                 id="name"
-                                                error={this.state.name===""}
-                                                defaultValue={this.state.name}
+                                                error={this.state.title === ""}
+                                                defaultValue={this.state.title}
                                                 onChange={(e) => {
-                                                    this.setState({name: e.target.value})
+                                                    this.setState({title: e.target.value})
                                                 }}
                                                 type="login"
                                                 variant={"outlined"}
@@ -137,7 +166,7 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
                                                 multiline
                                                 rows={4}
                                                 fullWidth
-                                                error={this.state.description===""}
+                                                error={this.state.description === ""}
                                                 defaultValue={this.state.description}
                                                 onChange={(e) => {
                                                     this.setState({description: e.target.value})
@@ -146,30 +175,61 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
                                             />
                                         </Grid>
                                     </Grid>
+                                    <Grid container direction="column" justify="flex-start" alignItems="flex-start"
+                                          style={{margin: 4}}>
+                                        <Grid item>
+                                            <b>Требования:</b>
+                                        </Grid>
+                                        <Grid item style={{width: "95%", marginTop: 6}}>
+                                            <Autocomplete
+                                                multiple
+                                                disabled
+                                                options={[]}
+                                                getOptionLabel={(option) => option}
+                                                defaultValue={["требование 1", "требование 2"]}
+                                                onChange={(e) => {
+                                                    console.log(e)
+                                                }}
+                                                renderInput={params => (
+                                                    <TextField
+                                                        {...params}
+                                                        variant="standard"
+                                                        placeholder="Начните вводить требование"
+                                                        margin="normal"
+                                                        fullWidth
+                                                    />
+                                                )}
+                                            />
+                                        </Grid>
+                                    </Grid>
                                     <Grid container direction="row" justify="flex-start" alignItems="center"
                                           style={{margin: 4}}>
                                         <Grid item xs={2}>
-                                            <b>Руководитель:</b>
+                                            <b>Автор*:</b>
                                         </Grid>
                                         <Grid item xs={8} style={{marginLeft: "30px"}}>
                                             <Select
                                                 value={this.state.reporterLogin}
                                                 disabled
-                                                onChange={(event, child)=> {
+                                                onChange={(event, child) => {
                                                     let id = child.props.id as number;
                                                     let reporter: User = this.props.users.filter(user => {
                                                         return user.id === id
                                                     }).map(user => {
                                                         return user
                                                     })[0];
-                                                    this.setState({reporter: reporter, reporterLogin: event.target.value});
+                                                    this.setState({
+                                                        reporter: reporter,
+                                                        reporterLogin: event.target.value
+                                                    });
                                                 }}
                                                 variant={"outlined"}
                                                 fullWidth
                                                 displayEmpty
                                             >
                                                 {this.props.users?.map((user, ind) => {
-                                                    return <MenuItem value={user.login} id={user.id}> {user.login} </MenuItem>
+                                                    return <MenuItem value={user.login}
+                                                                     id={user.id}> {user.login} </MenuItem>
                                                 })}
                                             </Select>
                                         </Grid>
@@ -177,26 +237,30 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
                                     <Grid container direction="row" justify="flex-start" alignItems="center"
                                           style={{margin: 4}}>
                                         <Grid item xs={2}>
-                                            <b>Управляющий:</b>
+                                            <b>Исполнитель:</b>
                                         </Grid>
                                         <Grid item xs={8} style={{marginLeft: "30px"}}>
                                             <Select
                                                 value={this.state.assigneeLogin}
-                                                onChange={(event, child)=> {
+                                                onChange={(event, child) => {
                                                     let id = child.props.id as number;
                                                     let assignee: User = this.props.users.filter(user => {
                                                         return user.id === id
                                                     }).map(user => {
                                                         return user
                                                     })[0];
-                                                    this.setState({assignee: assignee, assigneeLogin: event.target.value});
+                                                    this.setState({
+                                                        assignee: assignee,
+                                                        assigneeLogin: event.target.value
+                                                    });
                                                 }}
                                                 variant={"outlined"}
                                                 fullWidth
                                                 displayEmpty
                                             >
                                                 {this.props.users?.map((user, ind) => {
-                                                    return <MenuItem value={user.login} id={user.id}> {user.login} </MenuItem>
+                                                    return <MenuItem value={user.login}
+                                                                     id={user.id}> {user.login} </MenuItem>
                                                 })}
                                             </Select>
                                         </Grid>
@@ -207,26 +271,23 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
                         <DialogActions style={{marginTop: 6, marginRight: 6}}>
                             <Button
                                 onClick={(e) => {
-                                    if (this.state.name === "" || this.state.name === undefined) {
-                                        this.props.displayError("Поле 'Название проекта' не может быть пустым.");
+                                    if (this.state.title === "" || this.state.title === undefined) {
+                                        this.props.displayError("Поле 'Название задачи' не может быть пустым.");
                                         return;
                                     }
                                     if (this.state.description === "" || this.state.description === undefined) {
                                         this.props.displayError("Поле 'Описание' не может быть пустым.");
                                         return;
                                     }
-                                    if (this.state.assigneeLogin === "" || this.state.assignee === undefined) {
-                                        this.props.displayError("Выбор управляющего обязателен.");
-                                        return;
+                                    let taskRequest: TaskRequest = {
+                                        title: this.state.title,
+                                        status: TaskStatus.CREATED,
+                                        type: this.state.taskType || TaskType.TASK,
+                                        description: this.state.description,
+                                        assigneeId:  this.state.assignee.id,
+                                        reporterId: this.state.reporter.id
                                     }
-                                    if (this.state.reporterLogin === "" || this.state.reporter === undefined) {
-                                        this.props.displayError("Выбор руководителя обязателен.");
-                                        return;
-                                    }
-                                    let projectRequest: ProjectRequest = {
-                                        name: this.state.name
-                                    };
-                                    this.props.onClose('Ok', projectRequest, this.state.assignee, this.state.reporter, this.state.description);
+                                    this.props.onClose('Ok', taskRequest);
                                     this.props.close(false);
                                 }}
                                 color="primary"
@@ -251,4 +312,4 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
 
 }
 
-export default withStyles(styles)(AddProjectDialog);
+export default withStyles(styles)(CreateTaskDialog);

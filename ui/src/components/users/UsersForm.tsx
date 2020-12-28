@@ -11,6 +11,7 @@ import {withRouter} from "react-router";
 import UserEditForm, {UserEditFormState} from "./UserEditForm";
 import {Project, ProjectsByUsers} from "../../store/project/Types";
 import AddUserDialog from "./AddUserDialog";
+import ConfirmDialog from "../ConfirmDialog";
 
 const tableIcons = {
     ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref}/>),
@@ -48,7 +49,9 @@ export interface UsersFormState {
     columns: any[],
     currentUser?: User,
     openEdit: boolean,
-    openAdd: boolean
+    openAdd: boolean,
+    userToDelete?: number,
+    confirmDelete: boolean
 }
 
 class UsersForm extends React.Component<UsersFormProps, UsersFormState> {
@@ -56,6 +59,7 @@ class UsersForm extends React.Component<UsersFormProps, UsersFormState> {
         super(props);
 
         this.state = {
+            confirmDelete: false,
             columns: [
                 {title: 'id', field: 'id', hidden: true},
                 {
@@ -80,7 +84,17 @@ class UsersForm extends React.Component<UsersFormProps, UsersFormState> {
             openEdit: false,
             openAdd: false
         }
+        this.handleConfirmDialogDeleteClose = this.handleConfirmDialogDeleteClose.bind(this);
     }
+
+
+    handleConfirmDialogDeleteClose(value) {
+        this.setState({confirmDelete: false});
+        if (value === 'Ok') {
+            this.props.deleteUser(this.state.userToDelete);
+        }
+    }
+
 
     render(): React.ReactNode {
         // console.log(JSON.stringify(this.props, null, 2))
@@ -123,10 +137,8 @@ class UsersForm extends React.Component<UsersFormProps, UsersFormState> {
                             icon: () => <CloseIcon style={{marginRight: 6}}/>,
                             tooltip: 'Удалить пользователя',
                             hidden: this.props.role !== SystemRole.ADMIN,
-                            onClick: (event, rowData) => {
-                                if (confirm("Вы уверены, что хотите удалить пользователя?")) {
-                                    this.props.deleteUser(rowData.id)
-                                }
+                            onClick: (event, rowData: User) => {
+                                this.setState({confirmDelete: true, userToDelete: rowData.id})
                             }
                         }
                     ]}
@@ -135,6 +147,14 @@ class UsersForm extends React.Component<UsersFormProps, UsersFormState> {
                             this.setState({currentUser: rowData, openEdit: true})
                         }
                     }}
+                />
+
+                <ConfirmDialog
+                    warningText={"Вы уверены, что хотите удалить пользователя?"}
+                    open={this.state.confirmDelete}
+                    okString={"Да"}
+                    cancelString={"Отмена"}
+                    onClose={this.handleConfirmDialogDeleteClose}
                 />
 
                 {this.state.openEdit && <UserEditForm

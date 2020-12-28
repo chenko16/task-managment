@@ -33,6 +33,7 @@ import AuthView from "./auth/AuthView";
 import {mapRole, SystemRole} from "../store/users/Types";
 import SettingsView from "./settings/SettingsView";
 import ReleasesRouter from "./releases/ReleasesRouter";
+import TasksOverview from "./tasks/TasksOverview";
 
 // import MonitoringView from './monitoring/MonitoringView';
 // import GroupRouter from "./group/GroupRouter";
@@ -332,7 +333,9 @@ const navMappings = {
   task: ['Задачи', null],
   releases: ['Релизы', null],
   settings: ['Настройки', null],
-  users: ['Пользователи', null]
+  users: ['Пользователи', null],
+  release: ['Релиз', null],
+  tasks: ['Задачи', null]
 }
 
 interface AppState {
@@ -437,7 +440,7 @@ class App extends React.Component<AppProps & ReactRouterProps, AppState> {
                   const redirect = navMappings[path] && navMappings[path][1] !== null ? navMappings[path][1] : to
                   return last ? (
                     <Typography>
-                      {marker}
+                      {marker.split("&")[0]}
                     </Typography>
                   ) : (
                     <Link color="inherit" className={classes.breadcrumbLink} component={RouterLink} to={redirect}>
@@ -508,7 +511,7 @@ class App extends React.Component<AppProps & ReactRouterProps, AppState> {
         <main className={classes.content}>
           <div className={classes.appBarSpacer}/>
           <div className={classes.mainWindow}>
-            {/*<Route path="/tasks" component={TaskRouter}/>*/}
+            <Route path="/tasks" component={TasksOverview}/>
             <Route path="/releases" component={ReleasesRouter}/>
             <Route path="/settings" component={SettingsView}/>
             <Route path="/users" exact={true} render={() => <SettingsView currentTab={1}/>}/>

@@ -9,6 +9,7 @@ import AddProjectDialog from "./AddProjectDialog";
 import {SystemRole, User} from "../../store/users/Types";
 import EditProjectDialog from "./EditProjectDialog";
 import CloseIcon from "@material-ui/icons/Close";
+import ConfirmDialog from "../ConfirmDialog";
 
 
 const tableIcons = {
@@ -70,7 +71,9 @@ export interface ProjectsFormState {
     openAdd: boolean,
     openEdit: boolean,
     currentProject?: Project
-    columns: any[]
+    columns: any[],
+    confirmDelete: boolean,
+    projectToDelete?: number
 }
 
 export default class ProjectsForm extends React.Component<ProjectsFormProps, ProjectsFormState> {
@@ -80,6 +83,7 @@ export default class ProjectsForm extends React.Component<ProjectsFormProps, Pro
             openAdd: false,
             openEdit: this.props.openEditProject,
             currentProject: this.props.currentProject,
+            confirmDelete: false,
             columns: [
                 {title: 'id', field: 'id', hidden: true},
                 {title: 'reporter', field: 'reporter', hidden: true},
@@ -91,6 +95,7 @@ export default class ProjectsForm extends React.Component<ProjectsFormProps, Pro
                 }
             ]
         }
+        this.handleConfirmDialogDeleteClose = this.handleConfirmDialogDeleteClose.bind(this);
     }
 
     componentDidMount(): void {
@@ -98,6 +103,13 @@ export default class ProjectsForm extends React.Component<ProjectsFormProps, Pro
             this.props.fetchProjectsByUser(this.props.users.filter((user) => {
                 return user.login === this.props.currentUser
             })[0].id)
+        }
+    }
+
+    handleConfirmDialogDeleteClose(value) {
+        this.setState({confirmDelete: false});
+        if (value === 'Ok') {
+            this.props.deleteProject(this.state.projectToDelete);
         }
     }
 
@@ -144,10 +156,8 @@ export default class ProjectsForm extends React.Component<ProjectsFormProps, Pro
                             icon: () => <CloseIcon style={{marginRight: 6}}/>,
                             hidden: this.props.role !== SystemRole.MANAGER,
                             tooltip: 'Удалить проект',
-                            onClick: (event, rowData) => {
-                                if (confirm("Вы уверены, что хотите удалить проект?")) {
-                                    this.props.deleteProject(rowData.id)
-                                }
+                            onClick: (event, rowData: Project) => {
+                                this.setState({projectToDelete: rowData.id, confirmDelete: true})
                             }
                         }
                     ]}
@@ -211,6 +221,14 @@ export default class ProjectsForm extends React.Component<ProjectsFormProps, Pro
                         }
                     }}
                 />}
+
+                <ConfirmDialog
+                    warningText={"Вы уверены, что хотите удалить проект?"}
+                    open={this.state.confirmDelete}
+                    okString={"Да"}
+                    cancelString={"Отмена"}
+                    onClose={this.handleConfirmDialogDeleteClose}
+                />
 
                 {this.props.role === SystemRole.MANAGER && <Fab
                     color="primary"

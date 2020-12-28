@@ -48,6 +48,19 @@ export const finishReleaseAction = createAsyncAction(
     '@releases/FINISH_FAIL'
 )<void, void, void>();
 
+export const addTaskToReleaseAction = createAsyncAction(
+    '@releases/ADD_TASK_REQ',
+    '@releases/ADD_TASK_SUCC',
+    '@releases/ADD_TASK_FAIL'
+)<void, void, void>();
+
+export const deleteTaskToReleaseAction = createAsyncAction(
+    '@releases/DELETE_TASK_REQ',
+    '@releases/DELETE_TASK_SUCC',
+    '@releases/DELETE_TASK_FAIL'
+)<void, void, void>();
+
+
 export function createRelease(release: ReleaseRequest, okCallback?, errorCallback?) {
     return (dispatch, getState) => {
         dispatch(createReleaseAction.request());
@@ -95,7 +108,7 @@ export function deleteRelease (id: number, okCallback?, errorCallback?) {
     }
 }
 
-export function fetchRealese(id: number, okCallback?, errorCallback?) {
+export function fetchRelease(id: number, okCallback?, errorCallback?) {
     return (dispatch, getState) => {
         dispatch(fetchReleaseAction.request());
         ReleaseService.getRelease(id, (release) => {
@@ -155,6 +168,40 @@ export function finishRelease (id: number, okCallback?, errorCallback?) {
             if (errorCallback)
                 errorCallback(errorMessage);
             dispatch(notificationActions.error("Ошибка при завершении релиза."));
+        })
+    }
+}
+
+export function addTaskToRelease(releaseId: number, taskId: number, okCallback?, errorCallback?) {
+    return (dispatch, getState) => {
+        dispatch(addTaskToReleaseAction.request());
+        ReleaseService.addTaskToRelease(releaseId, taskId, (id) => {
+            dispatch(reqFinished());
+            if (okCallback)
+                okCallback(id);
+            dispatch(addTaskToReleaseAction.success());
+        }, (errorMessage) => {
+            dispatch(addTaskToReleaseAction.failure());
+            if (errorCallback)
+                errorCallback(errorMessage);
+            dispatch(notificationActions.error("Ошибка при добавлении задачи в релиз."));
+        })
+    }
+}
+
+export function deleteTaskFromRelease(releaseId: number, taskId: number, okCallback?, errorCallback?) {
+    return (dispatch, getState) => {
+        dispatch(addTaskToReleaseAction.request());
+        ReleaseService.removeTaskToRelease(releaseId, taskId, (id) => {
+            dispatch(reqFinished());
+            if (okCallback)
+                okCallback(id);
+            dispatch(addTaskToReleaseAction.success());
+        }, (errorMessage) => {
+            dispatch(addTaskToReleaseAction.failure());
+            if (errorCallback)
+                errorCallback(errorMessage);
+            dispatch(notificationActions.error("Ошибка при удалении задачи из релиза."));
         })
     }
 }

@@ -1,6 +1,6 @@
 import * as React from "react";
 import {SystemRole, User} from "../../store/users/Types";
-import {Project, ProjectRequest} from "../../store/project/Types";
+import {Project} from "../../store/project/Types";
 import {Release, ReleaseRequest} from "../../store/releases/Types";
 import MaterialTable from "material-table";
 import {Chip, Fab} from "@material-ui/core";
@@ -8,6 +8,9 @@ import AddBtn from "@material-ui/icons/Add";
 import {forwardRef} from "react";
 import {Add, ArrowDownward, Check, Clear, Delete, Edit, Remove, Search} from "@material-ui/icons";
 import AddReleaseDialog from "./AddReleaseDialog";
+import {withRouter} from "react-router";
+import {RouteProps} from 'react-router-dom';
+import {Task} from "../../store/tasks/Types";
 
 
 const tableIcons = {
@@ -42,7 +45,7 @@ export interface ReleasesOverviewFormState {
     columns: any[]
 }
 
-export class ReleasesOverviewForm extends React.Component<ReleasesOverviewFormProps, ReleasesOverviewFormState> {
+class ReleasesOverviewForm extends React.Component<ReleasesOverviewFormProps & RouteProps, ReleasesOverviewFormState> {
     constructor(props) {
         super(props);
         this.state = {
@@ -106,7 +109,10 @@ export class ReleasesOverviewForm extends React.Component<ReleasesOverviewFormPr
                         }
                     }}
                     onRowClick={(event, rowData: Release) => {
-                       console.log(rowData)
+                       console.log(rowData);
+                        event.preventDefault();
+                        event.stopPropagation();
+                        this.props.history.push("/releases/" + rowData.name + "&" + rowData.id)
                     }}
                 />
 
@@ -119,9 +125,7 @@ export class ReleasesOverviewForm extends React.Component<ReleasesOverviewFormPr
                     onClose={(value, releaseRequest) => {
                         if (value === 'Ok' && releaseRequest) {
                             console.log(releaseRequest)
-                            this.props.createRelease(releaseRequest, () => {
-                                this.props.fetchReleases();
-                            });
+                            this.props.createRelease(releaseRequest);
                         }
                     }}
                 />}
@@ -141,5 +145,6 @@ export class ReleasesOverviewForm extends React.Component<ReleasesOverviewFormPr
             </React.Fragment>
         )
     }
-
 }
+
+export default withRouter(ReleasesOverviewForm)

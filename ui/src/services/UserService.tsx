@@ -41,7 +41,7 @@ export class UserService {
         okCallback: (users: User[]) => void,
         errorCallback: (errorMessage: string) => void) {
 
-        let result = await BackendProvider.request('GET', '/user/list');
+        let result = await BackendProvider.request('GET', '/user');
 
         if (result.ok) {
             let body = await result.json();

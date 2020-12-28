@@ -1,17 +1,26 @@
 import {User} from "../users/Types";
-import {UserProject} from "../project/Types";
 
 export interface Task {
-    taskId: string,
+    id: number,
     title: string,
     description: string,
     type: TaskType,
     status: TaskStatus,
     reporter: User,
-    assignee: User,
-    comments?: Comment[],
-    linkedTask?: Task[],
-    created: number
+    assignee?: User,
+    // comments?: Comment[],
+    // linkedTask?: Task[],
+    created?: number
+}
+
+
+export interface TaskRequest {
+    title: string,
+    description: string,
+    status: TaskStatus,
+    type: TaskType,
+    reporterId: number,
+    assigneeId?: number
 }
 
 export enum TaskType {
@@ -28,9 +37,9 @@ export enum TaskStatus {
     DONE = 'DONE',
     ON_TESTING = 'ON_TESTING'
 }
-
-export interface Comment {
-    id: string,
-    text: string,
-    writer: UserProject
-}
+//
+// export interface Comment {
+//     id: string,
+//     text: string,
+//     writer: UserProject
+// }
