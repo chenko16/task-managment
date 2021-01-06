@@ -40,6 +40,7 @@ export interface TasksOverviewStateProps {
 }
 
 class TasksOverview extends React.Component<TasksOverviewDispatchProps & TasksOverviewProps & TasksOverviewStateProps, TasksOverviewState> {
+
     constructor(props) {
         super(props);
         this.props.fetchUsers();

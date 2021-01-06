@@ -102,7 +102,7 @@ class EditReleaseDialog extends React.Component<EditReleaseDialogProps, EditRele
                         className={classes.resizable}
                     >
                         <DialogTitle style={{cursor: 'move'}} id="draggable-dialog-title">
-                            Создание релиза.
+                            Редактирование релиза.
                         </DialogTitle>
                         <DialogContent>
                             <DialogContentText>

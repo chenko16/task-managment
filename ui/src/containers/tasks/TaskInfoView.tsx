@@ -35,6 +35,8 @@ interface TaskInfoViewDispatchProps {
 
     setAssignee (id: number, userId: number, okCallback?, errorCallback?): any,
 
+    deleteTask (id: number, okCallback?, errorCallback?): any,
+
     fetchProjects(): any,
 
     fetchTasks(): any,
@@ -63,6 +65,13 @@ class TaskInfoView extends React.Component<TaskInfoViewProps & TaskInfoViewDispa
             return (
                 <React.Fragment>
                     <TaskView
+                        displayError={this.props.displayError}
+                        users={this.props.users}
+                        deleteTask={(id) => {
+                            this.props.deleteTask(id, () => {
+                                this.props.history.push('/tasks')
+                            })
+                        }}
                         currentUserId={this.props.users.filter((user) => {return user.login === this.props.currentUser})[0].id}
                         setAssignee={(id, userId) => {
                             this.props.setAssignee(id, userId, () => {
@@ -116,6 +125,9 @@ function mapDispatchToProps(dispatch: any): TaskInfoViewDispatchProps {
         },
         setAssignee(id: number, userId: number, okCallback?, errorCallback?): any {
             dispatch(taskActions.setAssignee(id, userId, okCallback, errorCallback))
+        },
+        deleteTask(id: number, okCallback?, errorCallback?): any {
+            dispatch(taskActions.deleteTask(id, okCallback, errorCallback))
         },
         fetchTasks(): any {
             dispatch(taskActions.fetchTasks())

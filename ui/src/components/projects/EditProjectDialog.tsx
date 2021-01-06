@@ -249,7 +249,9 @@ class EditProjectDialog extends React.Component<EditProjectDialogProps, EditProj
                                                 fullWidth
                                                 displayEmpty
                                             >
-                                                {this.props.users?.map((user, ind) => {
+                                                {this.props.users?.filter(user => {
+                                                    return !this.props.participants?.some(userProject => userProject.user.id === user.id)
+                                                }).map((user, ind) => {
                                                     return <MenuItem value={user.id}> {user.login} </MenuItem>
                                                 })}
                                             </Select>
@@ -295,8 +297,8 @@ class EditProjectDialog extends React.Component<EditProjectDialogProps, EditProj
                                                         onChange={event => {
                                                             this.props.setParticipantRole(this.state.id, user.user.id,
                                                                 event.target.value as BusinessRole, () => {
-                                                                this.props.getParticipants(this.state.id);
-                                                            });
+                                                                    this.props.getParticipants(this.state.id);
+                                                                });
                                                         }}
                                                         variant={"outlined"}
                                                         fullWidth

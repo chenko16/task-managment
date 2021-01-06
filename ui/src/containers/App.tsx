@@ -35,6 +35,7 @@ import SettingsView from "./settings/SettingsView";
 import ReleasesRouter from "./releases/ReleasesRouter";
 import TasksOverview from "./tasks/TasksOverview";
 import TasksRouter from "./tasks/TasksRouter";
+import jwt_decode from "jwt-decode";
 
 // import MonitoringView from './monitoring/MonitoringView';
 // import GroupRouter from "./group/GroupRouter";
@@ -350,7 +351,8 @@ interface AppProps {
   isAuthenticated: boolean,
   isAuthPerformed: boolean,
   checkAuth: boolean,
-  logout(): any
+  logout(): any,
+  checkAuthAction(): any
 }
 
 class App extends React.Component<AppProps & ReactRouterProps, AppState> {
@@ -366,6 +368,7 @@ class App extends React.Component<AppProps & ReactRouterProps, AppState> {
   constructor(props) {
     super(props);
     autoBind(this);
+    // this.props.checkAuthAction();
     this.state = {
       isOpened: false
     }
@@ -375,6 +378,7 @@ class App extends React.Component<AppProps & ReactRouterProps, AppState> {
     this.intervalID = setInterval(() => {
       const currentTime = Math.floor(Date.now() / 1000);
       if (currentTime >= this.props.expTime) {
+        console.log("whyyyyyy")
         this.props.logout();
       }
     }, 1000);
@@ -396,8 +400,13 @@ class App extends React.Component<AppProps & ReactRouterProps, AppState> {
   }
 
   render() {
+    console.log(localStorage.getItem("jwtToken"))
 
     console.log(JSON.stringify(this.props, null,2))
+    if (!this.props.isAuthPerformed) {
+      this.props.checkAuthAction()
+      return this.renderLoader()
+    }
 
     if (!this.props.isAuthenticated) {
       return this.renderAuthView()
@@ -552,6 +561,9 @@ function mapDispatchProps(dispatch: any) {
   return {
     logout(): any {
       dispatch(authActions.logout())
+    },
+    checkAuthAction() : any {
+      dispatch(authActions.checkAuth())
     }
   }
 }

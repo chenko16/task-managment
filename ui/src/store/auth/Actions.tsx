@@ -2,6 +2,7 @@ import AuthService from '../../services/AuthService'
 import * as notificationActions from '../notification/Actions'
 import {createAsyncAction} from "typesafe-actions";
 import {AuthResult} from "./Types";
+import jwt_decode from "jwt-decode";
 
 export const logoutAction = createAsyncAction(
     '@auth/LOGOUT_REQ',
@@ -15,11 +16,35 @@ export const authActions = createAsyncAction(
     '@auth/REGISTER_FAIL'
 )<void, AuthResult, void>();
 
+export const checkAuthAction = createAsyncAction(
+    '@auth/CHECK_REQ',
+    '@auth/CHECK_SUCC',
+    '@auth/CHECK_FAIL'
+)<void, AuthResult, void>()
+
 export const logout = () => {
     return (dispatch, getState) => {
+        console.log("fuck!!!")
         dispatch(logoutAction.request());
         dispatch(logoutAction.success());
-        sessionStorage.removeItem("jwtToken")
+        localStorage.removeItem("jwtToken")
+    }
+}
+
+export const checkAuth = () => {
+    return (dispatch, getState) => {
+        dispatch(checkAuthAction.request);
+        console.log("AAAAAAA")
+        const token = localStorage.getItem("jwtToken");
+        const jwt = token !== null ? jwt_decode(token) : undefined;
+        dispatch(checkAuthAction.success(
+            {
+                login: jwt?.sub,
+                role: jwt?.role,
+                token: token,
+                exp: jwt?.exp
+            }
+        ))
     }
 }
 

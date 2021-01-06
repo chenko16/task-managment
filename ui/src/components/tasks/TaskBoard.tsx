@@ -6,6 +6,7 @@ import TaskItem from "./TaskItem";
 import {blue} from "@material-ui/core/colors";
 import CreateTaskDialog from "./CreateTaskDialog";
 import {User} from "../../store/users/Types";
+import {Project} from "../../store/project/Types";
 
 const grid = 8;
 
@@ -76,6 +77,30 @@ class TaskBoard extends React.Component<TaskBoardProps, TaskBoardState> {
             tasksOnTesting: this.props.tasksOnTesting
         };
 
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.tasksCreated !== prevProps.tasksCreated || this.props.tasksInProgress !== prevProps.tasksInProgress ||
+            this.props.tasksReady !== prevProps.tasksReady || this.props.tasksDone !== prevProps.tasksDone ||
+            this.props.tasksOnTesting !== prevProps.tasksOnTesting) {
+            this.setState({
+                tasksCreated: this.props.tasksCreated,
+                tasksInProgress: this.props.tasksInProgress,
+                tasksReady: this.props.tasksReady,
+                tasksDone: this.props.tasksDone,
+                tasksOnTesting: this.props.tasksOnTesting
+            })
+        }
+    }
+
+    componentDidMount(): void {
+        this.setState({
+            tasksCreated: this.props.tasksCreated,
+            tasksInProgress: this.props.tasksInProgress,
+            tasksReady: this.props.tasksReady,
+            tasksDone: this.props.tasksDone,
+            tasksOnTesting: this.props.tasksOnTesting
+        })
     }
 
     id2List = {

@@ -12,22 +12,32 @@ import {
     TableRow,
     Typography
 } from "@material-ui/core";
+import ConfirmDialog from "../ConfirmDialog";
+import EditTaskDialog from "./EditTaskDialog";
+import {User} from "../../store/users/Types";
 
 
 export interface TaskViewProps {
     task?: Task,
     currentUserId: number,
-    setAssignee (id: number, userId: number, okCallback?, errorCallback?): any
+    users: User[],
+    setAssignee (id: number, userId: number, okCallback?, errorCallback?): any,
+    deleteTask (id: number, okCallback?, errorCallback?): any,
+    displayError(errorMessage: string): any
 }
 
 export interface TaskViewState {
-    requirements: any[]
+    requirements: any[],
+    editOpen: boolean,
+    confirmDelete: boolean
 }
 
 export default class TaskView extends React.Component<TaskViewProps, TaskViewState> {
     constructor(props) {
         super(props);
         this.state = {
+            confirmDelete: false,
+            editOpen: false,
             requirements: [
                 {
                     title: 'req1',
@@ -38,7 +48,16 @@ export default class TaskView extends React.Component<TaskViewProps, TaskViewSta
                     description: 'Описание требования 2'
                 }]
         }
+        this.handleConfirmDialogDeleteClose = this.handleConfirmDialogDeleteClose.bind(this);
     }
+
+    handleConfirmDialogDeleteClose(value) {
+        this.setState({confirmDelete: false});
+        if (value === 'Ok') {
+            this.props.deleteTask(this.props.task?.id);
+        }
+    }
+
 
     render(): React.ReactNode {
         return (
@@ -67,6 +86,7 @@ export default class TaskView extends React.Component<TaskViewProps, TaskViewSta
                                 <Button
                                     onClick={(e) => {
                                         console.log("edit")
+                                        this.setState({editOpen: true})
                                         //this.setState({editRelease: true})
                                     }}
                                     color="primary"
@@ -77,7 +97,7 @@ export default class TaskView extends React.Component<TaskViewProps, TaskViewSta
                                 <Button
                                     onClick={(e) => {
                                         console.log("delete")
-                                        //this.setState({confirmDelete: true})
+                                        this.setState({confirmDelete: true})
                                     }}
                                     color="primary">
                                     Удалить
@@ -138,6 +158,26 @@ export default class TaskView extends React.Component<TaskViewProps, TaskViewSta
                         </Grid>
                     </Grid>
                 </Paper>
+
+                {this.state.editOpen && <EditTaskDialog
+                    close={(e) => {this.setState({editOpen: e})}}
+                    onClose={(value, assignee, description, title) => {
+                        if (value === 'Ok') {
+                            console.log("ok")
+                        }
+                    }}
+                    task={this.props.task}
+                    users={this.props.users}
+                    displayError={this.props.displayError}
+                />}
+
+                <ConfirmDialog
+                    warningText={"Вы уверены, что хотите удалить задачу?"}
+                    open={this.state.confirmDelete}
+                    okString={"Да"}
+                    cancelString={"Отмена"}
+                    onClose={this.handleConfirmDialogDeleteClose}
+                />
             </React.Fragment>
         )
     }

@@ -5,7 +5,7 @@ export default class BackendProvider {
 
   static request(method: string, path: string, headers?: any, params?: any, body?: any) {
 
-    let token = sessionStorage.getItem("jwtToken");
+    let token = localStorage.getItem("jwtToken");
     console.log("method "+ method+", path: "+path + ", token "+token)
 
     let _headers = {};

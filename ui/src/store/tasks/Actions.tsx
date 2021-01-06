@@ -76,7 +76,7 @@ export function createTask(task: TaskRequest, okCallback?, errorCallback?) {
     }
 }
 
-export function deleteRelease (id: number, okCallback?, errorCallback?) {
+export function deleteTask (id: number, okCallback?, errorCallback?) {
     return (dispatch, getState) => {
         dispatch(deleteTaskAction.request());
         TaskService.deleteTask(id, (id) => {
