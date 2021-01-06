@@ -284,7 +284,7 @@ class CreateTaskDialog extends React.Component<CreateTaskDialogProps, CreateTask
                                         status: TaskStatus.CREATED,
                                         type: this.state.taskType || TaskType.TASK,
                                         description: this.state.description,
-                                        assigneeId:  this.state.assignee.id,
+                                        assigneeId:  this.state.assignee.id === -1? undefined : this.state.assignee.id,
                                         reporterId: this.state.reporter.id
                                     }
                                     this.props.onClose('Ok', taskRequest);

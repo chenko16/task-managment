@@ -511,7 +511,7 @@ class App extends React.Component<AppProps & ReactRouterProps, AppState> {
         <main className={classes.content}>
           <div className={classes.appBarSpacer}/>
           <div className={classes.mainWindow}>
-            <Route path="/tasks" component={TasksOverview}/>
+            <Route path="/tasks" exact component={TasksOverview}/>
             <Route path="/releases" component={ReleasesRouter}/>
             <Route path="/settings" component={SettingsView}/>
             <Route path="/users" exact={true} render={() => <SettingsView currentTab={1}/>}/>

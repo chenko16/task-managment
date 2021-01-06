@@ -3,7 +3,8 @@ import {Avatar, Button, Card, CardActions, CardContent, Grid, IconButton, Typogr
 import Utils from "../../store/users/Utils";
 import {Task} from "../../store/tasks/Types";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
+import {withRouter} from "react-router";
+import {RouteProps} from 'react-router-dom';
 
 export interface TaskItemProps {
     task: Task
@@ -13,7 +14,7 @@ export interface TaskItemState {
 
 }
 
-export default class TaskItem extends React.Component<TaskItemProps, TaskItemState> {
+class TaskItem extends React.Component<TaskItemProps & RouteProps, TaskItemState> {
     constructor(props) {
         super(props);
     }
@@ -57,6 +58,8 @@ export default class TaskItem extends React.Component<TaskItemProps, TaskItemSta
                     <IconButton
                         size="small"
                         onClick={e => {
+                            this.props.history.push("/tasks/" + this.props.task.title + "&" + this.props.task.id)
+                            // this.props.history.push("/tasks/" + this.props.task.id)
                             console.log("подробнее")
                         }}
                     >
@@ -67,3 +70,5 @@ export default class TaskItem extends React.Component<TaskItemProps, TaskItemSta
         )
     }
 }
+
+export default withRouter(TaskItem)
