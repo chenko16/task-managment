@@ -14,7 +14,7 @@ export default class ReleasesRouter extends React.Component<any, any> {
             <React.Fragment>
                 <div style={{flexGrow: 1, marginTop: 16}}>
                     <Route path="/releases" exact component={ReleasesView}/>
-                    <Route path="/releases/:releaseName&:id" exact component={ReleaseView}/>
+                    <Route path="/releases/:releaseName&:id" component={ReleaseView}/>
                 </div>
             </React.Fragment>
         )

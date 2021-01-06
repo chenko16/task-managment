@@ -3,7 +3,7 @@ import {Task} from "../../store/tasks/Types";
 import {
     Button,
     Chip,
-    Grid,
+    Grid, Link,
     Paper,
     Table,
     TableBody,
@@ -15,7 +15,9 @@ import {
 
 
 export interface TaskViewProps {
-    task: Task
+    task?: Task,
+    currentUserId: number,
+    setAssignee (id: number, userId: number, okCallback?, errorCallback?): any
 }
 
 export interface TaskViewState {
@@ -48,14 +50,14 @@ export default class TaskView extends React.Component<TaskViewProps, TaskViewSta
                               style={{width: "50%"}}>
                             <Grid item style={{margin: 10}}>
                                 <Typography variant="button" color={"primary"}>
-                                    <b>{this.props.task.title}</b>
+                                    <b>{this.props.task?.title}</b>
                                 </Typography>
                             </Grid>
                             <Grid item style={{margin: 6}}>
-                                <b>Тип задачи: </b>{this.props.task.type}
+                                <b>Тип задачи: </b>{this.props.task?.type}
                             </Grid>
                             <Grid item style={{margin: 6}}>
-                                <b>Статус: </b> <Chip label={this.props.task.status} color={"primary"}/>
+                                <b>Статус: </b> <Chip label={this.props.task?.status} color={"primary"}/>
                             </Grid>
                         </Grid>
                         <Grid container direction="column" justify="flex-start" alignItems="flex-start"
@@ -82,10 +84,26 @@ export default class TaskView extends React.Component<TaskViewProps, TaskViewSta
                                 </Button>
                             </Grid>
                             <Grid item style={{margin: 6}}>
-                                <b>Исполнитель: </b>{this.props.task.assignee ? this.props.task.assignee.login : "не назначен"}
+                                <b>Исполнитель: </b>{this.props.task?.assignee ? this.props.task?.assignee.login : "не назначен"}
+                            </Grid>
+                            <Grid item style={{margin: 4}}>
+                                <Link href="#" onClick={(e) => {
+                                    this.props.setAssignee(this.props.task?.id, this.props.currentUserId);
+                                    console.log("Назначить на меня")
+                                }}>
+                                    Назначить на меня
+                                </Link>
+                            </Grid>
+                            <Grid item style={{margin: 4}}>
+                                <Link href="#" onClick={(e) => {
+                                    this.props.setAssignee(this.props.task?.id, this.props.task?.reporter.id);
+                                    console.log("Назначить на автора")
+                                }}>
+                                    Назначить на автора
+                                </Link>
                             </Grid>
                             <Grid item style={{margin: 6}}>
-                                <b>Автор: </b>{this.props.task.reporter.login}
+                                <b>Автор: </b>{this.props.task?.reporter.login}
                             </Grid>
                         </Grid>
                     </Grid>
@@ -95,7 +113,7 @@ export default class TaskView extends React.Component<TaskViewProps, TaskViewSta
                             <b>Описание задачи: </b>
                         </Grid>
                         <Grid item xs={10} style={{margin: 6, width: "100%"}}>
-                            {this.props.task.description}
+                            {this.props.task?.description}
                         </Grid>
                         <Grid item style={{margin: 6, marginTop: 10}}>
                             <b>Список требований: </b>
