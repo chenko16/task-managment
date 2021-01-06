@@ -20,10 +20,18 @@ import {User} from "../../store/users/Types";
 export interface TaskViewProps {
     task?: Task,
     currentUserId: number,
+    currentUser: string,
     users: User[],
-    setAssignee (id: number, userId: number, okCallback?, errorCallback?): any,
-    deleteTask (id: number, okCallback?, errorCallback?): any,
-    displayError(errorMessage: string): any
+
+    setAssignee(id: number, userId: number, okCallback?, errorCallback?): any,
+
+    deleteTask(id: number, okCallback?, errorCallback?): any,
+
+    displayError(errorMessage: string): any,
+
+    updateDescription(id: number, description: string, okCallback?, errorCallback?): any,
+
+    updateTaskTitle(id: number, title: string, okCallback?, errorCallback?): any
 }
 
 export interface TaskViewState {
@@ -109,7 +117,6 @@ export default class TaskView extends React.Component<TaskViewProps, TaskViewSta
                             <Grid item style={{margin: 4}}>
                                 <Link href="#" onClick={(e) => {
                                     this.props.setAssignee(this.props.task?.id, this.props.currentUserId);
-                                    console.log("Назначить на меня")
                                 }}>
                                     Назначить на меня
                                 </Link>
@@ -117,7 +124,6 @@ export default class TaskView extends React.Component<TaskViewProps, TaskViewSta
                             <Grid item style={{margin: 4}}>
                                 <Link href="#" onClick={(e) => {
                                     this.props.setAssignee(this.props.task?.id, this.props.task?.reporter.id);
-                                    console.log("Назначить на автора")
                                 }}>
                                     Назначить на автора
                                 </Link>
@@ -160,10 +166,18 @@ export default class TaskView extends React.Component<TaskViewProps, TaskViewSta
                 </Paper>
 
                 {this.state.editOpen && <EditTaskDialog
-                    close={(e) => {this.setState({editOpen: e})}}
+                    close={(e) => {
+                        this.setState({editOpen: e})
+                    }}
                     onClose={(value, assignee, description, title) => {
                         if (value === 'Ok') {
-                            console.log("ok")
+                            console.log("ffff")
+                            if (assignee)
+                                this.props.setAssignee(this.props.task?.id, assignee.id)
+                            if (description)
+                                this.props.updateDescription(this.props.task?.id, description)
+                            if (title)
+                                this.props.updateTaskTitle(this.props.task?.id, title)
                         }
                     }}
                     task={this.props.task}

@@ -35,6 +35,10 @@ interface TaskInfoViewDispatchProps {
 
     setAssignee (id: number, userId: number, okCallback?, errorCallback?): any,
 
+    updateDescription (id: number, description: string, okCallback?, errorCallback?): any,
+
+    updateTaskTitle (id: number, title: string, okCallback?, errorCallback?): any,
+
     deleteTask (id: number, okCallback?, errorCallback?): any,
 
     fetchProjects(): any,
@@ -65,6 +69,17 @@ class TaskInfoView extends React.Component<TaskInfoViewProps & TaskInfoViewDispa
             return (
                 <React.Fragment>
                     <TaskView
+                        currentUser={this.props.currentUser}
+                        updateDescription={(id, description) => {
+                            this.props.updateDescription(id, description, () => {
+                                this.props.fetchTask(id);
+                            })
+                        }}
+                        updateTaskTitle={(id, title) => {
+                            this.props.updateTaskTitle(id, title, () => {
+                                this.props.fetchTask(id);
+                            })
+                        }}
                         displayError={this.props.displayError}
                         users={this.props.users}
                         deleteTask={(id) => {
@@ -128,6 +143,12 @@ function mapDispatchToProps(dispatch: any): TaskInfoViewDispatchProps {
         },
         deleteTask(id: number, okCallback?, errorCallback?): any {
             dispatch(taskActions.deleteTask(id, okCallback, errorCallback))
+        },
+        updateDescription(id: number, description: string, okCallback?, errorCallback?): any {
+            dispatch(taskActions.updateDescription(id, description, okCallback, errorCallback))
+        },
+        updateTaskTitle(id: number, title: string, okCallback?, errorCallback?): any {
+            dispatch(taskActions.updateTaskTitle(id, title, okCallback, errorCallback))
         },
         fetchTasks(): any {
             dispatch(taskActions.fetchTasks())

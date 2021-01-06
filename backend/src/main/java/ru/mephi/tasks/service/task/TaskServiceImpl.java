@@ -98,7 +98,7 @@ public class TaskServiceImpl implements TaskService {
     public void updateTaskTitle(Long id, String title) {
         taskRepository.findById(id)
                 .ifPresent(task -> {
-                    task.setStatus(title);
+                    task.setTitle(title);
                     taskRepository.save(task);
                 });
     }
