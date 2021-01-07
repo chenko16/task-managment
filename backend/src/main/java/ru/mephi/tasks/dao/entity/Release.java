@@ -1,6 +1,8 @@
 package ru.mephi.tasks.dao.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -32,6 +34,8 @@ public class Release {
     @JoinColumn(name = "reporter_id", referencedColumnName = "user_id")
     private User reporter;
 
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @OneToMany(mappedBy = "release", cascade = CascadeType.ALL)
     List<Task> tasks = new ArrayList<>();
 }

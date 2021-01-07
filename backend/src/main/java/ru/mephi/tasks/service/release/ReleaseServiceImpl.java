@@ -3,6 +3,7 @@ package ru.mephi.tasks.service.release;
 import com.google.common.collect.Streams;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.mephi.tasks.dao.entity.Project;
 import ru.mephi.tasks.dao.entity.Release;
 import ru.mephi.tasks.dao.entity.User;
@@ -82,27 +83,27 @@ public class ReleaseServiceImpl implements ReleaseService {
                 });
     }
 
+    @Transactional
     @Override
     public void addTask(Long releaseId, Long taskId) {
         releaseRepository.findById(releaseId)
                 .ifPresent(release -> {
                     taskRepository.findById(taskId)
                             .ifPresent(task -> {
-                                release.getTasks().add(task);
-                                releaseRepository.save(release);
+                                task.setRelease(release);
+                                taskRepository.save(task);
                             });
                 });
     }
 
+    @Transactional
     @Override
     public void removeTask(Long releaseId, Long taskId) {
         releaseRepository.findById(releaseId)
-                .ifPresent(release -> {
-                    taskRepository.findById(taskId)
-                            .ifPresent(task -> {
-                                release.getTasks().remove(task);
-                                releaseRepository.save(release);
-                            });
+                .flatMap(release -> taskRepository.findById(taskId))
+                .ifPresent(task -> {
+                    task.setRelease(null);
+                    taskRepository.save(task);
                 });
     }
 }
