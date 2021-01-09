@@ -1,7 +1,6 @@
 package ru.mephi.tasks.dto.release;
 
 import lombok.Data;
-import ru.mephi.tasks.dao.entity.Task;
 import ru.mephi.tasks.dto.project.ProjectDto;
 import ru.mephi.tasks.dto.user.UserDto;
 
@@ -17,5 +16,5 @@ public class ReleaseDto {
     private String name;
     private Instant created;
     private Instant finished;
-    private List<Task> tasks;
+    private List<Long> tasks;
 }
