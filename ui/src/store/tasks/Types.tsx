@@ -1,4 +1,4 @@
-import {User} from "../users/Types";
+import {User} from '../users/Types';
 
 export interface Task {
     id: number,

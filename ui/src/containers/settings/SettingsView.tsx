@@ -1,22 +1,22 @@
-import * as React from "react";
-import {Grid} from "@material-ui/core";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import * as authSelectors from "../../store/auth/Reducer";
-import * as userSelectors from "../../store/users/Reducer";
-import * as userActions from "../../store/users/Actions";
-import * as projectSelectors from "../../store/project/Reducer";
-import * as projectActions from "../../store/project/Actions";
-import * as notificationActions from "../../store/notification/Actions";
-import {connect} from "react-redux";
-import {SystemRole, User, UserRequest} from "../../store/users/Types";
-import {SettingsForm} from "../../components/settings/SettingsForm";
+import * as React from 'react';
+import {Grid} from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import * as authSelectors from '../../store/auth/Reducer';
+import * as userSelectors from '../../store/users/Reducer';
+import * as userActions from '../../store/users/Actions';
+import * as projectSelectors from '../../store/project/Reducer';
+import * as projectActions from '../../store/project/Actions';
+import * as notificationActions from '../../store/notification/Actions';
+import {connect} from 'react-redux';
+import {SystemRole, User, UserRequest} from '../../store/users/Types';
+import {SettingsForm} from '../../components/settings/SettingsForm';
 import {
     BusinessRole,
     Project,
     ProjectRequest,
     ProjectsByUsers,
     UserProject
-} from "../../store/project/Types";
+} from '../../store/project/Types';
 
 export interface SettingsViewDispatchProps {
     displayError(msg: string): any,
@@ -120,7 +120,6 @@ class SettingsView extends React.Component<SettingsViewStateProps & SettingsView
         if (this.props.isLoading)
             return this.renderLoader();
 
-        //console.log(JSON.stringify(this.props, null, 2));
         return (
             <React.Fragment>
                 <SettingsForm
@@ -193,8 +192,8 @@ class SettingsView extends React.Component<SettingsViewStateProps & SettingsView
 
     renderLoader() {
         return (
-            <Grid container style={{width: "100%", marginTop: 32, paddingBottom: 32}} justify="center"
-                  alignItems="center">
+            <Grid container style={{width: '100%', marginTop: 32, paddingBottom: 32}} justify='center'
+                  alignItems='center'>
                 <Grid item>
                     <CircularProgress disableShrink/>
                 </Grid>

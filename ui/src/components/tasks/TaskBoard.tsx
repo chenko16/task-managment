@@ -1,12 +1,11 @@
-import {Button, Grid, Paper, Typography} from "@material-ui/core";
+import {Button, Grid, Paper, Typography} from '@material-ui/core';
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
-import * as React from "react";
-import {Task, TaskRequest, TaskStatus} from "../../store/tasks/Types";
-import TaskItem from "./TaskItem";
-import {blue} from "@material-ui/core/colors";
-import CreateTaskDialog from "./CreateTaskDialog";
-import {User} from "../../store/users/Types";
-import {Project} from "../../store/project/Types";
+import * as React from 'react';
+import {Task, TaskRequest, TaskStatus} from '../../store/tasks/Types';
+import TaskItem from './TaskItem';
+import {blue} from '@material-ui/core/colors';
+import CreateTaskDialog from './CreateTaskDialog';
+import {SystemRole, User} from '../../store/users/Types';
 
 const grid = 8;
 
@@ -27,15 +26,16 @@ const getItemStyle = (isDragging, draggableStyle) => ({
 });
 
 const getListStyle = (isDraggingOver) => ({
-    background: !isDraggingOver ? blue[50] : blue["A100"],
+    background: !isDraggingOver ? blue[50] : blue['A100'],
 
-    minHeight: "210px",
-    width: "100%",
+    minHeight: '210px',
+    width: '100%',
     padding: grid,
     marginLeft: 10
 });
 
 export interface TaskBoardProps {
+    userRole: SystemRole,
     users: User[],
     currentUser: string,
     tasksCreated: Task[],
@@ -55,7 +55,7 @@ export interface TaskBoardProps {
 
 export interface TaskBoardState {
     createTaskOpen: boolean,
-    sourceType: string,
+    sourceType: string | null,
     tasksCreated: Task[],
     tasksInProgress: Task[],
     tasksReady: Task[],
@@ -128,9 +128,6 @@ class TaskBoard extends React.Component<TaskBoardProps, TaskBoardState> {
 
         let destClone = Array.from(destination);
         let sourceClone = Array.from(source);
-
-        console.log("destinationDroppableId " + destinationDroppableId)
-        console.log("sourceDroppableId " + sourceDroppableId)
 
         if (!(destinationDroppableId === 'tasksCreated') &&
             ((sourceDroppableId === 'tasksCreated' && destinationDroppableId === 'tasksInProgress') ||
@@ -224,7 +221,6 @@ class TaskBoard extends React.Component<TaskBoardProps, TaskBoardState> {
                     reporterLogin={this.props.currentUser}
                     onClose={((value, taskRequest) => {
                         if (value === 'Ok' && taskRequest) {
-                            console.log(taskRequest)
                             this.props.createTask(taskRequest)
                         }
                     })}
@@ -235,26 +231,26 @@ class TaskBoard extends React.Component<TaskBoardProps, TaskBoardState> {
 
                 <Button
                     style={{margin: 12}}
-                    variant={"contained"}
-                    color={"primary"}
+                    variant={'contained'}
+                    color={'primary'}
                     onClick={(e) => this.setState({createTaskOpen: true})}
                 >
                     Создать задачу
                 </Button>
                 <Grid container style={{
-                    display: "flex",
-                    justifyContent: "space-between",
+                    display: 'flex',
+                    justifyContent: 'space-between',
                     overflow: 'auto'
                 }}>
                     <Paper style={{margin: 6, padding: 12, overflow: 'auto', width: '100%'}}>
                         <DragDropContext onDragEnd={this.onDragEnd} onDragStart={this.onDragStart}>
-                            <Grid container direction={"row"}>
-                                <Grid item style={{minWidth: "290px", marginRight: 8, marginLeft: 20}}>
-                                    <Typography style={{textAlign: "center"}}>
+                            <Grid container direction={'row'}>
+                                <Grid item style={{minWidth: '290px', marginRight: 8, marginLeft: 20}}>
+                                    <Typography style={{textAlign: 'center'}}>
                                         <b>СОЗДАНО</b>
                                     </Typography>
                                     <Droppable
-                                        droppableId="tasksCreated"
+                                        droppableId='tasksCreated'
                                         isDropDisabled={this.state.sourceType !== 'tasksCreated'}
                                     >
                                         {(provided, snapshot) => (
@@ -288,12 +284,12 @@ class TaskBoard extends React.Component<TaskBoardProps, TaskBoardState> {
                                         )}
                                     </Droppable>
                                 </Grid>
-                                <Grid item style={{minWidth: "290px", marginRight: 8}}>
-                                    <Typography style={{textAlign: "center"}}>
+                                <Grid item style={{minWidth: '290px', marginRight: 8}}>
+                                    <Typography style={{textAlign: 'center'}}>
                                         <b>В РАБОТЕ</b>
                                     </Typography>
                                     <Droppable
-                                        droppableId="tasksInProgress"
+                                        droppableId='tasksInProgress'
                                         isDropDisabled={(this.state.sourceType !== 'tasksOnTesting') && (this.state.sourceType !== 'tasksCreated') &&
                                                  (this.state.sourceType !== 'tasksInProgress')}
                                     >
@@ -328,12 +324,12 @@ class TaskBoard extends React.Component<TaskBoardProps, TaskBoardState> {
                                         )}
                                     </Droppable>
                                 </Grid>
-                                <Grid item style={{minWidth: "290px", marginRight: 8}}>
-                                    <Typography style={{textAlign: "center"}}>
+                                <Grid item style={{minWidth: '290px', marginRight: 8}}>
+                                    <Typography style={{textAlign: 'center'}}>
                                         <b>НА ТЕСТИРОВАНИИ</b>
                                     </Typography>
                                     <Droppable
-                                        droppableId="tasksOnTesting"
+                                        droppableId='tasksOnTesting'
                                         isDropDisabled={(this.state.sourceType !== 'tasksInProgress') && (this.state.sourceType !== 'tasksOnTesting')}
                                     >
                                         {(provided, snapshot) => (
@@ -367,12 +363,12 @@ class TaskBoard extends React.Component<TaskBoardProps, TaskBoardState> {
                                         )}
                                     </Droppable>
                                 </Grid>
-                                <Grid item style={{minWidth: "290px", marginRight: 8}}>
-                                    <Typography style={{textAlign: "center"}}>
+                                <Grid item style={{minWidth: '290px', marginRight: 8}}>
+                                    <Typography style={{textAlign: 'center'}}>
                                         <b>ГОТОВО</b>
                                     </Typography>
                                     <Droppable
-                                        droppableId="tasksReady"
+                                        droppableId='tasksReady'
                                         isDropDisabled={(this.state.sourceType !== 'tasksOnTesting') && (this.state.sourceType !== 'tasksInProgress') &&
                                         (this.state.sourceType !== 'tasksReady')}
                                     >
@@ -407,13 +403,14 @@ class TaskBoard extends React.Component<TaskBoardProps, TaskBoardState> {
                                         )}
                                     </Droppable>
                                 </Grid>
-                                <Grid item style={{minWidth: "290px"}}>
-                                    <Typography style={{textAlign: "center"}}>
+                                <Grid item style={{minWidth: '290px'}}>
+                                    <Typography style={{textAlign: 'center'}}>
                                         <b>ЗАКРЫТО</b>
                                     </Typography>
                                     <Droppable
-                                        droppableId="tasksDone"
-                                        isDropDisabled={(this.state.sourceType !== 'tasksReady') && (this.state.sourceType !== 'tasksDone')}
+                                        droppableId='tasksDone'
+                                        isDropDisabled={(this.state.sourceType !== 'tasksReady') && (this.state.sourceType !== 'tasksDone') ||
+                                        (this.props.userRole !== SystemRole.MANAGER)}
                                     >
                                         {(provided, snapshot) => (
                                             <div

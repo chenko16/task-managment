@@ -1,8 +1,8 @@
 import AuthService from '../../services/AuthService'
 import * as notificationActions from '../notification/Actions'
-import {createAsyncAction} from "typesafe-actions";
-import {AuthResult} from "./Types";
-import jwt_decode from "jwt-decode";
+import {createAsyncAction} from 'typesafe-actions';
+import {AuthResult} from './Types';
+import jwt_decode from 'jwt-decode';
 
 export const logoutAction = createAsyncAction(
     '@auth/LOGOUT_REQ',
@@ -24,18 +24,16 @@ export const checkAuthAction = createAsyncAction(
 
 export const logout = () => {
     return (dispatch, getState) => {
-        console.log("fuck!!!")
         dispatch(logoutAction.request());
         dispatch(logoutAction.success());
-        localStorage.removeItem("jwtToken")
+        localStorage.removeItem('jwtToken')
     }
 }
 
 export const checkAuth = () => {
     return (dispatch, getState) => {
         dispatch(checkAuthAction.request);
-        console.log("AAAAAAA")
-        const token = localStorage.getItem("jwtToken");
+        const token = localStorage.getItem('jwtToken');
         const jwt = token !== null ? jwt_decode(token) : undefined;
         dispatch(checkAuthAction.success(
             {
@@ -53,7 +51,7 @@ export const authorize = (login: string, password: string) => {
         dispatch(authActions.request());
         AuthService.auth(login, password, (authResult) => {
             dispatch(authActions.success(authResult));
-            dispatch(notificationActions.success("Добро пожаловать!"))
+            dispatch(notificationActions.success('Добро пожаловать!'))
         }, error => {
             dispatch(notificationActions.error(error))
         });

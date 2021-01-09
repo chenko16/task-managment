@@ -1,23 +1,23 @@
-import {SystemRole, User} from "../../store/users/Types";
-import {Release} from "../../store/releases/Types";
-import * as React from "react";
-import * as authSelectors from "../../store/auth/Reducer";
-import * as notificationActions from "../../store/notification/Actions";
-import * as releasesActions from "../../store/releases/Actions";
-import * as releasesSelectors from "../../store/releases/Reducer";
-import * as userSelectors from "../../store/users/Reducer";
-import * as userActions from "../../store/users/Actions";
-import * as projectSelectors from "../../store/project/Reducer";
-import * as projectActions from "../../store/project/Actions";
-import * as taskActions from "../../store/tasks/Actions";
-import * as taskSelectors from "../../store/tasks/Reducer";
-import {connect} from "react-redux";
+import {SystemRole, User} from '../../store/users/Types';
+import {Release} from '../../store/releases/Types';
+import * as React from 'react';
+import * as authSelectors from '../../store/auth/Reducer';
+import * as notificationActions from '../../store/notification/Actions';
+import * as releasesActions from '../../store/releases/Actions';
+import * as releasesSelectors from '../../store/releases/Reducer';
+import * as userSelectors from '../../store/users/Reducer';
+import * as userActions from '../../store/users/Actions';
+import * as projectSelectors from '../../store/project/Reducer';
+import * as projectActions from '../../store/project/Actions';
+import * as taskActions from '../../store/tasks/Actions';
+import * as taskSelectors from '../../store/tasks/Reducer';
+import {connect} from 'react-redux';
 import {ReactRouterProps} from 'react-router-dom';
-import {ReleaseViewForm} from "../../components/releases/ReleaseViewForm";
-import {Task} from "../../store/tasks/Types";
-import {withRouter} from "react-router";
+import {ReleaseViewForm} from '../../components/releases/ReleaseViewForm';
+import {Task} from '../../store/tasks/Types';
+import {withRouter} from 'react-router';
 import {RouteProps} from 'react-router-dom';
-import {Project} from "../../store/project/Types";
+import {Project} from '../../store/project/Types';
 
 interface ReleaseViewProps {
     role: SystemRole,
@@ -51,7 +51,6 @@ interface ReleaseViewDispatchProps {
 }
 
 interface ReleaseViewState {
-    tasks: Task[]
 }
 
 class ReleaseView extends React.Component<ReleaseViewProps & ReleaseViewDispatchProps & ReactRouterProps & RouteProps, ReleaseViewState> {
@@ -59,27 +58,9 @@ class ReleaseView extends React.Component<ReleaseViewProps & ReleaseViewDispatch
         super(props);
         let id = this.props.match.params.id;
         this.props.fetchRelease(id);
-        let task1: Task = {
-            title: "task1",
-            description: "description of task1"
-        };
-        let task2: Task = {
-            title: "task2",
-            description: "description of task2"
-        };
-        let task3: Task = {
-            title: "task3",
-            description: "description of task3"
-        };
-        let tasks: Task[] = [];
-        tasks.push(task1, task2, task3);
-        this.state = {
-            tasks: tasks
-        }
     }
 
     render(): React.ReactNode {
-        console.log(this.props.release)
         return (
             <React.Fragment>
                 <ReleaseViewForm
@@ -103,7 +84,7 @@ class ReleaseView extends React.Component<ReleaseViewProps & ReleaseViewDispatch
                     }}
                     deleteRelease={(id) => {
                         this.props.deleteRelease(id, () => {
-                            this.props.history.push("/releases")
+                            this.props.history.push('/releases')
                         })
                     }}
                     finishRelease={(id) => {

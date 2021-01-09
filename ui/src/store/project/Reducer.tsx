@@ -1,8 +1,8 @@
-import * as actions from "./Actions"
-import {ActionType, getType} from "typesafe-actions";
-import {Reducer} from "redux";
-import {ApplicationState} from "../Store";
-import {Project, ProjectsByUsers, UserProject} from "./Types";
+import * as actions from './Actions'
+import {ActionType, getType} from 'typesafe-actions';
+import {Reducer} from 'redux';
+import {ApplicationState} from '../Store';
+import {Project, ProjectsByUsers, UserProject} from './Types';
 
 export interface ProjectStoreState {
     projects : Array<Project>,

@@ -1,24 +1,21 @@
-import * as React from "react";
+import * as React from 'react';
 import {
-    Button, DialogActions,
-    Grid, IconButton,
-    MenuItem,
+    Button,
+    Grid,
     Paper,
-    Select,
     Table,
     TableBody,
     TableCell,
     TableHead,
-    TableRow,
-    TextField, Typography
-} from "@material-ui/core";
-import {Release} from "../../store/releases/Types";
-import parseISO from "date-fns/parseISO";
-import {Task} from "../../store/tasks/Types";
-import ConfirmDialog from "../ConfirmDialog";
-import {Project} from "../../store/project/Types";
-import EditReleaseDialog from "./EditReleaseDialog";
-import {User} from "../../store/users/Types";
+    TableRow, Typography
+} from '@material-ui/core';
+import {Release} from '../../store/releases/Types';
+import parseISO from 'date-fns/parseISO';
+import {Task} from '../../store/tasks/Types';
+import ConfirmDialog from '../ConfirmDialog';
+import {Project} from '../../store/project/Types';
+import EditReleaseDialog from './EditReleaseDialog';
+import {User} from '../../store/users/Types';
 
 export interface ReleaseViewFormProps {
     release: Release,
@@ -88,12 +85,12 @@ export class ReleaseViewForm extends React.Component<ReleaseViewFormProps, Relea
                 />}
 
                 <Paper elevation={1} style={{margin: 10, marginLeft: 20}}>
-                    <Grid container direction="row" justify="flex-start" alignItems="flex-start"
+                    <Grid container direction='row' justify='flex-start' alignItems='flex-start'
                           style={{margin: 6, padding: 6}}>
-                        <Grid container direction="column" justify="flex-start" alignItems="flex-start"
-                              style={{width: "50%"}}>
+                        <Grid container direction='column' justify='flex-start' alignItems='flex-start'
+                              style={{width: '50%'}}>
                             <Grid item style={{margin: 10}}>
-                                <Typography variant="button" color={"primary"}>
+                                <Typography variant='button' color={'primary'}>
                                     <b>{this.props.release.name}</b>
                                 </Typography>
                             </Grid>
@@ -104,16 +101,16 @@ export class ReleaseViewForm extends React.Component<ReleaseViewFormProps, Relea
                                 <b>Автор: </b>{this.props.release.reporter.login}
                             </Grid>
                         </Grid>
-                        <Grid container direction="column" justify="flex-start" alignItems="flex-start"
-                              style={{width: "50%"}}>
-                            <Grid container direction="row" justify="flex-start" alignItems="flex-start"
+                        <Grid container direction='column' justify='flex-start' alignItems='flex-start'
+                              style={{width: '50%'}}>
+                            <Grid container direction='row' justify='flex-start' alignItems='flex-start'
                                   style={{margin: 6, padding: 6}}>
                                 <Button
                                     onClick={(e) => {
                                        this.setState({editRelease: true})
                                     }}
-                                    color="primary"
-                                    variant={"contained"}
+                                    color='primary'
+                                    variant={'contained'}
                                 >
                                     Редактировать
                                 </Button>
@@ -122,49 +119,51 @@ export class ReleaseViewForm extends React.Component<ReleaseViewFormProps, Relea
                                         this.setState({confirmFinish: true})
                                     }}
                                     disabled={this.props.release.finished!==null}
-                                    variant={"contained"}
+                                    variant={'contained'}
                                     style={{marginLeft: 4, marginRight: 4}}
-                                    color="primary">
+                                    color='primary'>
                                     Закрыть
                                 </Button>
                                 <Button
                                     onClick={(e) => {
                                         this.setState({confirmDelete: true})
                                     }}
-                                    color="primary">
+                                    color='primary'>
                                     Удалить
                                 </Button>
                             </Grid>
                             <Grid item style={{margin: 6}}>
-                                <b>Дата создания: </b>{parseISO(this.props.release.created).toLocaleDateString("en-US")}
+                                <b>Дата создания: </b>{parseISO(this.props.release.created).toLocaleDateString('en-US')}
                             </Grid>
                             <Grid item style={{margin: 6}}>
                                 <b>Дата окончания: </b>{this.props.release.finished ?
-                                parseISO(this.props.release.finished).toLocaleDateString("en-US") : "релиз еще в работе"}
+                                parseISO(this.props.release.finished).toLocaleDateString('en-US') : 'релиз еще в работе'}
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid container direction="column" justify="flex-start" alignItems="flex-start"
+                    <Grid container direction='column' justify='flex-start' alignItems='flex-start'
                           style={{margin: 6, padding: 6}}>
                         <Grid item style={{margin: 6, marginTop: 10}}>
                             <b>Описание релиза: </b>
                         </Grid>
-                        <Grid item xs={10} style={{margin: 6, width: "100%"}}>
+                        <Grid item xs={10} style={{margin: 6, width: '100%'}}>
                             {this.props.release.description}
                         </Grid>
                         <Grid item style={{margin: 6, marginTop: 10}}>
                             <b>Список задач релиза: </b>
                         </Grid>
-                        <Grid item xs={10} style={{margin: 6, width: "100%"}}>
-                            <Table style={{textDecoration: "none"}}>
+                        <Grid item xs={10} style={{margin: 6, width: '100%'}}>
+                            <Table style={{textDecoration: 'none'}}>
                                 <TableHead>
                                     <TableRow>
                                         <TableCell> Задача </TableCell>
                                         <TableCell>Описание</TableCell>
                                     </TableRow>
                                 </TableHead>
-                                <TableBody style={{textDecoration: "none"}}>
-                                    {this.props.tasks?.map((task: Task) => {
+                                <TableBody style={{textDecoration: 'none'}}>
+                                    {this.props.tasks?.filter((task) => {
+                                        return this.props.release.tasks.some((taskRelease) => taskRelease === task.id)
+                                    }).map((task: Task) => {
                                         return <TableRow>
                                             <TableCell>{task.title}</TableCell>
                                             <TableCell>{task.description}</TableCell>
@@ -177,18 +176,18 @@ export class ReleaseViewForm extends React.Component<ReleaseViewFormProps, Relea
                 </Paper>
 
                 <ConfirmDialog
-                    warningText={"Вы уверены, что хотите удалить релиз?"}
+                    warningText={'Вы уверены, что хотите удалить релиз?'}
                     open={this.state.confirmDelete}
-                    okString={"Да"}
-                    cancelString={"Отмена"}
+                    okString={'Да'}
+                    cancelString={'Отмена'}
                     onClose={this.handleConfirmDialogDeleteClose}
                 />
 
                 <ConfirmDialog
-                    warningText={"Подтвердите завершение релиза."}
+                    warningText={'Подтвердите завершение релиза.'}
                     open={this.state.confirmFinish}
-                    okString={"Подтвердить"}
-                    cancelString={"Отмена"}
+                    okString={'Подтвердить'}
+                    cancelString={'Отмена'}
                     onClose={this.handleConfirmDialogFinishClose}
                 />
             </React.Fragment>

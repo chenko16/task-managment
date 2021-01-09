@@ -1,9 +1,9 @@
-import {createAsyncAction, createStandardAction} from "typesafe-actions";
-import {BusinessRole, Project, ProjectRequest, ProjectsByUsers, UserProject} from "./Types";
-import * as notificationActions from "../../store/notification/Actions";
-import {ProjectService} from "../../services/ProjectService";
+import {createAsyncAction, createStandardAction} from 'typesafe-actions';
+import {BusinessRole, Project, ProjectRequest, ProjectsByUsers, UserProject} from './Types';
+import * as notificationActions from '../../store/notification/Actions';
+import {ProjectService} from '../../services/ProjectService';
 
-export const reqFinished = createStandardAction("@project/REQ_FINISH")<void>();
+export const reqFinished = createStandardAction('@project/REQ_FINISH')<void>();
 
 export const createProjectAction = createAsyncAction(
     '@project/CREATE_REQ',
@@ -102,7 +102,7 @@ export function createProject(project: ProjectRequest, okCallback?, errorCallbac
             dispatch(createProjectAction.failure());
             if (errorCallback)
                 errorCallback(errorMessage);
-            dispatch(notificationActions.error("Ошибка при создании проекта."));
+            dispatch(notificationActions.error('Ошибка при создании проекта.'));
         })
     }
 }
@@ -115,7 +115,7 @@ export function updateProject(project: ProjectRequest) {
             dispatch(updateProjectAction.success());
         }, (errorMessage) => {
             dispatch(updateProjectAction.failure());
-            dispatch(notificationActions.error("Ошибка при обновлении проекта."));
+            dispatch(notificationActions.error('Ошибка при обновлении проекта.'));
         })
     }
 }
@@ -132,7 +132,7 @@ export function deleteProject (id: number, okCallback?, errorCallback?) {
             dispatch(deleteProjectAction.failure());
             if (errorCallback)
                 errorCallback(errorMessage);
-            dispatch(notificationActions.error("Ошибка при удалении проекта."));
+            dispatch(notificationActions.error('Ошибка при удалении проекта.'));
         })
     }
 }
@@ -141,7 +141,6 @@ export function fetchProject(id: number, okCallback?, errorCallback?) {
     return (dispatch, getState) => {
         dispatch(fetchProjectAction.request());
         ProjectService.getProjectInfo(id, (project) => {
-            console.log(project)
             dispatch(reqFinished());
             if (okCallback)
                 okCallback(project);
@@ -150,7 +149,7 @@ export function fetchProject(id: number, okCallback?, errorCallback?) {
             dispatch(fetchProjectAction.failure());
             if (errorCallback)
                 errorCallback(errorMessage);
-            dispatch(notificationActions.error("Ошибка при получении проекта."));
+            dispatch(notificationActions.error('Ошибка при получении проекта.'));
         })
     }
 }
@@ -163,7 +162,7 @@ export function fetchProjects(okCallback?, errorCallback?) {
             dispatch(fetchProjectsAction.success(projects));
         }, (errorMessage) => {
             dispatch(fetchProjectsAction.failure());
-            dispatch(notificationActions.error("Ошибка при получении всех проектов."));
+            dispatch(notificationActions.error('Ошибка при получении всех проектов.'));
         })
     }
 }
@@ -180,7 +179,7 @@ export function fetchProjectsByUser (userId: number, okCallback?, errorCallback?
             dispatch(fetchProjectsByUserAction.failure());
             if (errorCallback)
                 errorCallback(errorMessage);
-            dispatch(notificationActions.error("Ошибка при получении проектов пользователя."));
+            dispatch(notificationActions.error('Ошибка при получении проектов пользователя.'));
         })
     }
 }
@@ -197,7 +196,7 @@ export function updateDescription (id: number, description: string, okCallback?,
             dispatch(updateDescriptionAction.failure());
             if (errorCallback)
                 errorCallback(errorMessage);
-            dispatch(notificationActions.error("Ошибка при обновлении описания проекта."));
+            dispatch(notificationActions.error('Ошибка при обновлении описания проекта.'));
         })
     }
 }
@@ -214,7 +213,7 @@ export function updateProjectStatus (id: number, status: boolean, okCallback?, e
             dispatch(updateStatusAction.failure());
             if (errorCallback)
                 errorCallback(errorMessage);
-            dispatch(notificationActions.error("Ошибка при обновлении статуса проекта."));
+            dispatch(notificationActions.error('Ошибка при обновлении статуса проекта.'));
         })
     }
 }
@@ -231,7 +230,7 @@ export function updateAssignee (id: number, userId: number, okCallback?, errorCa
             dispatch(updateAssigneeAction.failure());
             if (errorCallback)
                 errorCallback(errorMessage);
-            dispatch(notificationActions.error("Ошибка при обновлении управляющего проекта."));
+            dispatch(notificationActions.error('Ошибка при обновлении управляющего проекта.'));
         })
     }
 }
@@ -248,7 +247,7 @@ export function updateReporter (id: number, userId: number, okCallback?, errorCa
             dispatch(updateReporterAction.failure());
             if (errorCallback)
                 errorCallback(errorMessage);
-            dispatch(notificationActions.error("Ошибка при обновлении руководителя проекта."));
+            dispatch(notificationActions.error('Ошибка при обновлении руководителя проекта.'));
         })
     }
 }
@@ -265,7 +264,7 @@ export function addParticipant (id: number, userId: number, okCallback?, errorCa
             dispatch(addParticipantAction.failure());
             if (errorCallback)
                 errorCallback(errorMessage);
-            dispatch(notificationActions.error("Ошибка при добавлении участника проекта."));
+            dispatch(notificationActions.error('Ошибка при добавлении участника проекта.'));
         })
     }
 }
@@ -282,7 +281,7 @@ export function deleteParticipant (id: number, userId: number, okCallback?, erro
             dispatch(deleteParticipantAction.failure());
             if (errorCallback)
                 errorCallback(errorMessage);
-            dispatch(notificationActions.error("Ошибка при удалении участника проекта."));
+            dispatch(notificationActions.error('Ошибка при удалении участника проекта.'));
         })
     }
 }
@@ -299,7 +298,7 @@ export function setParticipantRole (id: number, userId: number, role: BusinessRo
             dispatch(setParticipantRoleAction.failure());
             if (errorCallback)
                 errorCallback(errorMessage);
-            dispatch(notificationActions.error("Ошибка при установлении роли участнику проекта."));
+            dispatch(notificationActions.error('Ошибка при установлении роли участнику проекта.'));
         })
     }
 }
@@ -316,7 +315,7 @@ export function getParticipants (id: number, okCallback?, errorCallback?) {
             dispatch(getParticipantsAction.failure());
             if (errorCallback)
                 errorCallback(errorMessage);
-            dispatch(notificationActions.error("Ошибка при получении участников проекта."));
+            dispatch(notificationActions.error('Ошибка при получении участников проекта.'));
         })
     }
 }

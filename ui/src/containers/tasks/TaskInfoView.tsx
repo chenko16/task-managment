@@ -1,23 +1,22 @@
-import {SystemRole, User} from "../../store/users/Types";
-import {Release} from "../../store/releases/Types";
-import * as React from "react";
-import * as authSelectors from "../../store/auth/Reducer";
-import * as notificationActions from "../../store/notification/Actions";
-import * as userSelectors from "../../store/users/Reducer";
-import * as userActions from "../../store/users/Actions";
-import * as projectSelectors from "../../store/project/Reducer";
-import * as projectActions from "../../store/project/Actions";
-import * as taskActions from "../../store/tasks/Actions";
-import * as taskSelectors from "../../store/tasks/Reducer";
-import {connect} from "react-redux";
+import {SystemRole, User} from '../../store/users/Types';
+import * as React from 'react';
+import * as authSelectors from '../../store/auth/Reducer';
+import * as notificationActions from '../../store/notification/Actions';
+import * as userSelectors from '../../store/users/Reducer';
+import * as userActions from '../../store/users/Actions';
+import * as projectSelectors from '../../store/project/Reducer';
+import * as projectActions from '../../store/project/Actions';
+import * as taskActions from '../../store/tasks/Actions';
+import * as taskSelectors from '../../store/tasks/Reducer';
+import {connect} from 'react-redux';
 import {ReactRouterProps} from 'react-router-dom';
-import {Task} from "../../store/tasks/Types";
-import {withRouter} from "react-router";
+import {Task} from '../../store/tasks/Types';
+import {withRouter} from 'react-router';
 import {RouteProps} from 'react-router-dom';
-import {Project} from "../../store/project/Types";
-import TaskView from "../../components/tasks/TaskView";
-import {Grid} from "@material-ui/core";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import {Project} from '../../store/project/Types';
+import TaskView from '../../components/tasks/TaskView';
+import {Grid} from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 interface TaskInfoViewProps {
     role: SystemRole,
@@ -59,10 +58,6 @@ class TaskInfoView extends React.Component<TaskInfoViewProps & TaskInfoViewDispa
     }
 
     render(): React.ReactNode {
-        console.log(this.props.task)
-
-        console.log(JSON.stringify(this.props, null, 4));
-
         if (this.props.isLoading) {
             return this.renderLoader();
         } else {
@@ -102,8 +97,8 @@ class TaskInfoView extends React.Component<TaskInfoViewProps & TaskInfoViewDispa
 
     renderLoader() {
         return (
-            <Grid container style={{width: "100%", marginTop: 32, paddingBottom: 32}} justify="center"
-                  alignItems="center">
+            <Grid container style={{width: '100%', marginTop: 32, paddingBottom: 32}} justify='center'
+                  alignItems='center'>
                 <Grid item>
                     <CircularProgress disableShrink/>
                 </Grid>

@@ -1,6 +1,5 @@
-import {User} from "../users/Types";
-import {Project} from "../project/Types";
-import {Task} from "../tasks/Types";
+import {User} from '../users/Types';
+import {Project} from '../project/Types';
 
 export interface Release {
     id: number,
@@ -10,7 +9,7 @@ export interface Release {
     created: string,
     description: string,
     finished: string,
-    tasks: Task[]
+    tasks: number[]
 }
 
 export interface ReleaseRequest {

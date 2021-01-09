@@ -3,11 +3,9 @@ import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import LockIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
-import Tab from "@material-ui/core/Tab/Tab";
 import withStyles, {WithStyles} from '@material-ui/core/styles/withStyles';
-import createStyles from "@material-ui/core/styles/createStyles";
-import {Button, FormControl, Input, InputLabel, Typography} from "@material-ui/core";
-import {grey} from "@material-ui/core/colors";
+import createStyles from '@material-ui/core/styles/createStyles';
+import {Button, FormControl, Input, InputLabel} from '@material-ui/core';
 
 const styles = theme => createStyles({
     main: {
@@ -59,8 +57,8 @@ class AuthForm extends React.Component<AuthFormDispatchPropsWithStyles, AuthForm
     constructor(props) {
         super(props);
         this.state = {
-            username: "",
-            password: ""
+            username: '',
+            password: ''
         }
     }
 
@@ -79,16 +77,16 @@ class AuthForm extends React.Component<AuthFormDispatchPropsWithStyles, AuthForm
                             <LockIcon/>
                         </Avatar>
                         <form
-                            style={{width: "100%", marginTop: 10}}
+                            style={{width: '100%', marginTop: 10}}
                             onSubmit={(e) => {
                                 e.preventDefault()
                                 this.handleSignIn(this.state.username, this.state.password);
                             }}>
-                            <FormControl margin="normal" required fullWidth>
-                                <InputLabel htmlFor="username">Имя пользователя</InputLabel>
-                                <Input id="username"
-                                       name="username"
-                                       autoComplete="username"
+                            <FormControl margin='normal' required fullWidth>
+                                <InputLabel htmlFor='username'>Имя пользователя</InputLabel>
+                                <Input id='username'
+                                       name='username'
+                                       autoComplete='username'
                                        defaultValue={this.state.username}
                                        onChange={(event) =>
                                            this.setState({
@@ -98,25 +96,25 @@ class AuthForm extends React.Component<AuthFormDispatchPropsWithStyles, AuthForm
                                        autoFocus
                                 />
                             </FormControl>
-                            <FormControl margin="normal" required fullWidth>
-                                <InputLabel htmlFor="password">Пароль</InputLabel>
-                                <Input name="password"
-                                       type="password"
-                                       id="password"
+                            <FormControl margin='normal' required fullWidth>
+                                <InputLabel htmlFor='password'>Пароль</InputLabel>
+                                <Input name='password'
+                                       type='password'
+                                       id='password'
                                        defaultValue={this.state.password}
                                        onChange={(event) =>
                                            this.setState({
                                                password: event.target.value
                                            })
                                        }
-                                       autoComplete="current-password"
+                                       autoComplete='current-password'
                                 />
                             </FormControl>
                             <Button
-                                type="submit"
+                                type='submit'
                                 fullWidth
-                                variant="contained"
-                                color="primary"
+                                variant='contained'
+                                color='primary'
                                 style={{
                                     marginTop: 12
                                 }}

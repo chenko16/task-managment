@@ -1,5 +1,5 @@
-import BackendProvider from "./BackendProvider";
-import {Task, TaskRequest, TaskStatus, TaskType} from "../store/tasks/Types";
+import BackendProvider from './BackendProvider';
+import {Task, TaskRequest, TaskStatus, TaskType} from '../store/tasks/Types';
 
 export default class TaskService {
 
@@ -14,7 +14,7 @@ export default class TaskService {
             let body = await result.json();
             okCallback(body as Task);
         } else {
-            errorCallback("Ошибка при создании задачи")
+            errorCallback('Ошибка при создании задачи')
         }
     }
 
@@ -29,7 +29,7 @@ export default class TaskService {
             let body = await result.json();
             okCallback(body as Task);
         } else {
-            errorCallback("Ошибка при получении задачи")
+            errorCallback('Ошибка при получении задачи')
         }
     }
 
@@ -43,7 +43,7 @@ export default class TaskService {
             let body = await result.json();
             okCallback(body as Task[]);
         } else {
-            errorCallback("Ошибка при получении списка задач")
+            errorCallback('Ошибка при получении списка задач')
         }
     }
 
@@ -57,7 +57,7 @@ export default class TaskService {
         if (result.ok) {
             okCallback(idTask);
         } else {
-            errorCallback("Ошибка при удалении задачи")
+            errorCallback('Ошибка при удалении задачи')
         }
     }
 
@@ -74,7 +74,7 @@ export default class TaskService {
         if (result.ok) {
             okCallback(idTask);
         } else {
-            errorCallback("Ошибка при обновлении описания задачи")
+            errorCallback('Ошибка при обновлении описания задачи')
         }
     }
 
@@ -91,7 +91,7 @@ export default class TaskService {
         if (result.ok) {
             okCallback(idTask);
         } else {
-            errorCallback("Ошибка при обновлении статуса задачи")
+            errorCallback('Ошибка при обновлении статуса задачи')
         }
     }
 
@@ -108,7 +108,7 @@ export default class TaskService {
         if (result.ok) {
             okCallback(idTask);
         } else {
-            errorCallback("Ошибка при обновлении типа задачи")
+            errorCallback('Ошибка при обновлении типа задачи')
         }
     }
 
@@ -125,7 +125,7 @@ export default class TaskService {
         if (result.ok) {
             okCallback(idTask);
         } else {
-            errorCallback("Ошибка при обновлении названия задачи")
+            errorCallback('Ошибка при обновлении названия задачи')
         }
     }
 
@@ -140,7 +140,7 @@ export default class TaskService {
         if (result.ok) {
             okCallback(idTask);
         } else {
-            errorCallback("Ошибка при изменении исполнителя задачи")
+            errorCallback('Ошибка при изменении исполнителя задачи')
         }
     }
 }
