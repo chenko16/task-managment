@@ -89,21 +89,21 @@ class SettingsView extends React.Component<SettingsViewStateProps & SettingsView
 
     getUserRoleProjects(userProjects: ProjectsByUsers, projects: Project[]): Project[] {
         let projectIds: number[] = [];
-        userProjects.reporters?.forEach((id) => {
+        userProjects?.reporters?.forEach((id) => {
             if (projectIds.filter(projectId => {
                 return projectId === id
             }).length === 0) {
                 projectIds.push(id)
             }
         })
-        userProjects.assignee?.forEach((id) => {
+        userProjects?.assignee?.forEach((id) => {
             if (projectIds.filter(projectId => {
                 return projectId === id
             }).length === 0) {
                 projectIds.push(id)
             }
         })
-        userProjects.participants?.forEach((role) => {
+        userProjects?.participants?.forEach((role) => {
             if (projectIds.filter((id) => {
                 return id === role.projectId
             }).length === 0) {

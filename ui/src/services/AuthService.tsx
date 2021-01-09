@@ -18,10 +18,9 @@ export default class AuthService {
         if (result.ok) {
             let body = await result.json();
             var decoded = jwt_decode(body.jwtToken);
-            if(localStorage.getItem('jwtToken') === null) {
-                localStorage.setItem('jwtToken', body.jwtToken);
+            if(localStorage.getItem("jwtToken") === null) {
+                localStorage.setItem("jwtToken", body.jwtToken);
             }
-            sessionStorage.setItem('jwtToken', body.jwtToken);
             let authResult: AuthResult = {
                 login: decoded.sub,
                 role: decoded.role,

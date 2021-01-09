@@ -305,19 +305,6 @@ const styles = theme => ({
 
 })
 
-export const ERROR_500_MESSAGE = 'Внутренняя ошибка сервиса. Обратитесь к администратору.';
-export const ERROR_SOME_SERVICES_ARE_NOT_AVAILABLE = 'Некоторые сервисы в данный момент недоступны.';
-
-export const HtmlTooltip = withStyles((theme: Theme) => ({
-  tooltip: {
-    backgroundColor: '#f5f5f9',
-    color: 'rgba(0, 0, 0, 0.87)',
-    maxWidth: 500,
-    fontSize: theme.typography.pxToRem(12),
-    border: '1px solid #dadde9',
-  },
-}))(Tooltip);
-
 const navMappings = {
   task: ['Задачи', null],
   releases: ['Релизы', null],
