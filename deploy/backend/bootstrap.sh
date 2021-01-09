@@ -5,6 +5,9 @@ if ! [[ -d /var/lib/postgresql/10/main ]]; then
     pg_createcluster 10 main
 fi
 
+echo "host  all  all 0.0.0.0/0 md5" >> /etc/postgresql/10/main/pg_hba.conf
+echo "listen_addresses = '*'" >> /etc/postgresql/10/main/postgresql.conf
+
 service postgresql start
 
 sudo -u postgres psql -tc "SELECT 1 FROM pg_database WHERE datname = 'tasks'" | grep -q 1 || sudo -u postgres psql -f /opt/init.sql
