@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.mephi.tasks.dao.repository.UserRepository;
-import ru.mephi.tasks.dto.user.SystemRole;
+import ru.mephi.tasks.config.enums.SystemRole;
 import ru.mephi.tasks.dto.user.UserDto;
 import ru.mephi.tasks.dto.user.UserRequest;
 import ru.mephi.tasks.mapping.UserMapper;

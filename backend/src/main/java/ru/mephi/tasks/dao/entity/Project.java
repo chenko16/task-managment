@@ -2,6 +2,7 @@ package ru.mephi.tasks.dao.entity;
 
 import lombok.Data;
 import lombok.ToString;
+import ru.mephi.tasks.config.enums.BusinessRole;
 
 import javax.persistence.*;
 import java.util.ArrayList;

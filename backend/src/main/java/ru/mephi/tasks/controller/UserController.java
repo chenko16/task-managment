@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.mephi.tasks.dto.user.SystemRole;
+import ru.mephi.tasks.config.enums.SystemRole;
 import ru.mephi.tasks.dto.user.UserDto;
 import ru.mephi.tasks.dto.user.UserRequest;
 import ru.mephi.tasks.service.user.UserService;
@@ -30,7 +30,7 @@ public class UserController {
         return ResponseEntity.of(userService.getUser(id));
     }
 
-    @GetMapping(value = "/list")
+    @GetMapping
     @Operation(description = "Get user list")
     public ResponseEntity<List<UserDto>> getUserList() {
         return ResponseEntity.ok()

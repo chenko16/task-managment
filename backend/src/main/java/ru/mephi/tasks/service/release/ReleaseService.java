@@ -12,4 +12,6 @@ public interface ReleaseService {
     void deleteRelease(Long id);
     void updateReleaseDescription(Long id, String description);
     void finishRelease(Long id);
+    void addTask(Long releaseId, Long taskId);
+    void removeTask(Long releaseId, Long taskId);
 }
