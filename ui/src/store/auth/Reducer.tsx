@@ -1,11 +1,8 @@
-import {Reducer} from "redux";
-import * as actions from "./Actions"
-import {ActionType, getType} from "typesafe-actions";
-import {ApplicationState} from "../Store";
-import {SystemRole} from "../users/Types";
-import App from "../../containers/App";
-import jwt_decode from "jwt-decode";
-import {AuthResult} from "./Types";
+import {Reducer} from 'redux';
+import * as actions from './Actions'
+import {ActionType, getType} from 'typesafe-actions';
+import {ApplicationState} from '../Store';
+import {SystemRole} from '../users/Types';
 
 export interface AuthStoreState {
     authPerformed : boolean,
@@ -82,7 +79,7 @@ export function isAuthenticated(state: ApplicationState) : boolean {
 }
 
 export function username(state: ApplicationState) : string {
-    return state.auth.login || "";
+    return state.auth.login || '';
 }
 
 export function getRole(state: ApplicationState) : SystemRole {

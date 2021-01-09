@@ -1,9 +1,9 @@
-import * as React from "react";
-import {Avatar, Button, Card, CardActions, CardContent, Grid, IconButton, Typography} from "@material-ui/core";
-import Utils from "../../store/users/Utils";
-import {Task} from "../../store/tasks/Types";
+import * as React from 'react';
+import {Avatar, Card, CardActions, CardContent, Grid, IconButton, Typography} from '@material-ui/core';
+import Utils from '../../store/users/Utils';
+import {Task} from '../../store/tasks/Types';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import {withRouter} from "react-router";
+import {withRouter} from 'react-router';
 import {RouteProps} from 'react-router-dom';
 
 export interface TaskItemProps {
@@ -21,15 +21,15 @@ class TaskItem extends React.Component<TaskItemProps & RouteProps, TaskItemState
 
     getAvatar(name: string) {
         return (<Avatar
-            src={"https://ui-avatars.com/api/?size=96&name=" + name
-            + "&font-size=0.33&background=" + Utils.getUserColor(name) + "&color=000&rounded=true"}
+            src={'https://ui-avatars.com/api/?size=96&name=' + name
+            + '&font-size=0.33&background=' + Utils.getUserColor(name) + '&color=000&rounded=true'}
             style={{borderRadius: 0, height: 48, width: 48, marginRight: 2}}/>)
     }
 
     getDescriptionShort(description: string) {
         let val = description;
         if (val.length > 10) {
-            val = val.substr(0, 10) + "\n..."
+            val = val.substr(0, 10) + '\n...'
         }
         return val;
     }
@@ -38,10 +38,10 @@ class TaskItem extends React.Component<TaskItemProps & RouteProps, TaskItemState
         return (
             <Card elevation={1}>
                 <CardContent>
-                    <Grid container spacing={16} direction="row" justify="flex-start" alignItems="center">
+                    <Grid container spacing={16} direction='row' justify='flex-start' alignItems='center'>
                         {this.props.task.assignee ? this.getAvatar(this.props.task.assignee.login) : this.getAvatar(this.props.task.reporter.login)}
                         <Grid item sm>
-                            <Typography variant="h6" color="primary">
+                            <Typography variant='h6' color='primary'>
                                 {this.props.task.title}
                             </Typography>
                             <Typography>
@@ -56,14 +56,12 @@ class TaskItem extends React.Component<TaskItemProps & RouteProps, TaskItemState
                 </CardContent>
                 <CardActions>
                     <IconButton
-                        size="small"
+                        size='small'
                         onClick={e => {
-                            this.props.history.push("/tasks/" + this.props.task.title + "&" + this.props.task.id)
-                            // this.props.history.push("/tasks/" + this.props.task.id)
-                            console.log("подробнее")
+                            this.props.history.push('/tasks/' + this.props.task.title + '&' + this.props.task.id)
                         }}
                     >
-                        <ExpandMoreIcon color="primary"/>
+                        <ExpandMoreIcon color='primary'/>
                     </IconButton>
                 </CardActions>
             </Card>

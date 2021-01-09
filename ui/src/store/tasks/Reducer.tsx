@@ -1,8 +1,8 @@
-import * as actions from "./Actions"
-import {ActionType, getType} from "typesafe-actions";
-import {Reducer} from "redux";
-import {ApplicationState} from "../Store";
-import {Task} from "./Types";
+import * as actions from './Actions'
+import {ActionType, getType} from 'typesafe-actions';
+import {Reducer} from 'redux';
+import {ApplicationState} from '../Store';
+import {Task} from './Types';
 
 export interface TaskStoreState {
     tasks: Task[],

@@ -1,15 +1,15 @@
-import * as React from "react";
-import {forwardRef} from "react";
-import {Add, ArrowDownward, Check, Clear, Delete, Edit, Remove, Search} from "@material-ui/icons";
-import MaterialTable from "material-table";
-import {Fab} from "@material-ui/core";
-import AddBtn from "@material-ui/icons/Add";
-import {BusinessRole, Project, ProjectRequest, UserProject} from "../../store/project/Types";
-import AddProjectDialog from "./AddProjectDialog";
-import {SystemRole, User} from "../../store/users/Types";
-import EditProjectDialog from "./EditProjectDialog";
-import CloseIcon from "@material-ui/icons/Close";
-import ConfirmDialog from "../ConfirmDialog";
+import * as React from 'react';
+import {forwardRef} from 'react';
+import {Add, ArrowDownward, Check, Clear, Delete, Edit, Remove, Search} from '@material-ui/icons';
+import MaterialTable from 'material-table';
+import {Fab} from '@material-ui/core';
+import AddBtn from '@material-ui/icons/Add';
+import {BusinessRole, Project, ProjectRequest, UserProject} from '../../store/project/Types';
+import AddProjectDialog from './AddProjectDialog';
+import {SystemRole, User} from '../../store/users/Types';
+import EditProjectDialog from './EditProjectDialog';
+import CloseIcon from '@material-ui/icons/Close';
+import ConfirmDialog from '../ConfirmDialog';
 
 
 const tableIcons = {
@@ -114,13 +114,11 @@ export default class ProjectsForm extends React.Component<ProjectsFormProps, Pro
     }
 
     render(): React.ReactNode {
-        // console.log(JSON.stringify(this.state, null, 2))
-        // console.log(JSON.stringify(this.props, null, 2))
         return (
             <React.Fragment>
                 <MaterialTable
                     icons={tableIcons}
-                    title="Проекты"
+                    title='Проекты'
                     options={{
                         search: true,
                         paging: false,
@@ -133,18 +131,18 @@ export default class ProjectsForm extends React.Component<ProjectsFormProps, Pro
                         this.props.userRoleProjects : this.props.projects}
                     localization={{
                         toolbar: {
-                            searchTooltip: "Поиск",
-                            searchPlaceholder: "Найти проект"
+                            searchTooltip: 'Поиск',
+                            searchPlaceholder: 'Найти проект'
                         },
                         body: {
-                            emptyDataSourceMessage: "Список проектов пуст",
-                            addTooltip: "",
-                            deleteTooltip: "Удалить",
-                            editTooltip: "Редактировать",
+                            emptyDataSourceMessage: 'Список проектов пуст',
+                            addTooltip: '',
+                            deleteTooltip: 'Удалить',
+                            editTooltip: 'Редактировать',
                             editRow: {
-                                deleteText: "Вы уверены, что хотите удалить проект?",
-                                cancelTooltip: "Отмена",
-                                saveTooltip: "Подтвердить"
+                                deleteText: 'Вы уверены, что хотите удалить проект?',
+                                cancelTooltip: 'Отмена',
+                                saveTooltip: 'Подтвердить'
                             }
                         },
                         header: {
@@ -223,18 +221,18 @@ export default class ProjectsForm extends React.Component<ProjectsFormProps, Pro
                 />}
 
                 <ConfirmDialog
-                    warningText={"Вы уверены, что хотите удалить проект?"}
+                    warningText={'Вы уверены, что хотите удалить проект?'}
                     open={this.state.confirmDelete}
-                    okString={"Да"}
-                    cancelString={"Отмена"}
+                    okString={'Да'}
+                    cancelString={'Отмена'}
                     onClose={this.handleConfirmDialogDeleteClose}
                 />
 
                 {this.props.role === SystemRole.MANAGER && <Fab
-                    color="primary"
-                    aria-label="Add"
+                    color='primary'
+                    aria-label='Add'
                     style={{
-                        position: "fixed", bottom: 24, right: 24
+                        position: 'fixed', bottom: 24, right: 24
                     }}
                     onClick={(e) => {
                         this.setState({openAdd: true})

@@ -5,9 +5,9 @@ import * as releases from './releases/Reducer';
 import * as tasks from './tasks/Reducer';
 import * as project from './project/Reducer'
 import {applyMiddleware, combineReducers, createStore, Reducer} from 'redux';
-import {persistReducer, persistStore} from "redux-persist";
-import storage from "redux-persist/es/storage";
-import thunk from "redux-thunk";
+import {persistReducer, persistStore} from 'redux-persist';
+import storage from 'redux-persist/es/storage';
+import thunk from 'redux-thunk';
 
 export interface ApplicationState {
     auth: auth.AuthStoreState,

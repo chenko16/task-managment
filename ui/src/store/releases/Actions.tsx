@@ -1,9 +1,9 @@
-import {createAsyncAction, createStandardAction} from "typesafe-actions";
-import * as notificationActions from "../../store/notification/Actions";
-import {Release, ReleaseRequest} from "./Types";
-import ReleaseService from "../../services/ReleaseService";
+import {createAsyncAction, createStandardAction} from 'typesafe-actions';
+import * as notificationActions from '../../store/notification/Actions';
+import {Release, ReleaseRequest} from './Types';
+import ReleaseService from '../../services/ReleaseService';
 
-export const reqFinished = createStandardAction("@releases/REQ_FINISH")<void>();
+export const reqFinished = createStandardAction('@releases/REQ_FINISH')<void>();
 
 export const createReleaseAction = createAsyncAction(
     '@releases/CREATE_REQ',
@@ -73,7 +73,7 @@ export function createRelease(release: ReleaseRequest, okCallback?, errorCallbac
             dispatch(createReleaseAction.failure());
             if (errorCallback)
                 errorCallback(errorMessage);
-            dispatch(notificationActions.error("Ошибка при создании релиза."));
+            dispatch(notificationActions.error('Ошибка при создании релиза.'));
         })
     }
 }
@@ -86,7 +86,7 @@ export function updateRelease (release: ReleaseRequest) {
             dispatch(updateReleaseAction.success());
         }, (errorMessage) => {
             dispatch(updateReleaseAction.failure());
-            dispatch(notificationActions.error("Ошибка при обновлении релиза."));
+            dispatch(notificationActions.error('Ошибка при обновлении релиза.'));
         })
     }
 }
@@ -103,7 +103,7 @@ export function deleteRelease (id: number, okCallback?, errorCallback?) {
             dispatch(deleteReleaseAction.failure());
             if (errorCallback)
                 errorCallback(errorMessage);
-            dispatch(notificationActions.error("Ошибка при удалении релиза."));
+            dispatch(notificationActions.error('Ошибка при удалении релиза.'));
         })
     }
 }
@@ -120,7 +120,7 @@ export function fetchRelease(id: number, okCallback?, errorCallback?) {
             dispatch(fetchReleaseAction.failure());
             if (errorCallback)
                 errorCallback(errorMessage);
-            dispatch(notificationActions.error("Ошибка при получении релиза."));
+            dispatch(notificationActions.error('Ошибка при получении релиза.'));
         })
     }
 }
@@ -133,7 +133,7 @@ export function fetchReleases(okCallback?, errorCallback?) {
             dispatch(fetchReleasesAction.success(releases));
         }, (errorMessage) => {
             dispatch(fetchReleasesAction.failure());
-            dispatch(notificationActions.error("Ошибка при получении всех релизов."));
+            dispatch(notificationActions.error('Ошибка при получении всех релизов.'));
         })
     }
 }
@@ -150,7 +150,7 @@ export function updateDescription (id: number, description: string, okCallback?,
             dispatch(updateDescriptionAction.failure());
             if (errorCallback)
                 errorCallback(errorMessage);
-            dispatch(notificationActions.error("Ошибка при обновлении описания релиза."));
+            dispatch(notificationActions.error('Ошибка при обновлении описания релиза.'));
         })
     }
 }
@@ -167,7 +167,7 @@ export function finishRelease (id: number, okCallback?, errorCallback?) {
             dispatch(finishReleaseAction.failure());
             if (errorCallback)
                 errorCallback(errorMessage);
-            dispatch(notificationActions.error("Ошибка при завершении релиза."));
+            dispatch(notificationActions.error('Ошибка при завершении релиза.'));
         })
     }
 }
@@ -184,7 +184,7 @@ export function addTaskToRelease(releaseId: number, taskId: number, okCallback?,
             dispatch(addTaskToReleaseAction.failure());
             if (errorCallback)
                 errorCallback(errorMessage);
-            dispatch(notificationActions.error("Ошибка при добавлении задачи в релиз."));
+            dispatch(notificationActions.error('Ошибка при добавлении задачи в релиз.'));
         })
     }
 }
@@ -201,7 +201,7 @@ export function deleteTaskFromRelease(releaseId: number, taskId: number, okCallb
             dispatch(addTaskToReleaseAction.failure());
             if (errorCallback)
                 errorCallback(errorMessage);
-            dispatch(notificationActions.error("Ошибка при удалении задачи из релиза."));
+            dispatch(notificationActions.error('Ошибка при удалении задачи из релиза.'));
         })
     }
 }

@@ -1,38 +1,38 @@
-import * as React from "react";
-import Draggable from "react-draggable";
-import {ResizableBox} from "react-resizable";
+import * as React from 'react';
+import Draggable from 'react-draggable';
+import {ResizableBox} from 'react-resizable';
 import {
     Button, createStyles,
     Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, MenuItem,
     Paper, Select, TextField, withStyles
-} from "@material-ui/core";
-import {mapRole, SystemRole, User, UserRequest} from "../../store/users/Types";
+} from '@material-ui/core';
+import {mapRole, SystemRole, UserRequest} from '../../store/users/Types';
 
 
 const styles = theme => createStyles({
     resizable: {
-        position: "relative",
-        "& .react-resizable-handle": {
-            position: "absolute",
+        position: 'relative',
+        '& .react-resizable-handle': {
+            position: 'absolute',
             width: 20,
             height: 20,
             bottom: 0,
             right: 0,
             background:
                 "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDYiIHN0eWxlPSJiYWNrZ3JvdW5kLWNvbG9yOiNmZmZmZmYwMCIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSI2cHgiIGhlaWdodD0iNnB4Ij48ZyBvcGFjaXR5PSIwLjMwMiI+PHBhdGggZD0iTSA2IDYgTCAwIDYgTCAwIDQuMiBMIDQgNC4yIEwgNC4yIDQuMiBMIDQuMiAwIEwgNiAwIEwgNiA2IEwgNiA2IFoiIGZpbGw9IiMwMDAwMDAiLz48L2c+PC9zdmc+')",
-            "background-position": "bottom right",
-            padding: "0 3px 3px 0",
-            "background-repeat": "no-repeat",
-            "background-origin": "content-box",
-            "box-sizing": "border-box",
-            cursor: "se-resize"
+            'background-position': 'bottom right',
+            padding: '0 3px 3px 0',
+            'background-repeat': 'no-repeat',
+            'background-origin': 'content-box',
+            'box-sizing': 'border-box',
+            cursor: 'se-resize'
         }
     }
 });
 
 function PaperComponent(props) {
     return (
-        <Draggable handle="#draggable-dialog-title" cancel={'[class*="MuiDialogContent-root"]'}>
+        <Draggable handle='#draggable-dialog-title' cancel={'[class*="MuiDialogContent-root"]'}>
             <Paper {...props} />
         </Draggable>
     );
@@ -62,9 +62,9 @@ class AddUserDialog extends React.Component<AddUserDialogProps, AddUserDialogSta
         for (let role in SystemRole)
             systemRoles.push(role as SystemRole);
         this.state = {
-            login: "",
-            password: "",
-            password1: "",
+            login: '',
+            password: '',
+            password1: '',
             systemRole: SystemRole.USER,
             systemRoles: systemRoles
         }
@@ -80,78 +80,78 @@ class AddUserDialog extends React.Component<AddUserDialogProps, AddUserDialogSta
                     onClose={(e) => this.props.close(false)}
                     maxWidth={false}
                     PaperComponent={PaperComponent}
-                    aria-labelledby="draggable-dialog-title"
+                    aria-labelledby='draggable-dialog-title'
                 >
                     <ResizableBox
                         width={700}
                         className={classes.resizable}
                     >
-                        <DialogTitle style={{cursor: 'move', textAlign: "center"}} id="draggable-dialog-title">
+                        <DialogTitle style={{cursor: 'move', textAlign: 'center'}} id='draggable-dialog-title'>
                             Создание пользователя.
                         </DialogTitle>
                         <DialogContent>
                             <DialogContentText>
-                                <Grid container direction="column" justify="center" alignItems="center">
-                                    <Grid container direction="row" justify="flex-start" alignItems="center"
+                                <Grid container direction='column' justify='center' alignItems='center'>
+                                    <Grid container direction='row' justify='flex-start' alignItems='center'
                                           style={{margin: 4}}>
-                                        <Grid item style={{width: "100%"}}>
+                                        <Grid item style={{width: '100%'}}>
                                             <TextField
-                                                id="name"
-                                                label={"Логин пользователя"}
-                                                error={this.state.login === ""}
+                                                id='name'
+                                                label={'Логин пользователя'}
+                                                error={this.state.login === ''}
                                                 defaultValue={this.state.login}
                                                 onChange={(event => {
                                                     this.setState({login: event.target.value})
                                                 })}
-                                                type="login"
-                                                variant={"outlined"}
+                                                type='login'
+                                                variant={'outlined'}
                                                 fullWidth
                                             />
                                         </Grid>
                                     </Grid>
-                                    <Grid container direction="row" justify="flex-start" alignItems="center"
+                                    <Grid container direction='row' justify='flex-start' alignItems='center'
                                           style={{margin: 4}}>
-                                        <Grid item style={{width: "calc((100% - 6px)/2)"}}>
+                                        <Grid item style={{width: 'calc((100% - 6px)/2)'}}>
                                             <TextField
-                                                id="password"
-                                                label={"Пароль"}
-                                                error={this.state.password === ""}
+                                                id='password'
+                                                label={'Пароль'}
+                                                error={this.state.password === ''}
                                                 defaultValue={this.state.password}
                                                 onChange={(event => {
                                                     this.setState({password: event.target.value})
                                                 })}
-                                                type="password"
-                                                variant={"outlined"}
+                                                type='password'
+                                                variant={'outlined'}
                                                 fullWidth
                                             />
                                         </Grid>
-                                        <Grid item style={{marginLeft: "6px", width: "calc((100% - 6px)/2)"}}>
+                                        <Grid item style={{marginLeft: '6px', width: 'calc((100% - 6px)/2)'}}>
                                             <TextField
-                                                label={"Повторите пароль"}
-                                                id="password1"
-                                                error={(this.state.password1 === "") || (this.state.password1 !== this.state.password)}
+                                                label={'Повторите пароль'}
+                                                id='password1'
+                                                error={(this.state.password1 === '') || (this.state.password1 !== this.state.password)}
                                                 defaultValue={this.state.password1}
                                                 onChange={(event => {
                                                     this.setState({password1: event.target.value})
                                                 })}
-                                                type="password1"
-                                                variant={"outlined"}
+                                                type='password1'
+                                                variant={'outlined'}
                                                 fullWidth
                                             />
                                         </Grid>
                                     </Grid>
-                                    <Grid container direction="row" justify="flex-start" alignItems="center"
+                                    <Grid container direction='row' justify='flex-start' alignItems='center'
                                           style={{margin: 4}}>
-                                        <Grid item style={{width: "30%"}}>
+                                        <Grid item style={{width: '30%'}}>
                                             <b>Роль в системе:</b>
                                         </Grid>
-                                        <Grid item style={{marginLeft: "10px", width: "calc(70% - 10px)"}}>
+                                        <Grid item style={{marginLeft: '10px', width: 'calc(70% - 10px)'}}>
                                             <Select
                                                 value={this.state.systemRole}
                                                 onChange={event => {
                                                     this.setState({systemRole: (event.target.value as SystemRole)});
                                                 }}
-                                                variant={"outlined"}
+                                                variant={'outlined'}
                                                 fullWidth
                                                 displayEmpty
                                             >
@@ -169,16 +169,16 @@ class AddUserDialog extends React.Component<AddUserDialogProps, AddUserDialogSta
                             <Button
                                 onClick={(e) => {
                                     if (this.state.password !== this.state.password1) {
-                                        this.props.displayError("Пароли не совпадают.");
+                                        this.props.displayError('Пароли не совпадают.');
                                         return;
                                     }
-                                    if (this.state.login === "" || this.state.login === undefined) {
-                                        this.props.displayError("Поле логин не может быть пустым.");
+                                    if (this.state.login === '' || this.state.login === undefined) {
+                                        this.props.displayError('Поле логин не может быть пустым.');
                                         return;
                                     }
-                                    if (this.state.password1 === "" || this.state.password1 === undefined ||
-                                         this.state.password === "" || this.state.password === undefined) {
-                                        this.props.displayError("Поле пароль не может быть пустым.");
+                                    if (this.state.password1 === '' || this.state.password1 === undefined ||
+                                         this.state.password === '' || this.state.password === undefined) {
+                                        this.props.displayError('Поле пароль не может быть пустым.');
                                         return;
                                     }
                                     let userRequest: UserRequest = {
@@ -189,8 +189,8 @@ class AddUserDialog extends React.Component<AddUserDialogProps, AddUserDialogSta
                                     this.props.onClose('Ok', userRequest)
                                     this.props.close(false);
                                 }}
-                                color="primary"
-                                variant={"contained"}
+                                color='primary'
+                                variant={'contained'}
                             >
                                 Создать
                             </Button>
@@ -198,7 +198,7 @@ class AddUserDialog extends React.Component<AddUserDialogProps, AddUserDialogSta
                                 this.props.onClose('Cancel');
                                 this.props.close(false)
                             }}
-                                    color="primary">
+                                    color='primary'>
                                 Отменить
                             </Button>
 

@@ -1,9 +1,9 @@
-import {createAsyncAction, createStandardAction} from "typesafe-actions";
-import * as notificationActions from "../../store/notification/Actions";
-import {Task, TaskRequest, TaskStatus, TaskType} from "./Types";
-import TaskService from "../../services/TaskService";
+import {createAsyncAction, createStandardAction} from 'typesafe-actions';
+import * as notificationActions from '../../store/notification/Actions';
+import {Task, TaskRequest, TaskStatus, TaskType} from './Types';
+import TaskService from '../../services/TaskService';
 
-export const reqFinished = createStandardAction("@task/REQ_FINISH")<void>();
+export const reqFinished = createStandardAction('@task/REQ_FINISH')<void>();
 
 export const createTaskAction = createAsyncAction(
     '@task/CREATE_REQ',
@@ -71,7 +71,7 @@ export function createTask(task: TaskRequest, okCallback?, errorCallback?) {
             dispatch(createTaskAction.failure());
             if (errorCallback)
                 errorCallback(errorMessage);
-            dispatch(notificationActions.error("Ошибка при создании задачи."));
+            dispatch(notificationActions.error('Ошибка при создании задачи.'));
         })
     }
 }
@@ -88,7 +88,7 @@ export function deleteTask (id: number, okCallback?, errorCallback?) {
             dispatch(deleteTaskAction.failure());
             if (errorCallback)
                 errorCallback(errorMessage);
-            dispatch(notificationActions.error("Ошибка при удалении задачи."));
+            dispatch(notificationActions.error('Ошибка при удалении задачи.'));
         })
     }
 }
@@ -101,7 +101,7 @@ export function fetchTasks (okCallback?, errorCallback?) {
             dispatch(fetchTasksAction.success(tasks));
         }, (errorMessage) => {
             dispatch(fetchTasksAction.failure());
-            dispatch(notificationActions.error("Ошибка при получении всех задач."));
+            dispatch(notificationActions.error('Ошибка при получении всех задач.'));
         })
     }
 }
@@ -118,7 +118,7 @@ export function fetchTask(id: number, okCallback?, errorCallback?) {
             dispatch(fetchTaskAction.failure());
             if (errorCallback)
                 errorCallback(errorMessage);
-            dispatch(notificationActions.error("Ошибка при получении задачи."));
+            dispatch(notificationActions.error('Ошибка при получении задачи.'));
         })
     }
 }
@@ -135,7 +135,7 @@ export function updateDescription (id: number, description: string, okCallback?,
             dispatch(updateDescriptionAction.failure());
             if (errorCallback)
                 errorCallback(errorMessage);
-            dispatch(notificationActions.error("Ошибка при обновлении описания задачи."));
+            dispatch(notificationActions.error('Ошибка при обновлении описания задачи.'));
         })
     }
 }
@@ -152,7 +152,7 @@ export function updateTaskStatus (id: number, status: TaskStatus, okCallback?, e
             dispatch(updateStatusAction.failure());
             if (errorCallback)
                 errorCallback(errorMessage);
-            dispatch(notificationActions.error("Ошибка при обновлении статуса задачи."));
+            dispatch(notificationActions.error('Ошибка при обновлении статуса задачи.'));
         })
     }
 }
@@ -169,7 +169,7 @@ export function updateTaskType (id: number, type: TaskType, okCallback?, errorCa
             dispatch(updateTypeAction.failure());
             if (errorCallback)
                 errorCallback(errorMessage);
-            dispatch(notificationActions.error("Ошибка при обновлении типа задачи."));
+            dispatch(notificationActions.error('Ошибка при обновлении типа задачи.'));
         })
     }
 }
@@ -186,7 +186,7 @@ export function updateTaskTitle (id: number, title: string, okCallback?, errorCa
             dispatch(updateTitleAction.failure());
             if (errorCallback)
                 errorCallback(errorMessage);
-            dispatch(notificationActions.error("Ошибка при обновлении названия задачи."));
+            dispatch(notificationActions.error('Ошибка при обновлении названия задачи.'));
         })
     }
 }
@@ -203,7 +203,7 @@ export function setAssignee (id: number, userId: number, okCallback?, errorCallb
             dispatch(updateAssigneeAction.failure());
             if (errorCallback)
                 errorCallback(errorMessage);
-            dispatch(notificationActions.error("Ошибка при обновлении исполнителя задачи."));
+            dispatch(notificationActions.error('Ошибка при обновлении исполнителя задачи.'));
         })
     }
 }

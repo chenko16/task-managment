@@ -1,5 +1,5 @@
-import * as React from "react";
-import {Task} from "../../store/tasks/Types";
+import * as React from 'react';
+import {Task} from '../../store/tasks/Types';
 import {
     Button,
     Chip,
@@ -11,10 +11,10 @@ import {
     TableHead,
     TableRow,
     Typography
-} from "@material-ui/core";
-import ConfirmDialog from "../ConfirmDialog";
-import EditTaskDialog from "./EditTaskDialog";
-import {User} from "../../store/users/Types";
+} from '@material-ui/core';
+import ConfirmDialog from '../ConfirmDialog';
+import EditTaskDialog from './EditTaskDialog';
+import {User} from '../../store/users/Types';
 
 
 export interface TaskViewProps {
@@ -71,12 +71,12 @@ export default class TaskView extends React.Component<TaskViewProps, TaskViewSta
         return (
             <React.Fragment>
                 <Paper elevation={1} style={{margin: 10, marginLeft: 20}}>
-                    <Grid container direction="row" justify="flex-start" alignItems="flex-start"
+                    <Grid container direction='row' justify='flex-start' alignItems='flex-start'
                           style={{margin: 6, padding: 6}}>
-                        <Grid container direction="column" justify="flex-start" alignItems="flex-start"
-                              style={{width: "50%"}}>
+                        <Grid container direction='column' justify='flex-start' alignItems='flex-start'
+                              style={{width: '50%'}}>
                             <Grid item style={{margin: 10}}>
-                                <Typography variant="button" color={"primary"}>
+                                <Typography variant='button' color={'primary'}>
                                     <b>{this.props.task?.title}</b>
                                 </Typography>
                             </Grid>
@@ -84,45 +84,42 @@ export default class TaskView extends React.Component<TaskViewProps, TaskViewSta
                                 <b>Тип задачи: </b>{this.props.task?.type}
                             </Grid>
                             <Grid item style={{margin: 6}}>
-                                <b>Статус: </b> <Chip label={this.props.task?.status} color={"primary"}/>
+                                <b>Статус: </b> <Chip label={this.props.task?.status} color={'primary'}/>
                             </Grid>
                         </Grid>
-                        <Grid container direction="column" justify="flex-start" alignItems="flex-start"
-                              style={{width: "50%"}}>
-                            <Grid container direction="row" justify="flex-start" alignItems="flex-start"
+                        <Grid container direction='column' justify='flex-start' alignItems='flex-start'
+                              style={{width: '50%'}}>
+                            <Grid container direction='row' justify='flex-start' alignItems='flex-start'
                                   style={{margin: 6, padding: 6}}>
                                 <Button
                                     onClick={(e) => {
-                                        console.log("edit")
                                         this.setState({editOpen: true})
-                                        //this.setState({editRelease: true})
                                     }}
-                                    color="primary"
-                                    variant={"contained"}
+                                    color='primary'
+                                    variant={'contained'}
                                 >
                                     Редактировать
                                 </Button>
                                 <Button
                                     onClick={(e) => {
-                                        console.log("delete")
                                         this.setState({confirmDelete: true})
                                     }}
-                                    color="primary">
+                                    color='primary'>
                                     Удалить
                                 </Button>
                             </Grid>
                             <Grid item style={{margin: 6}}>
-                                <b>Исполнитель: </b>{this.props.task?.assignee ? this.props.task?.assignee.login : "не назначен"}
+                                <b>Исполнитель: </b>{this.props.task?.assignee ? this.props.task?.assignee.login : 'не назначен'}
                             </Grid>
                             <Grid item style={{margin: 4}}>
-                                <Link href="#" onClick={(e) => {
+                                <Link href='#' onClick={(e) => {
                                     this.props.setAssignee(this.props.task?.id, this.props.currentUserId);
                                 }}>
                                     Назначить на меня
                                 </Link>
                             </Grid>
                             <Grid item style={{margin: 4}}>
-                                <Link href="#" onClick={(e) => {
+                                <Link href='#' onClick={(e) => {
                                     this.props.setAssignee(this.props.task?.id, this.props.task?.reporter.id);
                                 }}>
                                     Назначить на автора
@@ -133,26 +130,26 @@ export default class TaskView extends React.Component<TaskViewProps, TaskViewSta
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid container direction="column" justify="flex-start" alignItems="flex-start"
+                    <Grid container direction='column' justify='flex-start' alignItems='flex-start'
                           style={{margin: 6, padding: 6}}>
                         <Grid item style={{margin: 6, marginTop: 10}}>
                             <b>Описание задачи: </b>
                         </Grid>
-                        <Grid item xs={10} style={{margin: 6, width: "100%"}}>
+                        <Grid item xs={10} style={{margin: 6, width: '100%'}}>
                             {this.props.task?.description}
                         </Grid>
                         <Grid item style={{margin: 6, marginTop: 10}}>
                             <b>Список требований: </b>
                         </Grid>
-                        <Grid item xs={10} style={{margin: 6, width: "100%"}}>
-                            <Table style={{textDecoration: "none"}}>
+                        <Grid item xs={10} style={{margin: 6, width: '100%'}}>
+                            <Table style={{textDecoration: 'none'}}>
                                 <TableHead>
                                     <TableRow>
                                         <TableCell> Требование </TableCell>
                                         <TableCell>Описание</TableCell>
                                     </TableRow>
                                 </TableHead>
-                                <TableBody style={{textDecoration: "none"}}>
+                                <TableBody style={{textDecoration: 'none'}}>
                                     {this.state.requirements?.map((req) => {
                                         return <TableRow>
                                             <TableCell>{req.title}</TableCell>
@@ -171,7 +168,6 @@ export default class TaskView extends React.Component<TaskViewProps, TaskViewSta
                     }}
                     onClose={(value, assignee, description, title) => {
                         if (value === 'Ok') {
-                            console.log("ffff")
                             if (assignee)
                                 this.props.setAssignee(this.props.task?.id, assignee.id)
                             if (description)
@@ -186,10 +182,10 @@ export default class TaskView extends React.Component<TaskViewProps, TaskViewSta
                 />}
 
                 <ConfirmDialog
-                    warningText={"Вы уверены, что хотите удалить задачу?"}
+                    warningText={'Вы уверены, что хотите удалить задачу?'}
                     open={this.state.confirmDelete}
-                    okString={"Да"}
-                    cancelString={"Отмена"}
+                    okString={'Да'}
+                    cancelString={'Отмена'}
                     onClose={this.handleConfirmDialogDeleteClose}
                 />
             </React.Fragment>

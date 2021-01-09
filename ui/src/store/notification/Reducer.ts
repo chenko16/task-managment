@@ -1,7 +1,7 @@
 import {ActionType, getType} from 'typesafe-actions'
 import * as actions from './Actions'
-import {Reducer} from "redux";
-import {ApplicationState} from "../Store";
+import {Reducer} from 'redux';
+import {ApplicationState} from '../Store';
 
 export type NotificationActions = ActionType<typeof actions>
 
@@ -12,24 +12,24 @@ export interface NotificationState {
 }
 
 export const initialState: NotificationState = {
-  message: "",
-  variant: "info",
+  message: '',
+  variant: 'info',
   isOpen: false
 }
 
 export const reducer: Reducer<NotificationState> = (state: NotificationState = initialState, action: NotificationActions) => {
   switch (action.type) {
     case getType(actions.error) :
-      return {...state, isOpen: true, message: action.payload, variant: "error"}
+      return {...state, isOpen: true, message: action.payload, variant: 'error'}
 
     case getType(actions.success) :
-      return {...state, isOpen: true, message: action.payload, variant: "success"}
+      return {...state, isOpen: true, message: action.payload, variant: 'success'}
 
     case getType(actions.info) :
-      return {...state, isOpen: true, message: action.payload, variant: "info"}
+      return {...state, isOpen: true, message: action.payload, variant: 'info'}
 
     case getType(actions.warning) :
-      return {...state, isOpen: true, message: action.payload, variant: "warning"}
+      return {...state, isOpen: true, message: action.payload, variant: 'warning'}
 
     case getType(actions.close) :
       return {...state, isOpen: false}

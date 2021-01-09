@@ -1,6 +1,6 @@
-import * as React from "react";
-import Draggable from "react-draggable";
-import {ResizableBox} from "react-resizable";
+import * as React from 'react';
+import Draggable from 'react-draggable';
+import {ResizableBox} from 'react-resizable';
 import {
     Button,
     createStyles,
@@ -10,35 +10,35 @@ import {
     DialogTitle, Grid, MenuItem,
     Paper, Select, TextField,
     withStyles
-} from "@material-ui/core";
-import {User} from "../../store/users/Types";
-import {BusinessRole, ProjectRequest} from "../../store/project/Types";
-import {UserService} from "../../services/UserService";
+} from '@material-ui/core';
+import {User} from '../../store/users/Types';
+import {BusinessRole, ProjectRequest} from '../../store/project/Types';
+import {UserService} from '../../services/UserService';
 
 const styles = theme => createStyles({
     resizable: {
-        position: "relative",
-        "& .react-resizable-handle": {
-            position: "absolute",
+        position: 'relative',
+        '& .react-resizable-handle': {
+            position: 'absolute',
             width: 20,
             height: 20,
             bottom: 0,
             right: 0,
             background:
                 "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDYiIHN0eWxlPSJiYWNrZ3JvdW5kLWNvbG9yOiNmZmZmZmYwMCIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSI2cHgiIGhlaWdodD0iNnB4Ij48ZyBvcGFjaXR5PSIwLjMwMiI+PHBhdGggZD0iTSA2IDYgTCAwIDYgTCAwIDQuMiBMIDQgNC4yIEwgNC4yIDQuMiBMIDQuMiAwIEwgNiAwIEwgNiA2IEwgNiA2IFoiIGZpbGw9IiMwMDAwMDAiLz48L2c+PC9zdmc+')",
-            "background-position": "bottom right",
-            padding: "0 3px 3px 0",
-            "background-repeat": "no-repeat",
-            "background-origin": "content-box",
-            "box-sizing": "border-box",
-            cursor: "se-resize"
+            'background-position': 'bottom right',
+            padding: '0 3px 3px 0',
+            'background-repeat': 'no-repeat',
+            'background-origin': 'content-box',
+            'box-sizing': 'border-box',
+            cursor: 'se-resize'
         }
     }
 });
 
 function PaperComponent(props) {
     return (
-        <Draggable handle="#draggable-dialog-title" cancel={'[class*="MuiDialogContent-root"]'}>
+        <Draggable handle='#draggable-dialog-title' cancel={'[class*="MuiDialogContent-root"]'}>
             <Paper {...props} />
         </Draggable>
     );
@@ -73,9 +73,9 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
             businessRoles.push(role as BusinessRole);
         this.state = {
             businessRoles: businessRoles,
-            name: "",
-            description: "",
-            assigneeLogin: "",
+            name: '',
+            description: '',
+            assigneeLogin: '',
             assignee: UserService.getEmptyUser(),
             reporterLogin: this.props.reporterLogin,
             reporter: this.props.users.filter((user) => {
@@ -85,7 +85,6 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
     }
 
     render(): React.ReactNode {
-       console.log(this.state)
         // @ts-ignore
         const {classes} = this.props;
         return (
@@ -95,63 +94,63 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
                     onClose={(e) => this.props.close(false)}
                     maxWidth={false}
                     PaperComponent={PaperComponent}
-                    aria-labelledby="draggable-dialog-title"
+                    aria-labelledby='draggable-dialog-title'
                 >
                     <ResizableBox
                         width={800}
                         className={classes.resizable}
                     >
-                        <DialogTitle style={{cursor: 'move'}} id="draggable-dialog-title">
+                        <DialogTitle style={{cursor: 'move'}} id='draggable-dialog-title'>
                             Создание проекта.
                         </DialogTitle>
                         <DialogContent>
                             <DialogContentText>
-                                <Grid container direction="column" justify="center" alignItems="center">
-                                    <Grid container direction="row" justify="flex-start" alignItems="center"
+                                <Grid container direction='column' justify='center' alignItems='center'>
+                                    <Grid container direction='row' justify='flex-start' alignItems='center'
                                           style={{margin: 4}}>
                                         <Grid item xs={2}>
                                             <b>Название проекта:</b>
                                         </Grid>
-                                        <Grid item xs={8} style={{marginLeft: "30px"}}>
+                                        <Grid item xs={8} style={{marginLeft: '30px'}}>
                                             <TextField
-                                                id="name"
-                                                error={this.state.name===""}
+                                                id='name'
+                                                error={this.state.name===''}
                                                 defaultValue={this.state.name}
                                                 onChange={(e) => {
                                                     this.setState({name: e.target.value})
                                                 }}
-                                                type="login"
-                                                variant={"outlined"}
+                                                type='login'
+                                                variant={'outlined'}
                                                 fullWidth
                                             />
                                         </Grid>
                                     </Grid>
-                                    <Grid container direction="column" justify="flex-start" alignItems="flex-start"
+                                    <Grid container direction='column' justify='flex-start' alignItems='flex-start'
                                           style={{margin: 4}}>
                                         <Grid item>
                                             <b>Описание проекта:</b>
                                         </Grid>
-                                        <Grid item style={{width: "95%", marginTop: 6}}>
+                                        <Grid item style={{width: '95%', marginTop: 6}}>
                                             <TextField
-                                                id="outlined-multiline-description"
+                                                id='outlined-multiline-description'
                                                 multiline
                                                 rows={4}
                                                 fullWidth
-                                                error={this.state.description===""}
+                                                error={this.state.description===''}
                                                 defaultValue={this.state.description}
                                                 onChange={(e) => {
                                                     this.setState({description: e.target.value})
                                                 }}
-                                                variant="outlined"
+                                                variant='outlined'
                                             />
                                         </Grid>
                                     </Grid>
-                                    <Grid container direction="row" justify="flex-start" alignItems="center"
+                                    <Grid container direction='row' justify='flex-start' alignItems='center'
                                           style={{margin: 4}}>
                                         <Grid item xs={2}>
                                             <b>Руководитель:</b>
                                         </Grid>
-                                        <Grid item xs={8} style={{marginLeft: "30px"}}>
+                                        <Grid item xs={8} style={{marginLeft: '30px'}}>
                                             <Select
                                                 value={this.state.reporterLogin}
                                                 disabled
@@ -164,7 +163,7 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
                                                     })[0];
                                                     this.setState({reporter: reporter, reporterLogin: event.target.value});
                                                 }}
-                                                variant={"outlined"}
+                                                variant={'outlined'}
                                                 fullWidth
                                                 displayEmpty
                                             >
@@ -174,12 +173,12 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
                                             </Select>
                                         </Grid>
                                     </Grid>
-                                    <Grid container direction="row" justify="flex-start" alignItems="center"
+                                    <Grid container direction='row' justify='flex-start' alignItems='center'
                                           style={{margin: 4}}>
                                         <Grid item xs={2}>
                                             <b>Управляющий:</b>
                                         </Grid>
-                                        <Grid item xs={8} style={{marginLeft: "30px"}}>
+                                        <Grid item xs={8} style={{marginLeft: '30px'}}>
                                             <Select
                                                 value={this.state.assigneeLogin}
                                                 onChange={(event, child)=> {
@@ -191,7 +190,7 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
                                                     })[0];
                                                     this.setState({assignee: assignee, assigneeLogin: event.target.value});
                                                 }}
-                                                variant={"outlined"}
+                                                variant={'outlined'}
                                                 fullWidth
                                                 displayEmpty
                                             >
@@ -207,20 +206,20 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
                         <DialogActions style={{marginTop: 6, marginRight: 6}}>
                             <Button
                                 onClick={(e) => {
-                                    if (this.state.name === "" || this.state.name === undefined) {
+                                    if (this.state.name === '' || this.state.name === undefined) {
                                         this.props.displayError("Поле 'Название проекта' не может быть пустым.");
                                         return;
                                     }
-                                    if (this.state.description === "" || this.state.description === undefined) {
+                                    if (this.state.description === '' || this.state.description === undefined) {
                                         this.props.displayError("Поле 'Описание' не может быть пустым.");
                                         return;
                                     }
-                                    if (this.state.assigneeLogin === "" || this.state.assignee === undefined) {
-                                        this.props.displayError("Выбор управляющего обязателен.");
+                                    if (this.state.assigneeLogin === '' || this.state.assignee === undefined) {
+                                        this.props.displayError('Выбор управляющего обязателен.');
                                         return;
                                     }
-                                    if (this.state.reporterLogin === "" || this.state.reporter === undefined) {
-                                        this.props.displayError("Выбор руководителя обязателен.");
+                                    if (this.state.reporterLogin === '' || this.state.reporter === undefined) {
+                                        this.props.displayError('Выбор руководителя обязателен.');
                                         return;
                                     }
                                     let projectRequest: ProjectRequest = {
@@ -229,8 +228,8 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
                                     this.props.onClose('Ok', projectRequest, this.state.assignee, this.state.reporter, this.state.description);
                                     this.props.close(false);
                                 }}
-                                color="primary"
-                                variant={"contained"}
+                                color='primary'
+                                variant={'contained'}
                             >
                                 Создать
                             </Button>
@@ -238,7 +237,7 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
                                 this.props.onClose('Cancel');
                                 this.props.close(false)
                             }}
-                                    color="primary">
+                                    color='primary'>
                                 Отменить
                             </Button>
 

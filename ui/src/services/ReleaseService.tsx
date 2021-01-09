@@ -1,5 +1,5 @@
-import BackendProvider from "./BackendProvider";
-import {Release, ReleaseRequest} from "../store/releases/Types";
+import BackendProvider from './BackendProvider';
+import {Release, ReleaseRequest} from '../store/releases/Types';
 
 
 export default class ReleaseService {
@@ -15,7 +15,7 @@ export default class ReleaseService {
             let body = await result.json();
             okCallback(body as Release);
         } else {
-            errorCallback("Ошибка при создании релиза")
+            errorCallback('Ошибка при создании релиза')
         }
     }
 
@@ -30,7 +30,7 @@ export default class ReleaseService {
             let body = await result.json();
             okCallback(body as Release);
         } else {
-            errorCallback("Ошибка при получении релиза")
+            errorCallback('Ошибка при получении релиза')
         }
     }
 
@@ -44,7 +44,7 @@ export default class ReleaseService {
             let body = await result.json();
             okCallback(body as Release[]);
         } else {
-            errorCallback("Ошибка при получении списка релизов")
+            errorCallback('Ошибка при получении списка релизов')
         }
     }
 
@@ -58,7 +58,7 @@ export default class ReleaseService {
         if (result.ok) {
             okCallback(idRelease);
         } else {
-            errorCallback("Ошибка при удалении релиза")
+            errorCallback('Ошибка при удалении релиза')
         }
     }
 
@@ -75,7 +75,7 @@ export default class ReleaseService {
         if (result.ok) {
             okCallback(idRelease);
         } else {
-            errorCallback("Ошибка при обновлении описания релиза")
+            errorCallback('Ошибка при обновлении описания релиза')
         }
     }
 
@@ -89,7 +89,7 @@ export default class ReleaseService {
         if (result.ok) {
             okCallback(id);
         } else {
-            errorCallback("Ошибка при закрытии релиза")
+            errorCallback('Ошибка при закрытии релиза')
         }
     }
 
@@ -104,7 +104,7 @@ export default class ReleaseService {
         if (result.ok) {
             okCallback(releaseId);
         } else {
-            errorCallback("Ошибка при добавлении задачи в релиз")
+            errorCallback('Ошибка при добавлении задачи в релиз')
         }
     }
 
@@ -119,7 +119,7 @@ export default class ReleaseService {
         if (result.ok) {
             okCallback(releaseId);
         } else {
-            errorCallback("Ошибка при удалении задачи из релиза")
+            errorCallback('Ошибка при удалении задачи из релиза')
         }
     }
 }
