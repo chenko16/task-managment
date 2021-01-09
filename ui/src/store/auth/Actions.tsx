@@ -26,14 +26,14 @@ export const logout = () => {
     return (dispatch, getState) => {
         dispatch(logoutAction.request());
         dispatch(logoutAction.success());
-        localStorage.removeItem('jwtToken')
+        localStorage.removeItem("jwtToken")
     }
 }
 
 export const checkAuth = () => {
     return (dispatch, getState) => {
         dispatch(checkAuthAction.request);
-        const token = localStorage.getItem('jwtToken');
+        const token = localStorage.getItem("jwtToken");
         const jwt = token !== null ? jwt_decode(token) : undefined;
         dispatch(checkAuthAction.success(
             {

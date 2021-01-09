@@ -5,7 +5,7 @@ export default class BackendProvider {
 
   static request(method: string, path: string, headers?: any, params?: any, body?: any) {
 
-    let token = localStorage.getItem('jwtToken');
+    let token = localStorage.getItem("jwtToken");
 
     let _headers = {};
     if (token) {
