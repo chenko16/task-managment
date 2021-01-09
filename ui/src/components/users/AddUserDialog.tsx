@@ -112,6 +112,7 @@ class AddUserDialog extends React.Component<AddUserDialogProps, AddUserDialogSta
                                     <Grid container direction='row' justify='flex-start' alignItems='center'
                                           style={{margin: 4}}>
                                         <Grid item style={{width: 'calc((100% - 6px)/2)'}}>
+                                        <form autoComplete="off">
                                             <TextField
                                                 id='password'
                                                 label={'Пароль'}
@@ -124,8 +125,10 @@ class AddUserDialog extends React.Component<AddUserDialogProps, AddUserDialogSta
                                                 variant={'outlined'}
                                                 fullWidth
                                             />
+                                        </form>
                                         </Grid>
                                         <Grid item style={{marginLeft: '6px', width: 'calc((100% - 6px)/2)'}}>
+                                        <form autoComplete="off">
                                             <TextField
                                                 label={'Повторите пароль'}
                                                 id='password1'
@@ -134,10 +137,11 @@ class AddUserDialog extends React.Component<AddUserDialogProps, AddUserDialogSta
                                                 onChange={(event => {
                                                     this.setState({password1: event.target.value})
                                                 })}
-                                                type='password1'
+                                                type='password'
                                                 variant={'outlined'}
                                                 fullWidth
                                             />
+                                        </form>
                                         </Grid>
                                     </Grid>
                                     <Grid container direction='row' justify='flex-start' alignItems='center'
