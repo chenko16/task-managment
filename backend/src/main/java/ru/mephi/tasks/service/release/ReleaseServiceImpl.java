@@ -43,6 +43,7 @@ public class ReleaseServiceImpl implements ReleaseService {
         release.setReleaseId(releaseRequest.getId());
         release.setProject(project);
         release.setReporter(reporter);
+        release.setName(releaseRequest.getName());
         release.setDescription(releaseRequest.getDescription());
         return releaseMapper.toDto(releaseRepository.save(release));
     }

@@ -25,6 +25,8 @@ public class Release {
 
     private String description;
 
+    private String name;
+
     @CreationTimestamp
     private Instant created;
 

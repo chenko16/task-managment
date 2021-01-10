@@ -19,25 +19,25 @@ public class ReleaseController {
 
     @PostMapping
     @Operation(description = "Create/edit release")
-    public ResponseEntity<ReleaseDto> createProject(@RequestBody ReleaseRequest releaseRequest) {
+   public ResponseEntity<ReleaseDto> createRelease(@RequestBody ReleaseRequest releaseRequest) {
         return ResponseEntity.ok().body(releaseService.createRelease(releaseRequest));
     }
 
     @GetMapping(value = "/{id}")
     @Operation(description = "Get release info")
-    public ResponseEntity<ReleaseDto> getProject(@PathVariable Long id) {
+    public ResponseEntity<ReleaseDto> getRelease(@PathVariable Long id) {
         return ResponseEntity.of(releaseService.getRelease(id));
     }
 
-    @PostMapping("/list")
+    @GetMapping("/list")
     @Operation(description = "Get release list")
-    public ResponseEntity<List<ReleaseDto>> getProjectList() {
+    public ResponseEntity<List<ReleaseDto>> getReleaseList() {
         return ResponseEntity.ok().body(releaseService.getReleaseList());
     }
 
     @DeleteMapping(value = "/{id}")
     @Operation(description = "Delete release")
-    public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteRelease(@PathVariable Long id) {
         releaseService.deleteRelease(id);
         return ResponseEntity.ok().build();
     }

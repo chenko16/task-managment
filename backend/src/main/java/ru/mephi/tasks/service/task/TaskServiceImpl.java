@@ -33,7 +33,7 @@ public class TaskServiceImpl implements TaskService {
         User reporter = userRepository.findById(taskRequest.getReporterId()).orElseThrow(() -> new EntryNotFoundException("security_user", "user_id", taskRequest.getReporterId()));
         task.setReporter(reporter);
         if (taskRequest.getAssigneeId() != null) {
-            User assignee = userRepository.findById(taskRequest.getReporterId()).orElseThrow(() -> new EntryNotFoundException("security_user", "user_id", taskRequest.getReporterId()));
+            User assignee = userRepository.findById(taskRequest.getAssigneeId()).orElseThrow(() -> new EntryNotFoundException("security_user", "user_id", taskRequest.getReporterId()));
             task.setAssignee(assignee);
         }
         if (taskRequest.getDescription() != null)
@@ -98,7 +98,7 @@ public class TaskServiceImpl implements TaskService {
     public void updateTaskTitle(Long id, String title) {
         taskRepository.findById(id)
                 .ifPresent(task -> {
-                    task.setStatus(title);
+                    task.setTitle(title);
                     taskRepository.save(task);
                 });
     }
