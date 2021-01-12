@@ -17,6 +17,8 @@ import {
     ProjectsByUsers,
     UserProject
 } from '../../store/project/Types';
+import {withRouter} from 'react-router';
+import {RouteProps} from 'react-router-dom';
 
 export interface SettingsViewDispatchProps {
     displayError(msg: string): any,
@@ -77,7 +79,7 @@ export interface SettingsViewState {
     currentProject?: Project
 }
 
-class SettingsView extends React.Component<SettingsViewStateProps & SettingsViewDispatchProps & SettingsViewProps, SettingsViewState> {
+class SettingsView extends React.Component<SettingsViewStateProps & SettingsViewDispatchProps & SettingsViewProps & RouteProps, SettingsViewState> {
     constructor(props) {
         super(props);
         this.state = {
@@ -134,21 +136,25 @@ class SettingsView extends React.Component<SettingsViewStateProps & SettingsView
                     createUser={(user) => {
                         this.props.createUser(user, () => {
                             this.props.fetchUsers();
+                            this.props.history.push('/users')
                         })
                     }}
                     updateUserStatus={(id, status) => {
                         this.props.updateUserStatus(id, status, () => {
                             this.props.fetchUsers();
+                            this.props.history.push('/users')
                         })
                     }}
                     updateUserRole={(id, role) => {
                         this.props.updateUserRole(id, role, () => {
                             this.props.fetchUsers();
+                            this.props.history.push('/users')
                         })
                     }}
                     deleteUser={(id) => {
                         this.props.deleteUser(id, () => {
                             this.props.fetchUsers();
+                            this.props.history.push('/users')
                         })
                     }}
                     projectsByUser={this.props.projectsByUser}
@@ -160,12 +166,14 @@ class SettingsView extends React.Component<SettingsViewStateProps & SettingsView
                     deleteProject={(projectId) => {
                         this.props.deleteProject(projectId, () => {
                             this.props.fetchProjects();
+                            this.props.history.push('/settings')
                         })
                     }}
                     updateReporter={this.props.updateReporter}
                     updateProjectStatus={(projectId, status) => {
                         this.props.updateProjectStatus(projectId, status, () => {
                             this.props.fetchProjects();
+                            this.props.history.push('/settings')
                         })
                     }}
                     fetchProject={this.props.fetchProject}
@@ -279,4 +287,4 @@ function mapDispatchToProps(dispatch: any): SettingsViewDispatchProps {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SettingsView);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SettingsView));
