@@ -204,7 +204,7 @@ class EditTaskDialog extends React.Component<EditTaskDialogProps, EditTaskDialog
                                                 fullWidth
                                                 displayEmpty
                                             >
-                                                {this.props.users?.map((user, ind) => {
+                                                {this.props.users?.filter(user => {return user.active}).map((user, ind) => {
                                                     return <MenuItem value={user.login}
                                                                      id={user.id}> {user.login} </MenuItem>
                                                 })}
@@ -235,7 +235,7 @@ class EditTaskDialog extends React.Component<EditTaskDialogProps, EditTaskDialog
                                                 fullWidth
                                                 displayEmpty
                                             >
-                                                {this.props.users?.map((user, ind) => {
+                                                {this.props.users?.filter(user => {return user.active}).map((user, ind) => {
                                                     return <MenuItem value={user.login}
                                                                      id={user.id}> {user.login} </MenuItem>
                                                 })}

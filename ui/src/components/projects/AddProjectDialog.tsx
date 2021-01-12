@@ -167,7 +167,7 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
                                                 fullWidth
                                                 displayEmpty
                                             >
-                                                {this.props.users?.map((user, ind) => {
+                                                {this.props.users?.filter(user => {return user.active}).map((user, ind) => {
                                                     return <MenuItem value={user.login} id={user.id}> {user.login} </MenuItem>
                                                 })}
                                             </Select>
@@ -194,7 +194,7 @@ class AddProjectDialog extends React.Component<AddProjectDialogProps, AddProject
                                                 fullWidth
                                                 displayEmpty
                                             >
-                                                {this.props.users?.map((user, ind) => {
+                                                {this.props.users?.filter(user => {return user.active}).map((user, ind) => {
                                                     return <MenuItem value={user.login} id={user.id}> {user.login} </MenuItem>
                                                 })}
                                             </Select>

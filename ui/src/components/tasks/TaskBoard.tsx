@@ -135,7 +135,10 @@ class TaskBoard extends React.Component<TaskBoardProps, TaskBoardState> {
                 (sourceDroppableId === 'tasksInProgress' && destinationDroppableId === 'tasksReady') ||
                 (sourceDroppableId === 'tasksOnTesting' && destinationDroppableId === 'tasksInProgress') ||
                 (sourceDroppableId === 'tasksOnTesting' && destinationDroppableId === 'tasksReady') ||
-                (sourceDroppableId === 'tasksReady' && destinationDroppableId === 'tasksDone'))) {
+                (sourceDroppableId === 'tasksReady' && destinationDroppableId === 'tasksDone') || (
+                    (this.props.userRole === SystemRole.MANAGER) &&
+                    (sourceDroppableId === 'tasksReady' && destinationDroppableId === 'tasksInProgress')
+                ))) {
             const [removed] = sourceClone.splice(droppableSource.index, 1);
             destClone.splice(droppableDestination.index, 0, removed);
             switch (destinationDroppableId) {
@@ -291,7 +294,8 @@ class TaskBoard extends React.Component<TaskBoardProps, TaskBoardState> {
                                     <Droppable
                                         droppableId='tasksInProgress'
                                         isDropDisabled={(this.state.sourceType !== 'tasksOnTesting') && (this.state.sourceType !== 'tasksCreated') &&
-                                                 (this.state.sourceType !== 'tasksInProgress')}
+                                                 (this.state.sourceType !== 'tasksInProgress') &&
+                                        ((this.props.userRole !== SystemRole.MANAGER) && (this.state.sourceType !== 'tasksReady'))}
                                     >
                                         {(provided, snapshot) => (
                                             <div
