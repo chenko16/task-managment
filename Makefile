@@ -32,3 +32,6 @@ stop:
 
 logs:
 	cd deploy && $(DOCKER_COMPOSE) logs
+
+pg-logs:
+	docker exec -it deploy_appbackend_1 cat /var/log/postgresql/postgresql-13-main.log
