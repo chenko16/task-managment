@@ -1,22 +1,24 @@
-import * as React from "react";
-import {Grid} from "@material-ui/core";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import * as authSelectors from "../../store/auth/Reducer";
-import * as userSelectors from "../../store/users/Reducer";
-import * as userActions from "../../store/users/Actions";
-import * as projectSelectors from "../../store/project/Reducer";
-import * as projectActions from "../../store/project/Actions";
-import * as notificationActions from "../../store/notification/Actions";
-import {connect} from "react-redux";
-import {SystemRole, User, UserRequest} from "../../store/users/Types";
-import {SettingsForm} from "../../components/settings/SettingsForm";
+import * as React from 'react';
+import {Grid} from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import * as authSelectors from '../../store/auth/Reducer';
+import * as userSelectors from '../../store/users/Reducer';
+import * as userActions from '../../store/users/Actions';
+import * as projectSelectors from '../../store/project/Reducer';
+import * as projectActions from '../../store/project/Actions';
+import * as notificationActions from '../../store/notification/Actions';
+import {connect} from 'react-redux';
+import {SystemRole, User, UserRequest} from '../../store/users/Types';
+import {SettingsForm} from '../../components/settings/SettingsForm';
 import {
     BusinessRole,
     Project,
     ProjectRequest,
     ProjectsByUsers,
     UserProject
-} from "../../store/project/Types";
+} from '../../store/project/Types';
+import {withRouter} from 'react-router';
+import {RouteProps} from 'react-router-dom';
 
 export interface SettingsViewDispatchProps {
     displayError(msg: string): any,
@@ -77,7 +79,7 @@ export interface SettingsViewState {
     currentProject?: Project
 }
 
-class SettingsView extends React.Component<SettingsViewStateProps & SettingsViewDispatchProps & SettingsViewProps, SettingsViewState> {
+class SettingsView extends React.Component<SettingsViewStateProps & SettingsViewDispatchProps & SettingsViewProps & RouteProps, SettingsViewState> {
     constructor(props) {
         super(props);
         this.state = {
@@ -89,21 +91,21 @@ class SettingsView extends React.Component<SettingsViewStateProps & SettingsView
 
     getUserRoleProjects(userProjects: ProjectsByUsers, projects: Project[]): Project[] {
         let projectIds: number[] = [];
-        userProjects.reporters?.forEach((id) => {
+        userProjects?.reporters?.forEach((id) => {
             if (projectIds.filter(projectId => {
                 return projectId === id
             }).length === 0) {
                 projectIds.push(id)
             }
         })
-        userProjects.assignee?.forEach((id) => {
+        userProjects?.assignee?.forEach((id) => {
             if (projectIds.filter(projectId => {
                 return projectId === id
             }).length === 0) {
                 projectIds.push(id)
             }
         })
-        userProjects.participants?.forEach((role) => {
+        userProjects?.participants?.forEach((role) => {
             if (projectIds.filter((id) => {
                 return id === role.projectId
             }).length === 0) {
@@ -120,7 +122,6 @@ class SettingsView extends React.Component<SettingsViewStateProps & SettingsView
         if (this.props.isLoading)
             return this.renderLoader();
 
-        //console.log(JSON.stringify(this.props, null, 2));
         return (
             <React.Fragment>
                 <SettingsForm
@@ -135,21 +136,25 @@ class SettingsView extends React.Component<SettingsViewStateProps & SettingsView
                     createUser={(user) => {
                         this.props.createUser(user, () => {
                             this.props.fetchUsers();
+                            this.props.history.push('/users')
                         })
                     }}
                     updateUserStatus={(id, status) => {
                         this.props.updateUserStatus(id, status, () => {
                             this.props.fetchUsers();
+                            this.props.history.push('/users')
                         })
                     }}
                     updateUserRole={(id, role) => {
                         this.props.updateUserRole(id, role, () => {
                             this.props.fetchUsers();
+                            this.props.history.push('/users')
                         })
                     }}
                     deleteUser={(id) => {
                         this.props.deleteUser(id, () => {
                             this.props.fetchUsers();
+                            this.props.history.push('/users')
                         })
                     }}
                     projectsByUser={this.props.projectsByUser}
@@ -161,12 +166,14 @@ class SettingsView extends React.Component<SettingsViewStateProps & SettingsView
                     deleteProject={(projectId) => {
                         this.props.deleteProject(projectId, () => {
                             this.props.fetchProjects();
+                            this.props.history.push('/settings')
                         })
                     }}
                     updateReporter={this.props.updateReporter}
                     updateProjectStatus={(projectId, status) => {
                         this.props.updateProjectStatus(projectId, status, () => {
                             this.props.fetchProjects();
+                            this.props.history.push('/settings')
                         })
                     }}
                     fetchProject={this.props.fetchProject}
@@ -193,8 +200,8 @@ class SettingsView extends React.Component<SettingsViewStateProps & SettingsView
 
     renderLoader() {
         return (
-            <Grid container style={{width: "100%", marginTop: 32, paddingBottom: 32}} justify="center"
-                  alignItems="center">
+            <Grid container style={{width: '100%', marginTop: 32, paddingBottom: 32}} justify='center'
+                  alignItems='center'>
                 <Grid item>
                     <CircularProgress disableShrink/>
                 </Grid>
@@ -280,4 +287,4 @@ function mapDispatchToProps(dispatch: any): SettingsViewDispatchProps {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SettingsView);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SettingsView));

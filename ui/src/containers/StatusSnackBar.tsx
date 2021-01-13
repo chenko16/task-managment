@@ -11,12 +11,12 @@ import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import WarningIcon from '@material-ui/icons/Warning';
 import {WithStyles, withStyles} from '@material-ui/core/styles';
-import * as notificationSelectors from "../store/notification/Reducer";
-import * as notificationActions from "../store/notification/Actions";
-import connect from "react-redux/es/connect/connect";
-import autoBind from "react-autobind/src/autoBind";
-import {ApplicationState} from "../store/Store";
-import {blue} from "@material-ui/core/colors";
+import * as notificationSelectors from '../store/notification/Reducer';
+import * as notificationActions from '../store/notification/Actions';
+import connect from 'react-redux/es/connect/connect';
+import autoBind from 'react-autobind/src/autoBind';
+import {ApplicationState} from '../store/Store';
+import {blue} from '@material-ui/core/colors';
 
 
 const styles = theme => ({
@@ -91,18 +91,18 @@ class StatusSnackBar extends React.Component<MergedProps, any> {
       >
         <SnackbarContent
           className={classNames(classes[this.props.variant])}
-          aria-describedby="client-snackbar"
+          aria-describedby='client-snackbar'
           message={
-            <span id="client-snackbar" className={classes.message}>
+            <span id='client-snackbar' className={classes.message}>
           <Icon className={classNames(classes.icon, classes.iconVariant)}/>
               {this.props.message}
         </span>
           }
           action={[
             <IconButton
-              key="close"
-              aria-label="Close"
-              color="inherit"
+              key='close'
+              aria-label='Close'
+              color='inherit'
               onClick={this.handleClose}
             >
               <CloseIcon className={classes.icon}/>

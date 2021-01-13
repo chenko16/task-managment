@@ -1,11 +1,11 @@
-import * as React from "react";
-import {SystemRole, User, UserRequest} from "../../store/users/Types";
-import UsersForm from "../users/UsersForm";
-import PersonIcon from "@material-ui/icons/Person";
-import FolderIcon from "@material-ui/icons/Folder";
-import {AppBar, Grid, Tab, Tabs} from "@material-ui/core";
-import {BusinessRole, Project, ProjectRequest, ProjectsByUsers, UserProject} from "../../store/project/Types";
-import ProjectsForm from "../projects/ProjectsForm";
+import * as React from 'react';
+import {SystemRole, User, UserRequest} from '../../store/users/Types';
+import UsersForm from '../users/UsersForm';
+import PersonIcon from '@material-ui/icons/Person';
+import FolderIcon from '@material-ui/icons/Folder';
+import {AppBar, Grid, Tab, Tabs} from '@material-ui/core';
+import {BusinessRole, Project, ProjectRequest, ProjectsByUsers, UserProject} from '../../store/project/Types';
+import ProjectsForm from '../projects/ProjectsForm';
 
 
 export interface SettingsFormProps {
@@ -80,7 +80,7 @@ export class SettingsForm extends React.Component<SettingsFormProps, SettingsFor
     buildParts() {
         this.schemeParts = [
             {
-                name: "Проекты",
+                name: 'Проекты',
                 value: <ProjectsForm
                     role={this.props.role}
                     currentUser={this.props.currentUser}
@@ -110,7 +110,7 @@ export class SettingsForm extends React.Component<SettingsFormProps, SettingsFor
                 icon: <FolderIcon/>
             },
             {
-                name: "Пользователи",
+                name: 'Пользователи',
                 value: <UsersForm
                     role={this.props.role}
                     users={this.props.users}
@@ -139,16 +139,15 @@ export class SettingsForm extends React.Component<SettingsFormProps, SettingsFor
     }
 
     render() {
-        // console.log(JSON.stringify(this.props, null, 2))
         this.buildParts()
         return (
             <React.Fragment>
-                <Grid container justify="center">
-                    <Grid spacing={2} style={{width: "100%", marginTop: 12}}>
-                        <Grid item xs={6} style={{maxWidth: "100%"}}>
-                            <AppBar position="static">
+                <Grid container justify='center'>
+                    <Grid spacing={2} style={{width: '100%', marginTop: 12}}>
+                        <Grid item xs={6} style={{maxWidth: '100%'}}>
+                            <AppBar position='static'>
                                 <Tabs
-                                    style={{maxWidth: "500"}}
+                                    style={{maxWidth: '500'}}
                                     centered
                                     value={this.state.currentTab}
                                     onChange={(event, value) => {
@@ -164,8 +163,8 @@ export class SettingsForm extends React.Component<SettingsFormProps, SettingsFor
                             </AppBar>
                         </Grid>
                     </Grid>
-                    <Grid spacing={2} style={{width: "100%", marginTop: 12}}>
-                        <Grid item xs={10} style={{maxWidth: "100%"}}>
+                    <Grid spacing={2} style={{width: '100%', marginTop: 12}}>
+                        <Grid item xs={10} style={{maxWidth: '100%'}}>
                             {this.schemeParts[this.state.currentTab].value}
                         </Grid>
                     </Grid>

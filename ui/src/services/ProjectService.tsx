@@ -1,10 +1,7 @@
-import BackendProvider from "./BackendProvider";
-import {BusinessRole, Project, ProjectRequest, ProjectsByUsers, UserProject} from "../store/project/Types";
-import {SystemRole, User} from "../store/users/Types";
-
+import BackendProvider from './BackendProvider';
+import {BusinessRole, Project, ProjectRequest, ProjectsByUsers, UserProject} from '../store/project/Types';
 
 export class ProjectService {
-
 
     static async createProject(
         project: ProjectRequest,
@@ -19,9 +16,9 @@ export class ProjectService {
         } else {
             //let body = await result.json();
             if (project.id) {
-                errorCallback("Ошибка при редактировании проекта.")
+                errorCallback('Ошибка при редактировании проекта.')
             } else {
-                errorCallback("Ошибка при добавлении проекта.");
+                errorCallback('Ошибка при добавлении проекта.');
             }
         }
     }
@@ -37,7 +34,7 @@ export class ProjectService {
             let body = await result.json();
             okCallback(body as Project);
         } else {
-            errorCallback("Ошибка при получении информации о проекте.")
+            errorCallback('Ошибка при получении информации о проекте.')
         }
     }
 
@@ -51,7 +48,7 @@ export class ProjectService {
             let body = await result.json();
             okCallback(body as Project[]);
         } else {
-            errorCallback("Ошибка при получении списка проектов.")
+            errorCallback('Ошибка при получении списка проектов.')
         }
     }
 
@@ -65,7 +62,7 @@ export class ProjectService {
         if (result.ok) {
             okCallback(id)
         } else {
-            errorCallback("Ошибка при удалении проекта.")
+            errorCallback('Ошибка при удалении проекта.')
         }
     }
 
@@ -80,7 +77,7 @@ export class ProjectService {
         if (result.ok) {
             okCallback(id);
         } else {
-            errorCallback("Ошибка при обновлении имени.");
+            errorCallback('Ошибка при обновлении имени.');
         }
     }
 
@@ -95,7 +92,7 @@ export class ProjectService {
         if (result.ok) {
             okCallback(id);
         } else {
-            errorCallback("Ошибка при обновлении описания.");
+            errorCallback('Ошибка при обновлении описания.');
         }
     }
 
@@ -110,7 +107,7 @@ export class ProjectService {
         if (result.ok) {
             okCallback(id);
         } else {
-            errorCallback("Ошибка при обновлении статуса.");
+            errorCallback('Ошибка при обновлении статуса.');
         }
     }
 
@@ -125,7 +122,7 @@ export class ProjectService {
         if (result.ok) {
             okCallback(id);
         } else {
-            errorCallback("Ошибка при обновлении руководителя.");
+            errorCallback('Ошибка при обновлении руководителя.');
         }
     }
 
@@ -140,7 +137,7 @@ export class ProjectService {
         if (result.ok) {
             okCallback(id);
         } else {
-            errorCallback("Ошибка при обновлении создателя.");
+            errorCallback('Ошибка при обновлении создателя.');
         }
     }
 
@@ -155,7 +152,7 @@ export class ProjectService {
         if (result.ok) {
             okCallback(id);
         } else {
-            errorCallback("Ошибка при добавлении участника.");
+            errorCallback('Ошибка при добавлении участника.');
         }
     }
 
@@ -170,7 +167,7 @@ export class ProjectService {
         if (result.ok) {
             okCallback(id);
         } else {
-            errorCallback("Ошибка при удалении участника.");
+            errorCallback('Ошибка при удалении участника.');
         }
     }
 
@@ -187,7 +184,7 @@ export class ProjectService {
         if (result.ok) {
             okCallback(id);
         } else {
-            errorCallback("Ошибка при изменении роли участника.");
+            errorCallback('Ошибка при изменении роли участника.');
         }
     }
 
@@ -202,7 +199,7 @@ export class ProjectService {
             let body = await result.json();
             okCallback(body as UserProject[]);
         } else {
-            errorCallback("Ошибка при получении списка участников проекта.");
+            errorCallback('Ошибка при получении списка участников проекта.');
         }
     }
 
@@ -217,7 +214,7 @@ export class ProjectService {
             let body = await result.json();
             okCallback(body as ProjectsByUsers);
         } else {
-            errorCallback("Ошибка при получении списка проектов пользователя.")
+            errorCallback('Ошибка при получении списка проектов пользователя.')
         }
     }
 

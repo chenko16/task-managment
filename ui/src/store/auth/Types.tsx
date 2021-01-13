@@ -1,4 +1,4 @@
-import {SystemRole} from "../users/Types";
+import {SystemRole} from '../users/Types';
 
 export interface AuthResult {
     role: SystemRole,

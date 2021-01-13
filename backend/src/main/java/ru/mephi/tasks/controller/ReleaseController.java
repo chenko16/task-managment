@@ -55,4 +55,18 @@ public class ReleaseController {
         releaseService.finishRelease(id);
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping(value = "/{id}/task/{taskId}")
+    @Operation(description = "Add task to release")
+    public ResponseEntity<Void> addTaskToRelease(@PathVariable Long id, @PathVariable Long taskId) {
+        releaseService.addTask(id, taskId);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping(value = "/{id}/task/{taskId}")
+    @Operation(description = "Remove task from release")
+    public ResponseEntity<Void> removeTaskToRelease(@PathVariable Long id, @PathVariable Long taskId) {
+        releaseService.removeTask(id, taskId);
+        return ResponseEntity.ok().build();
+    }
 }

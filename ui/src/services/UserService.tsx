@@ -1,5 +1,5 @@
-import {SystemRole, User, UserRequest} from "../store/users/Types";
-import BackendProvider from "./BackendProvider";
+import {SystemRole, User, UserRequest} from '../store/users/Types';
+import BackendProvider from './BackendProvider';
 
 export class UserService {
 
@@ -15,9 +15,9 @@ export class UserService {
             okCallback(body as User)
         } else {
             if (user.id) {
-                errorCallback("Ошибка при редактировании пользователя.")
+                errorCallback('Ошибка при редактировании пользователя.')
             } else {
-                errorCallback("Ошибка при добавлении пользователя.");
+                errorCallback('Ошибка при добавлении пользователя.');
             }
         }
     }
@@ -33,7 +33,7 @@ export class UserService {
             let body = await result.json();
             okCallback(body as User);
         } else {
-            errorCallback("Ошибка при получении информации о пользователе.")
+            errorCallback('Ошибка при получении информации о пользователе.')
         }
     }
 
@@ -41,13 +41,13 @@ export class UserService {
         okCallback: (users: User[]) => void,
         errorCallback: (errorMessage: string) => void) {
 
-        let result = await BackendProvider.request('GET', '/user/list');
+        let result = await BackendProvider.request('GET', '/user');
 
         if (result.ok) {
             let body = await result.json();
             okCallback(body as User[]);
         } else {
-            errorCallback("Ошибка при получении списка пользователей.")
+            errorCallback('Ошибка при получении списка пользователей.')
         }
     }
 
@@ -61,7 +61,7 @@ export class UserService {
         if (result.ok) {
             okCallback(id)
         } else {
-            errorCallback("Ошибка при удалении пользователя.")
+            errorCallback('Ошибка при удалении пользователя.')
         }
     }
 
@@ -76,7 +76,7 @@ export class UserService {
         if (result.ok) {
             okCallback(id);
         } else {
-            errorCallback("Ошибка при обновлении статуса.");
+            errorCallback('Ошибка при обновлении статуса.');
         }
     }
 
@@ -91,7 +91,7 @@ export class UserService {
         if (result.ok) {
             okCallback(id)
         } else {
-            errorCallback("Ошибка при обновлении роли.")
+            errorCallback('Ошибка при обновлении роли.')
         }
     }
 
@@ -99,7 +99,7 @@ export class UserService {
         return {
             id: -1,
             systemRole: SystemRole.USER,
-            login: "",
+            login: '',
             active: false
         }
     }

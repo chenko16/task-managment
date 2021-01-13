@@ -1,5 +1,3 @@
-import {deepOrange, green, purple, yellow} from "@material-ui/core/colors";
-
 export default class Utils {
 
     static getUserColor (login) {
@@ -25,6 +23,3 @@ export default class Utils {
         }
     };
 }
-
-//<Avatar src={"https://ui-avatars.com/api/?size=96&name=Artemiy+Lebedev&font-size=0.33&background=CCCCFF&color=000&rounded=true"}  />
-//

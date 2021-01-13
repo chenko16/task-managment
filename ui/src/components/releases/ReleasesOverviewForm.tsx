@@ -1,14 +1,15 @@
-import * as React from "react";
-import {SystemRole, User} from "../../store/users/Types";
-import {Project, ProjectRequest} from "../../store/project/Types";
-import {Release, ReleaseRequest} from "../../store/releases/Types";
-import MaterialTable from "material-table";
-import {Chip, Fab} from "@material-ui/core";
-import AddBtn from "@material-ui/icons/Add";
-import {forwardRef} from "react";
-import {Add, ArrowDownward, Check, Clear, Delete, Edit, Remove, Search} from "@material-ui/icons";
-import AddReleaseDialog from "./AddReleaseDialog";
-
+import * as React from 'react';
+import {SystemRole, User} from '../../store/users/Types';
+import {Project} from '../../store/project/Types';
+import {Release, ReleaseRequest} from '../../store/releases/Types';
+import MaterialTable from 'material-table';
+import {Chip, Fab} from '@material-ui/core';
+import AddBtn from '@material-ui/icons/Add';
+import {forwardRef} from 'react';
+import {Add, ArrowDownward, Check, Clear, Delete, Edit, Remove, Search} from '@material-ui/icons';
+import AddReleaseDialog from './AddReleaseDialog';
+import {withRouter} from 'react-router';
+import {RouteProps} from 'react-router-dom';
 
 const tableIcons = {
     ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref}/>),
@@ -42,7 +43,7 @@ export interface ReleasesOverviewFormState {
     columns: any[]
 }
 
-export class ReleasesOverviewForm extends React.Component<ReleasesOverviewFormProps, ReleasesOverviewFormState> {
+class ReleasesOverviewForm extends React.Component<ReleasesOverviewFormProps & RouteProps, ReleasesOverviewFormState> {
     constructor(props) {
         super(props);
         this.state = {
@@ -55,7 +56,7 @@ export class ReleasesOverviewForm extends React.Component<ReleasesOverviewFormPr
                 {
                     title: 'Ответственный',
                     field: 'reporter',
-                    render: (rowData) => (<Chip label={rowData.reporter.login} color={"primary"}/>)
+                    render: (rowData) => (<Chip label={rowData.reporter.login} color={'primary'}/>)
                 },
                 {
                     title: 'Открыт', field: 'created', type: 'date'
@@ -69,13 +70,11 @@ export class ReleasesOverviewForm extends React.Component<ReleasesOverviewFormPr
 
 
     render(): React.ReactNode {
-        // console.log(JSON.stringify(this.state, null, 2))
-        // console.log(JSON.stringify(this.props, null, 2))
-        return (
+       return (
             <React.Fragment>
                 <MaterialTable
                     icons={tableIcons}
-                    title="Релизы"
+                    title='Релизы'
                     options={{
                         search: true,
                         paging: false,
@@ -87,18 +86,18 @@ export class ReleasesOverviewForm extends React.Component<ReleasesOverviewFormPr
                     data={this.props.releases}
                     localization={{
                         toolbar: {
-                            searchTooltip: "Поиск",
-                            searchPlaceholder: "Найти релиз"
+                            searchTooltip: 'Поиск',
+                            searchPlaceholder: 'Найти релиз'
                         },
                         body: {
-                            emptyDataSourceMessage: "Список релизов пуст",
-                            addTooltip: "",
-                            deleteTooltip: "Удалить",
-                            editTooltip: "Редактировать",
+                            emptyDataSourceMessage: 'Список релизов пуст',
+                            addTooltip: '',
+                            deleteTooltip: 'Удалить',
+                            editTooltip: 'Редактировать',
                             editRow: {
-                                deleteText: "Вы уверены, что хотите удалить релиз?",
-                                cancelTooltip: "Отмена",
-                                saveTooltip: "Подтвердить"
+                                deleteText: 'Вы уверены, что хотите удалить релиз?',
+                                cancelTooltip: 'Отмена',
+                                saveTooltip: 'Подтвердить'
                             }
                         },
                         header: {
@@ -106,7 +105,9 @@ export class ReleasesOverviewForm extends React.Component<ReleasesOverviewFormPr
                         }
                     }}
                     onRowClick={(event, rowData: Release) => {
-                       console.log(rowData)
+                        event.preventDefault();
+                        event.stopPropagation();
+                        this.props.history.push('/releases/' + rowData.name + '&' + rowData.id)
                     }}
                 />
 
@@ -118,19 +119,16 @@ export class ReleasesOverviewForm extends React.Component<ReleasesOverviewFormPr
                     close={(value)=> {this.setState({openAdd: value})}}
                     onClose={(value, releaseRequest) => {
                         if (value === 'Ok' && releaseRequest) {
-                            console.log(releaseRequest)
-                            this.props.createRelease(releaseRequest, () => {
-                                this.props.fetchReleases();
-                            });
+                            this.props.createRelease(releaseRequest);
                         }
                     }}
                 />}
 
                 <Fab
-                    color="primary"
-                    aria-label="Add"
+                    color='primary'
+                    aria-label='Add'
                     style={{
-                        position: "fixed", bottom: 24, right: 24
+                        position: 'fixed', bottom: 24, right: 24
                     }}
                     onClick={(e) => {
                         this.setState({openAdd: true})
@@ -141,5 +139,6 @@ export class ReleasesOverviewForm extends React.Component<ReleasesOverviewFormPr
             </React.Fragment>
         )
     }
-
 }
+
+export default withRouter(ReleasesOverviewForm)

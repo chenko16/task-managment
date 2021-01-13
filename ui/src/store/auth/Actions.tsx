@@ -1,7 +1,9 @@
 import AuthService from '../../services/AuthService'
 import * as notificationActions from '../notification/Actions'
-import {createAsyncAction} from "typesafe-actions";
-import {AuthResult} from "./Types";
+import {createAsyncAction} from 'typesafe-actions';
+import {AuthResult} from './Types';
+import jwt_decode from 'jwt-decode';
+import {Release} from "../releases/Types";
 
 export const logoutAction = createAsyncAction(
     '@auth/LOGOUT_REQ',
@@ -15,20 +17,43 @@ export const authActions = createAsyncAction(
     '@auth/REGISTER_FAIL'
 )<void, AuthResult, void>();
 
+export const checkAuthAction = createAsyncAction(
+    '@auth/CHECK_REQ',
+    '@auth/CHECK_SUCC',
+    '@auth/CHECK_FAIL'
+)<void, AuthResult, void>()
+
 export const logout = () => {
     return (dispatch, getState) => {
         dispatch(logoutAction.request());
         dispatch(logoutAction.success());
-        sessionStorage.removeItem("jwtToken")
+        localStorage.removeItem("jwtToken")
     }
 }
 
-export const authorize = (login: string, password: string) => {
+export const checkAuth = () => {
+    return (dispatch, getState) => {
+        dispatch(checkAuthAction.request);
+        const token = localStorage.getItem("jwtToken");
+        const jwt = token !== null ? jwt_decode(token) : undefined;
+        dispatch(checkAuthAction.success(
+            {
+                login: jwt?.sub,
+                role: jwt?.role,
+                token: token,
+                exp: jwt?.exp
+            }
+        ))
+    }
+}
+
+export const authorize = (login: string, password: string, callback: () => void) => {
     return (dispatch, getState) => {
         dispatch(authActions.request());
         AuthService.auth(login, password, (authResult) => {
             dispatch(authActions.success(authResult));
-            dispatch(notificationActions.success("Добро пожаловать!"))
+            callback();
+            dispatch(notificationActions.success('Добро пожаловать!'))
         }, error => {
             dispatch(notificationActions.error(error))
         });

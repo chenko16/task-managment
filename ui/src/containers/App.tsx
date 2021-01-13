@@ -1,49 +1,39 @@
 import * as React from 'react'
 import clsx from 'clsx';
 import 'typeface-roboto'
-import {Link as RouterLink, ReactRouterProps, Route} from "react-router-dom"
+import {Link as RouterLink, ReactRouterProps, Route} from 'react-router-dom'
 import autoBind from 'react-autobind';
 import {connect} from 'react-redux';
-import Box from "@material-ui/core/Box";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import Link from "@material-ui/core/Link";
-import {withRouter} from "react-router"
-import ClickAwayListener from "@material-ui/core/ClickAwayListener";
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import Link from '@material-ui/core/Link';
+import {withRouter} from 'react-router'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import {Divider, Grid, List, ListItem, ListItemIcon, ListItemText, Theme, Tooltip} from '@material-ui/core';
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Drawer from "@material-ui/core/Drawer";
-import IconButton from "@material-ui/core/IconButton";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Drawer from '@material-ui/core/Drawer';
+import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import withStyles from "@material-ui/core/styles/withStyles";
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import withStyles from '@material-ui/core/styles/withStyles';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import MenuIcon from '@material-ui/icons/Menu';
-import OutlinePersonIcon from "@material-ui/icons/PersonOutline";
+import OutlinePersonIcon from '@material-ui/icons/PersonOutline';
 import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
 
 import * as authSelectors from '../store/auth/Reducer';
-import * as authActions from "../store/auth/Actions";
-import {blue} from "@material-ui/core/colors";
-import AuthView from "./auth/AuthView";
-import {mapRole, SystemRole} from "../store/users/Types";
-import SettingsView from "./settings/SettingsView";
-import ReleasesRouter from "./releases/ReleasesRouter";
-
-// import MonitoringView from './monitoring/MonitoringView';
-// import GroupRouter from "./group/GroupRouter";
-// import UserRouter from "./users/UserRouter";
-// import ProjectRouter from "./projects/ProjectRouter";
-// import FlowRouter from "./processing/FlowRouter";
-// import KafkaRouter from "../components/kafka/KafkaRouter";
-// import TracingRouter from "../containers/tracing/TracingRouter";
-// import SettingView from "./settings/SettingView";
-// import IndexView from "./index/IndexView"
-// import SolrIcon from '../components/index/SolrIcon';
+import * as authActions from '../store/auth/Actions';
+import {blue} from '@material-ui/core/colors';
+import AuthView from './auth/AuthView';
+import {mapRole, SystemRole} from '../store/users/Types';
+import SettingsView from './settings/SettingsView';
+import ReleasesRouter from './releases/ReleasesRouter';
+import TasksRouter from './tasks/TasksRouter';
 
 const drawerWidth = 216
 const drawerCloseWidth = 72
@@ -70,16 +60,16 @@ const styles = theme => ({
   },
 
   fixedBlocksWrapper: {
-    position: "fixed" as any,
+    position: 'fixed' as any,
     top: 0,
-    width: "100%",
+    width: '100%',
     zIndex: 1000
   },
   headerWrapper: {
-    position: "relative" as any,
+    position: 'relative' as any,
     zIndex: 1000,
     top: 0,
-    width: "100%",
+    width: '100%',
     height: topBarSize,
   },
 
@@ -92,13 +82,13 @@ const styles = theme => ({
   avatarWrapper: {
     width: theme.spacing(7) + 1,
     height: topBarSize,
-    position: "relative" as any,
+    position: 'relative' as any,
     '&::after': {
       'box-sizing': 'border-box',
       width: 1,
       left: theme.spacing(7) + 1,
       right: 0,
-      position: "absolute" as any,
+      position: 'absolute' as any,
       content: "''",
       top: 14,
       bottom: 0,
@@ -114,11 +104,11 @@ const styles = theme => ({
     padding: 16
   },
   breadcrumbLink: {
-    cursor: "pointer"
+    cursor: 'pointer'
   },
   mainWindow: {
     zIndex: 5,
-    position: "sticky" as any,
+    position: 'sticky' as any,
     right: 0,
     top: topBarSize,
    // left: theme.spacing(7) + 1,
@@ -132,13 +122,13 @@ const styles = theme => ({
   },
 
   version: {
-    position: "absolute" as any,
+    position: 'absolute' as any,
     bottom: 0,
-    left: "47%"
+    left: '47%'
   },
 
   userIconBlock: {
-    position: "absolute" as any,
+    position: 'absolute' as any,
     right: 0,
     top: 0,
     bottom: 0,
@@ -193,7 +183,7 @@ const styles = theme => ({
     width: topBarSize + 6,
     height: topBarSize + 6,
     marginLeft: 2,
-    position: "absolute" as any,
+    position: 'absolute' as any,
   },
 
   appBarSpacer: {
@@ -201,7 +191,7 @@ const styles = theme => ({
   },
 
   drawerOpen: {
-    position: "fixed" as any,
+    position: 'fixed' as any,
     overflowX: 'hidden' as any,
     width: drawerWidth,
     boxShadow: '3px 0px 1px -2px rgba(0,0,0,0.2)',
@@ -214,7 +204,7 @@ const styles = theme => ({
     })
   },
   drawerClose: {
-    position: "fixed" as any,
+    position: 'fixed' as any,
     zIndex: 1000,
     top: topBarSize,
     bottom: 0,
@@ -258,19 +248,19 @@ const styles = theme => ({
   },
 
   drawerList: {
-    position: "absolute" as any,
-    width: "100%",
+    position: 'absolute' as any,
+    width: '100%',
     top: 0,
     bottom: 16
   },
   drawerHideList: {
-    position: "absolute" as any,
+    position: 'absolute' as any,
     bottom: 0
   },
 
   arrowRightButton: {
     bottom: 5,
-    position: "fixed" as any,
+    position: 'fixed' as any,
     marginRight: 0,
   },
   arrowRightButtonHidden: {
@@ -279,7 +269,7 @@ const styles = theme => ({
 
   arrowLeftButton: {
     bottom: 5,
-    position: "fixed" as any,
+    position: 'fixed' as any,
     marginRight: 0,
   },
   arrowLeftButtonHidden: {
@@ -315,24 +305,13 @@ const styles = theme => ({
 
 })
 
-export const ERROR_500_MESSAGE = "Внутренняя ошибка сервиса. Обратитесь к администратору.";
-export const ERROR_SOME_SERVICES_ARE_NOT_AVAILABLE = "Некоторые сервисы в данный момент недоступны.";
-
-export const HtmlTooltip = withStyles((theme: Theme) => ({
-  tooltip: {
-    backgroundColor: '#f5f5f9',
-    color: 'rgba(0, 0, 0, 0.87)',
-    maxWidth: 500,
-    fontSize: theme.typography.pxToRem(12),
-    border: '1px solid #dadde9',
-  },
-}))(Tooltip);
-
 const navMappings = {
   task: ['Задачи', null],
   releases: ['Релизы', null],
   settings: ['Настройки', null],
-  users: ['Пользователи', null]
+  users: ['Пользователи', null],
+  release: ['Релиз', null],
+  tasks: ['Задачи', null]
 }
 
 interface AppState {
@@ -346,15 +325,16 @@ interface AppProps {
   isAuthenticated: boolean,
   isAuthPerformed: boolean,
   checkAuth: boolean,
-  logout(): any
+  logout(): any,
+  checkAuthAction(): any
 }
 
 class App extends React.Component<AppProps & ReactRouterProps, AppState> {
 
   menuItems = [
-    {icon: <AssignmentTurnedInIcon/>, text: "Задачи", link: "/tasks"},
-    {icon: <FavoriteIcon/>, text: "Релизы", link: "/releases"},
-    {icon: <SettingsApplicationsIcon/>, text: "Настройки", link: "/settings"}
+    {icon: <AssignmentTurnedInIcon/>, text: 'Задачи', link: '/tasks'},
+    {icon: <FavoriteIcon/>, text: 'Релизы', link: '/releases'},
+    {icon: <SettingsApplicationsIcon/>, text: 'Настройки', link: '/settings'}
   ];
 
   intervalID;
@@ -362,6 +342,7 @@ class App extends React.Component<AppProps & ReactRouterProps, AppState> {
   constructor(props) {
     super(props);
     autoBind(this);
+    // this.props.checkAuthAction();
     this.state = {
       isOpened: false
     }
@@ -392,8 +373,10 @@ class App extends React.Component<AppProps & ReactRouterProps, AppState> {
   }
 
   render() {
-
-    console.log(JSON.stringify(this.props, null,2))
+    if (!this.props.isAuthPerformed) {
+      this.props.checkAuthAction()
+      return this.renderLoader()
+    }
 
     if (!this.props.isAuthenticated) {
       return this.renderAuthView()
@@ -404,7 +387,7 @@ class App extends React.Component<AppProps & ReactRouterProps, AppState> {
 
   renderLoader() {
     return (
-      <Grid container style={{width: "100%", marginTop: 32, paddingBottom: 32}} justify="center" alignItems="center">
+      <Grid container style={{width: '100%', marginTop: 32, paddingBottom: 32}} justify='center' alignItems='center'>
         <Grid item>
           <CircularProgress disableShrink/>
         </Grid>
@@ -426,7 +409,7 @@ class App extends React.Component<AppProps & ReactRouterProps, AppState> {
     return (
       <React.Fragment>
         <div className={classes.root}>
-          <AppBar position="absolute" className={clsx(classes.appBar, this.state.isOpened && classes.appBarShift)}>
+          <AppBar position='absolute' className={clsx(classes.appBar, this.state.isOpened && classes.appBarShift)}>
             <Toolbar className={classes.toolbar}>
             {location && <div className={classes.breadcrumbBlock}>
               <Breadcrumbs>
@@ -437,10 +420,10 @@ class App extends React.Component<AppProps & ReactRouterProps, AppState> {
                   const redirect = navMappings[path] && navMappings[path][1] !== null ? navMappings[path][1] : to
                   return last ? (
                     <Typography>
-                      {marker}
+                      {marker.split('&')[0]}
                     </Typography>
                   ) : (
-                    <Link color="inherit" className={classes.breadcrumbLink} component={RouterLink} to={redirect}>
+                    <Link color='inherit' className={classes.breadcrumbLink} component={RouterLink} to={redirect}>
                       {marker}
                     </Link>
                   )
@@ -450,19 +433,19 @@ class App extends React.Component<AppProps & ReactRouterProps, AppState> {
             <div className={classes.userIconBlock}>
               <OutlinePersonIcon className={classes.userIcon}/>
               <div className={classes.userFillerBlock}/>
-              <Box boxShadow={1} bgcolor={"white"} className={classes.userInfoBlock}>
-                <Typography variant="subtitle1" color={"primary"}>
+              <Box boxShadow={1} bgcolor={'white'} className={classes.userInfoBlock}>
+                <Typography variant='subtitle1' color={'primary'}>
                   {this.getName()}
                 </Typography>
-                <Typography variant="body" color={"primary"}>
+                <Typography variant='body' color={'primary'}>
                   {mapRole[this.props.role]}
                 </Typography>
                 <Divider/>
                 <Button
-                  variant="outlined"
+                  variant='outlined'
                   onClick={() => this.props.logout()}
-                  style={{width: "100%", marginTop: 8}}
-                  color="primary">
+                  style={{width: '100%', marginTop: 8}}
+                  color='primary'>
                   Выйти
                 </Button>
               </Box>
@@ -472,7 +455,7 @@ class App extends React.Component<AppProps & ReactRouterProps, AppState> {
         <ClickAwayListener onClickAway={() => {
         }}>
           <Drawer
-              variant="permanent"
+              variant='permanent'
               classes={{
                 paper: clsx(classes.drawerPaper, !this.state.isOpened && classes.drawerPaperClose),
               }}
@@ -481,15 +464,15 @@ class App extends React.Component<AppProps & ReactRouterProps, AppState> {
             <div>
               <ListItem  style={{paddingBottom: 10 , paddingTop: 13, paddingLeft: 16, background: blue[900]}} >
                 <ListItemIcon>
-                  <MenuIcon style={{color: "white"}}/>
+                  <MenuIcon style={{color: 'white'}}/>
                 </ListItemIcon>
               </ListItem>
             </div>
             <List>{this.renderMenuList(this.menuItems)} </List>
             <div className={classes.toolbarIcon}>
               <IconButton
-                  edge="start"
-                  aria-label="open drawer"
+                  edge='start'
+                  aria-label='open drawer'
                   onClick={handleDrawerOpen}
                   className={clsx(classes.arrowRightButton, this.state.isOpened && classes.arrowRightButtonHidden)}
               >
@@ -508,10 +491,10 @@ class App extends React.Component<AppProps & ReactRouterProps, AppState> {
         <main className={classes.content}>
           <div className={classes.appBarSpacer}/>
           <div className={classes.mainWindow}>
-            {/*<Route path="/tasks" component={TaskRouter}/>*/}
-            <Route path="/releases" component={ReleasesRouter}/>
-            <Route path="/settings" component={SettingsView}/>
-            <Route path="/users" exact={true} render={() => <SettingsView currentTab={1}/>}/>
+            <Route path='/tasks' component={TasksRouter}/>
+            <Route path='/releases' component={ReleasesRouter}/>
+            <Route path='/settings' component={SettingsView}/>
+            <Route path='/users' exact={true} render={() => <SettingsView currentTab={1}/>}/>
           </div>
         </main>
         </div>
@@ -526,7 +509,7 @@ class App extends React.Component<AppProps & ReactRouterProps, AppState> {
   getName() {
     let val = this.props.login;
     if (val.length > 10) {
-      val = val.substr(0, 10) + "..."
+      val = val.substr(0, 10) + '...'
     }
     return val
   }
@@ -548,6 +531,9 @@ function mapDispatchProps(dispatch: any) {
   return {
     logout(): any {
       dispatch(authActions.logout())
+    },
+    checkAuthAction() : any {
+      dispatch(authActions.checkAuth())
     }
   }
 }

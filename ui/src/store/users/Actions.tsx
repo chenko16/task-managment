@@ -1,9 +1,9 @@
-import {createAsyncAction, createStandardAction} from "typesafe-actions";
-import {SystemRole, User, UserRequest} from "./Types";
-import {UserService} from "../../services/UserService";
-import * as notificationActions from "../../store/notification/Actions";
+import {createAsyncAction, createStandardAction} from 'typesafe-actions';
+import {SystemRole, User, UserRequest} from './Types';
+import {UserService} from '../../services/UserService';
+import * as notificationActions from '../../store/notification/Actions';
 
-export const reqFinished = createStandardAction("@user/REQ_FINISH")<void>();
+export const reqFinished = createStandardAction('@user/REQ_FINISH')<void>();
 
 export const createUserAction = createAsyncAction(
     '@user/CREATE_REQ',

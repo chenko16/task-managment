@@ -1,6 +1,6 @@
-import BackendProvider from "./BackendProvider";
+import BackendProvider from './BackendProvider';
 import jwt_decode from 'jwt-decode';
-import {AuthResult} from "../store/auth/Types";
+import {AuthResult} from '../store/auth/Types';
 
 export default class AuthService {
 
@@ -18,7 +18,9 @@ export default class AuthService {
         if (result.ok) {
             let body = await result.json();
             var decoded = jwt_decode(body.jwtToken);
-            sessionStorage.setItem("jwtToken", body.jwtToken);
+            if(localStorage.getItem("jwtToken") === null) {
+                localStorage.setItem("jwtToken", body.jwtToken);
+            }
             let authResult: AuthResult = {
                 login: decoded.sub,
                 role: decoded.role,
@@ -27,7 +29,7 @@ export default class AuthService {
             }
             okCallback(authResult)
         } else {
-            errorCallback("Неверный логин или пароль")
+            errorCallback('Неверный логин или пароль')
         }
     }
 }

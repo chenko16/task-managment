@@ -1,9 +1,8 @@
-import {Reducer} from "redux";
-import * as actions from "./Actions"
-import {ActionType, getType} from "typesafe-actions";
-import {ApplicationState} from "../Store";
-import {SystemRole} from "../users/Types";
-import App from "../../containers/App";
+import {Reducer} from 'redux';
+import * as actions from './Actions'
+import {ActionType, getType} from 'typesafe-actions';
+import {ApplicationState} from '../Store';
+import {SystemRole} from '../users/Types';
 
 export interface AuthStoreState {
     authPerformed : boolean,
@@ -28,6 +27,7 @@ export const initialState: AuthStoreState = {
 export type NotificationActions = ActionType<typeof actions>
 
 export const reducer: Reducer<AuthStoreState> = (state: AuthStoreState = initialState, action: NotificationActions) => {
+
     switch (action.type) {
         case getType(actions.authActions.success) :
             return {
@@ -40,6 +40,16 @@ export const reducer: Reducer<AuthStoreState> = (state: AuthStoreState = initial
                 authPerformed: true
             }
 
+        case getType(actions.checkAuthAction.success) :
+            return {
+                ...state,
+                authenticated: true,
+                login: action.payload.login,
+                role: action.payload.role,
+                jwtToken: action.payload.token,
+                expTime: action.payload.exp,
+                authPerformed: true
+            }
 
         case getType(actions.logoutAction.success):
             return {
@@ -69,7 +79,7 @@ export function isAuthenticated(state: ApplicationState) : boolean {
 }
 
 export function username(state: ApplicationState) : string {
-    return state.auth.login || "";
+    return state.auth.login || '';
 }
 
 export function getRole(state: ApplicationState) : SystemRole {

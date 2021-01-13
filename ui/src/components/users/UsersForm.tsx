@@ -1,16 +1,17 @@
-import * as React from "react";
-import {forwardRef} from "react";
-import MaterialTable from "material-table";
-import {Add, ArrowDownward, Check, Clear, Delete, Edit, Remove, Search} from "@material-ui/icons";
-import CloseIcon from "@material-ui/icons/Close";
-import AddBtn from "@material-ui/icons/Add";
-import {Avatar, Fab} from "@material-ui/core";
-import Utils from "../../store/users/Utils";
-import {SystemRole, User, UserRequest} from "../../store/users/Types";
-import {withRouter} from "react-router";
-import UserEditForm, {UserEditFormState} from "./UserEditForm";
-import {Project, ProjectsByUsers} from "../../store/project/Types";
-import AddUserDialog from "./AddUserDialog";
+import * as React from 'react';
+import {forwardRef} from 'react';
+import MaterialTable from 'material-table';
+import {Add, ArrowDownward, Check, Clear, Delete, Edit, Remove, Search} from '@material-ui/icons';
+import CloseIcon from '@material-ui/icons/Close';
+import AddBtn from '@material-ui/icons/Add';
+import {Avatar, Fab} from '@material-ui/core';
+import Utils from '../../store/users/Utils';
+import {SystemRole, User, UserRequest} from '../../store/users/Types';
+import {withRouter} from 'react-router';
+import UserEditForm, {UserEditFormState} from './UserEditForm';
+import {Project, ProjectsByUsers} from '../../store/project/Types';
+import AddUserDialog from './AddUserDialog';
+import ConfirmDialog from '../ConfirmDialog';
 
 const tableIcons = {
     ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref}/>),
@@ -48,7 +49,9 @@ export interface UsersFormState {
     columns: any[],
     currentUser?: User,
     openEdit: boolean,
-    openAdd: boolean
+    openAdd: boolean,
+    userToDelete?: number,
+    confirmDelete: boolean
 }
 
 class UsersForm extends React.Component<UsersFormProps, UsersFormState> {
@@ -56,21 +59,22 @@ class UsersForm extends React.Component<UsersFormProps, UsersFormState> {
         super(props);
 
         this.state = {
+            confirmDelete: false,
             columns: [
                 {title: 'id', field: 'id', hidden: true},
                 {
                     title: '', field: 'imageUrl',
                     render: rowData =>
-                        <Avatar src={"https://ui-avatars.com/api/?size=96&name=" + rowData.login
-                        + "&font-size=0.33&background=" + Utils.getUserColor(rowData.login) + "&color=000&rounded=true"}/>
+                        <Avatar src={'https://ui-avatars.com/api/?size=96&name=' + rowData.login
+                        + '&font-size=0.33&background=' + Utils.getUserColor(rowData.login) + '&color=000&rounded=true'}/>
                 },
                 {title: 'Логин', field: 'login'},
                 {
                     title: 'Роль', field: 'systemRole',
                     lookup: {
-                        "USER": 'Пользователь',
-                        "MANAGER": 'Менеджер',
-                        "ADMIN": 'Администратор'
+                        'USER': 'Пользователь',
+                        'MANAGER': 'Менеджер',
+                        'ADMIN': 'Администратор'
                     }
                 },
                 {
@@ -80,15 +84,24 @@ class UsersForm extends React.Component<UsersFormProps, UsersFormState> {
             openEdit: false,
             openAdd: false
         }
+        this.handleConfirmDialogDeleteClose = this.handleConfirmDialogDeleteClose.bind(this);
     }
 
+
+    handleConfirmDialogDeleteClose(value) {
+        this.setState({confirmDelete: false});
+        if (value === 'Ok') {
+            this.props.deleteUser(this.state.userToDelete);
+        }
+    }
+
+
     render(): React.ReactNode {
-        // console.log(JSON.stringify(this.props, null, 2))
         return (
             <React.Fragment>
                 <MaterialTable
                     icons={tableIcons}
-                    title="Пользователи"
+                    title='Пользователи'
                     options={{
                         search: true,
                         paging: false,
@@ -100,18 +113,18 @@ class UsersForm extends React.Component<UsersFormProps, UsersFormState> {
                     data={this.props.users}
                     localization={{
                         toolbar: {
-                            searchTooltip: "Поиск",
-                            searchPlaceholder: "Найти пользователя"
+                            searchTooltip: 'Поиск',
+                            searchPlaceholder: 'Найти пользователя'
                         },
                         body: {
-                            emptyDataSourceMessage: "Список пользоватлей пуст",
-                            addTooltip: "",
-                            deleteTooltip: "Удалить",
-                            editTooltip: "Редактировать",
+                            emptyDataSourceMessage: 'Список пользоватлей пуст',
+                            addTooltip: '',
+                            deleteTooltip: 'Удалить',
+                            editTooltip: 'Редактировать',
                             editRow: {
-                                deleteText: "Вы уверены, что хотите удалить пользователя?",
-                                cancelTooltip: "Отмена",
-                                saveTooltip: "Подтвердить"
+                                deleteText: 'Вы уверены, что хотите удалить пользователя?',
+                                cancelTooltip: 'Отмена',
+                                saveTooltip: 'Подтвердить'
                             }
                         },
                         header: {
@@ -123,10 +136,8 @@ class UsersForm extends React.Component<UsersFormProps, UsersFormState> {
                             icon: () => <CloseIcon style={{marginRight: 6}}/>,
                             tooltip: 'Удалить пользователя',
                             hidden: this.props.role !== SystemRole.ADMIN,
-                            onClick: (event, rowData) => {
-                                if (confirm("Вы уверены, что хотите удалить пользователя?")) {
-                                    this.props.deleteUser(rowData.id)
-                                }
+                            onClick: (event, rowData: User) => {
+                                this.setState({confirmDelete: true, userToDelete: rowData.id})
                             }
                         }
                     ]}
@@ -135,6 +146,14 @@ class UsersForm extends React.Component<UsersFormProps, UsersFormState> {
                             this.setState({currentUser: rowData, openEdit: true})
                         }
                     }}
+                />
+
+                <ConfirmDialog
+                    warningText={'Вы уверены, что хотите удалить пользователя?'}
+                    open={this.state.confirmDelete}
+                    okString={'Да'}
+                    cancelString={'Отмена'}
+                    onClose={this.handleConfirmDialogDeleteClose}
                 />
 
                 {this.state.openEdit && <UserEditForm
@@ -147,7 +166,9 @@ class UsersForm extends React.Component<UsersFormProps, UsersFormState> {
                         this.props.updateUserStatus(id, status)
                     }}
                     onClose={(value, data: UserEditFormState) => {
-                        this.props.updateUserRole(data.id, data.systemRole);
+                        if (value === 'Ok') {
+                            this.props.updateUserRole(data.id, data.systemRole);
+                        }
                     }}
                     close={value => this.setState({openEdit: value})}
                     currentUser={this.state.currentUser}
@@ -164,10 +185,10 @@ class UsersForm extends React.Component<UsersFormProps, UsersFormState> {
                 />}
 
                 {this.props.role === SystemRole.ADMIN && <Fab
-                    color="primary"
-                    aria-label="Add"
+                    color='primary'
+                    aria-label='Add'
                     style={{
-                        position: "fixed", bottom: 24, right: 24
+                        position: 'fixed', bottom: 24, right: 24
                     }}
                     onClick={(e) => {
                         this.setState({openAdd: true})
