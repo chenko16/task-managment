@@ -1,12 +1,12 @@
 #!/bin/bash
 set -e
-if ! [[ -d /var/lib/postgresql/10/main ]]; then
-    pg_dropcluster 10 main || true
-    pg_createcluster 10 main
+if ! [[ -d /var/lib/postgresql/13/main ]]; then
+    pg_dropcluster 13 main || true
+    pg_createcluster 13 main
 fi
 
-echo "host  all  all 0.0.0.0/0 md5" >> /etc/postgresql/10/main/pg_hba.conf
-echo "listen_addresses = '*'" >> /etc/postgresql/10/main/postgresql.conf
+echo "host  all  all 0.0.0.0/0 md5" >> /etc/postgresql/13/main/pg_hba.conf
+echo "listen_addresses = '*'" >> /etc/postgresql/13/main/postgresql.conf
 
 service postgresql start
 
