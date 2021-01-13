@@ -20,7 +20,7 @@ var setupApi = function (env, options) {
       case 'production' :
         // reverse proxy or same port
         console.log("using production mode")
-        apiHost = 'api/'
+        apiHost = 'api'
         break;
       default :
         console.log("using development mode")
