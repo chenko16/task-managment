@@ -3,6 +3,7 @@ import * as notificationActions from '../notification/Actions'
 import {createAsyncAction} from 'typesafe-actions';
 import {AuthResult} from './Types';
 import jwt_decode from 'jwt-decode';
+import {Release} from "../releases/Types";
 
 export const logoutAction = createAsyncAction(
     '@auth/LOGOUT_REQ',
@@ -46,11 +47,12 @@ export const checkAuth = () => {
     }
 }
 
-export const authorize = (login: string, password: string) => {
+export const authorize = (login: string, password: string, callback: () => void) => {
     return (dispatch, getState) => {
         dispatch(authActions.request());
         AuthService.auth(login, password, (authResult) => {
             dispatch(authActions.success(authResult));
+            callback();
             dispatch(notificationActions.success('Добро пожаловать!'))
         }, error => {
             dispatch(notificationActions.error(error))

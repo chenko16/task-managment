@@ -103,8 +103,30 @@ class EditProjectDialog extends React.Component<EditProjectDialogProps, EditProj
 
     componentDidMount(): void {
         this.props.fetchProject(this.props.currentProject?.id, (project: Project) => {
-            this.setState({active: project.active})
+            this.setState({
+                active: project.active,
+                id: project.id,
+                name: project.name,
+                description: project.description,
+                assigneeLogin: project.assignee.login,
+                assignee: project.assignee,
+                reporter: project.reporter
+            })
         })
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.currentProject !== prevProps.currentProject) {
+            this.setState({
+                id: this.props.currentProject ? this.props.currentProject.id : -1,
+                name: this.props.currentProject ? this.props.currentProject.name : '',
+                description: this.props.currentProject ? this.props.currentProject.description : '',
+                assigneeLogin: this.props.currentProject ? this.props.currentProject.assignee.login : '',
+                active: this.props.currentProject ? this.props.currentProject.active : false,
+                assignee: this.props.currentProject ? this.props.currentProject.assignee : UserService.getEmptyUser(),
+                reporter: this.props.currentProject ? this.props.currentProject.reporter : UserService.getEmptyUser()
+            })
+        }
     }
 
     render(): React.ReactNode {
@@ -173,6 +195,7 @@ class EditProjectDialog extends React.Component<EditProjectDialogProps, EditProj
                                                 rows={4}
                                                 fullWidth
                                                 error={this.state.description === ''}
+                                                value={this.state.description}
                                                 defaultValue={this.state.description}
                                                 onChange={(e) => {
                                                     this.setState({description: e.target.value})
@@ -194,7 +217,7 @@ class EditProjectDialog extends React.Component<EditProjectDialogProps, EditProj
                                                 fullWidth
                                                 displayEmpty
                                             >
-                                                {this.props.users?.map((user, ind) => {
+                                                {this.props.users?.filter(user => {return user.active}).map((user, ind) => {
                                                     return <MenuItem value={user.login}> {user.login} </MenuItem>
                                                 })}
                                             </Select>
@@ -224,7 +247,7 @@ class EditProjectDialog extends React.Component<EditProjectDialogProps, EditProj
                                                 fullWidth
                                                 displayEmpty
                                             >
-                                                {this.props.users?.map((user, ind) => {
+                                                {this.props.users?.filter(user => {return user.active}).map((user, ind) => {
                                                     return <MenuItem value={user.login}
                                                                      id={user.id}> {user.login} </MenuItem>
                                                 })}
@@ -248,7 +271,7 @@ class EditProjectDialog extends React.Component<EditProjectDialogProps, EditProj
                                                 fullWidth
                                                 displayEmpty
                                             >
-                                                {this.props.users?.filter(user => {
+                                                {this.props.users?.filter(user => {return user.active}).filter(user => {
                                                     return !this.props.participants?.some(userProject => userProject.user.id === user.id)
                                                 }).map((user, ind) => {
                                                     return <MenuItem value={user.id}> {user.login} </MenuItem>
@@ -343,7 +366,7 @@ class EditProjectDialog extends React.Component<EditProjectDialogProps, EditProj
                                 color='primary'
                                 variant={'contained'}
                             >
-                                Создать
+                                Обновить
                             </Button>
                             <Button onClick={(e) => {
                                 this.props.onClose('Cancel');

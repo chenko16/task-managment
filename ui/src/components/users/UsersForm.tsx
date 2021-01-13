@@ -166,7 +166,7 @@ class UsersForm extends React.Component<UsersFormProps, UsersFormState> {
                         this.props.updateUserStatus(id, status)
                     }}
                     onClose={(value, data: UserEditFormState) => {
-                        if (value != "Cancel") {
+                        if (value === 'Ok') {
                             this.props.updateUserRole(data.id, data.systemRole);
                         }
                     }}

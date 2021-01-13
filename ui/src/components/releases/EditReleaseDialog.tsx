@@ -136,7 +136,7 @@ class EditReleaseDialog extends React.Component<EditReleaseDialogProps, EditRele
                                                 fullWidth
                                                 displayEmpty
                                             >
-                                                {this.props.users?.map((user, ind) => {
+                                                {this.props.users?.filter(user => {return user.active}).map((user, ind) => {
                                                     return <MenuItem value={user.login}
                                                                      id={user.id}> {user.login} </MenuItem>
                                                 })}
@@ -156,7 +156,7 @@ class EditReleaseDialog extends React.Component<EditReleaseDialogProps, EditRele
                                                 fullWidth
                                                 displayEmpty
                                             >
-                                                {this.props.projects?.map((project, ind) => {
+                                                {this.props.projects?.filter(project => {return project.active}).map((project, ind) => {
                                                     return <MenuItem value={project.id}> {project.name} </MenuItem>
                                                 })}
                                             </Select>

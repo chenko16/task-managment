@@ -10,6 +10,7 @@ import {SystemRole, User} from '../../store/users/Types';
 import EditProjectDialog from './EditProjectDialog';
 import CloseIcon from '@material-ui/icons/Close';
 import ConfirmDialog from '../ConfirmDialog';
+import {UserService} from "../../services/UserService";
 
 
 const tableIcons = {
@@ -69,6 +70,7 @@ export interface ProjectsFormProps {
 
 export interface ProjectsFormState {
     openAdd: boolean,
+    projects: Project[],
     openEdit: boolean,
     currentProject?: Project
     columns: any[],
@@ -84,6 +86,7 @@ export default class ProjectsForm extends React.Component<ProjectsFormProps, Pro
             openEdit: this.props.openEditProject,
             currentProject: this.props.currentProject,
             confirmDelete: false,
+            projects: this.props.projects || [],
             columns: [
                 {title: 'id', field: 'id', hidden: true},
                 {title: 'reporter', field: 'reporter', hidden: true},
@@ -105,6 +108,15 @@ export default class ProjectsForm extends React.Component<ProjectsFormProps, Pro
             })[0].id)
         }
     }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.projects !== prevProps.projects) {
+            this.setState({
+                projects: this.props.projects || []
+            })
+        }
+    }
+
 
     handleConfirmDialogDeleteClose(value) {
         this.setState({confirmDelete: false});
@@ -128,7 +140,7 @@ export default class ProjectsForm extends React.Component<ProjectsFormProps, Pro
                     }}
                     columns={this.state.columns}
                     data={this.props.role === SystemRole.USER ?
-                        this.props.userRoleProjects : this.props.projects}
+                        this.props.userRoleProjects : this.state.projects}
                     localization={{
                         toolbar: {
                             searchTooltip: 'Поиск',

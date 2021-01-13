@@ -42,7 +42,7 @@ const styles = theme => createStyles({
 });
 
 export interface AuthFormDispatchProps {
-    onSignInClicked(username: string, password: string)
+    onSignInClicked(username: string, password: string, callback?)
 }
 
 type AuthFormDispatchPropsWithStyles = AuthFormDispatchProps & WithStyles<typeof styles>

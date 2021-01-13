@@ -157,7 +157,7 @@ class CreateTaskDialog extends React.Component<CreateTaskDialogProps, CreateTask
                                     <Grid container direction='column' justify='flex-start' alignItems='flex-start'
                                           style={{margin: 4}}>
                                         <Grid item>
-                                            <b>Описание проекта:</b>
+                                            <b>Описание задачи:</b>
                                         </Grid>
                                         <Grid item style={{width: '95%', marginTop: 6}}>
                                             <TextField
@@ -226,7 +226,7 @@ class CreateTaskDialog extends React.Component<CreateTaskDialogProps, CreateTask
                                                 fullWidth
                                                 displayEmpty
                                             >
-                                                {this.props.users?.map((user, ind) => {
+                                                {this.props.users?.filter(user => {return user.active}).map((user, ind) => {
                                                     return <MenuItem value={user.login}
                                                                      id={user.id}> {user.login} </MenuItem>
                                                 })}
@@ -257,7 +257,7 @@ class CreateTaskDialog extends React.Component<CreateTaskDialogProps, CreateTask
                                                 fullWidth
                                                 displayEmpty
                                             >
-                                                {this.props.users?.map((user, ind) => {
+                                                {this.props.users?.filter(user => {return user.active}).map((user, ind) => {
                                                     return <MenuItem value={user.login}
                                                                      id={user.id}> {user.login} </MenuItem>
                                                 })}
